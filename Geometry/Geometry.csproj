@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <AssemblyName>AstroMultimedia.Numerics.Geometry</AssemblyName>
+        <RootNamespace>AstroMultimedia.Numerics.Geometry</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Integers\Integers.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="AstroMultimedia.Core.Numbers">
+        <HintPath>..\..\Core\Numbers\bin\Debug\net7.0\AstroMultimedia.Core.Numbers.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,11 @@
+Fraction class:
+
+* Add support for mixed numbers to the Fraction class e.g. 2 3/4. Format can be "M".
+So:
+  "U" would be unicode, proper or improper. n/d
+  "M" would be same as "U" if n < d, or mixed format if n > d
+  "A" format does not support mixed
+
+* Update comparison operators to compare numerators if the denominators are equal.
+
+* Write lots of tests.

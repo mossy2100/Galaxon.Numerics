@@ -1,0 +1,4 @@
+Make a single class for polygonal numbers with the same methods each of these classes have,
+but with additional logic to handle a variable number of sides.
+See: https://en.wikipedia.org/wiki/Polygonal_number
+for equations.
