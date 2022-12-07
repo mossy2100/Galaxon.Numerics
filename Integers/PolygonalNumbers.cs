@@ -4,7 +4,7 @@ public class PolygonalNumbers
 {
     #region Methods to get a polygonal number
 
-    public static uint Get(uint s, uint n)
+    public static ulong Get(ulong s, ulong n)
     {
         // Guards.
         if (s < 2)
@@ -21,22 +21,22 @@ public class PolygonalNumbers
         return (s - 2) * n * (n - 1) / 2 + n;
     }
 
-    public static uint GetTriangular(uint n) =>
+    public static ulong GetTriangular(ulong n) =>
         Get(3, n);
 
-    public static uint GetSquare(uint n) =>
+    public static ulong GetSquare(ulong n) =>
         Get(4, n);
 
-    public static uint GetPentagonal(uint n) =>
+    public static ulong GetPentagonal(ulong n) =>
         Get(5, n);
 
-    public static uint GetHexagonal(uint n) =>
+    public static ulong GetHexagonal(ulong n) =>
         Get(6, n);
 
-    public static uint GetHeptagonal(uint n) =>
+    public static ulong GetHeptagonal(ulong n) =>
         Get(7, n);
 
-    public static uint GetOctagonal(uint n) =>
+    public static ulong GetOctagonal(ulong n) =>
         Get(8, n);
 
     #endregion Methods to get a polygonal number
@@ -46,10 +46,10 @@ public class PolygonalNumbers
     /// <summary>
     /// Get all polygonal numbers of side s up to a certain maximum value.
     /// </summary>
-    public static Dictionary<uint, uint> GetAllUpTo(uint s, uint max)
+    public static Dictionary<ulong, ulong> GetAllUpTo(ulong s, ulong max)
     {
-        Dictionary<uint, uint> result = new ();
-        uint n = 0;
+        Dictionary<ulong, ulong> result = new ();
+        ulong n = 0;
         while (n <= max)
         {
             n++;
@@ -58,22 +58,22 @@ public class PolygonalNumbers
         return result;
     }
 
-    public static Dictionary<uint, uint> GetAllTriangularUpTo(uint max) =>
+    public static Dictionary<ulong, ulong> GetAllTriangularUpTo(ulong max) =>
         GetAllUpTo(3, max);
 
-    public static Dictionary<uint, uint> GetAllSquareUpTo(uint max) =>
+    public static Dictionary<ulong, ulong> GetAllSquareUpTo(ulong max) =>
         GetAllUpTo(4, max);
 
-    public static Dictionary<uint, uint> GetAllPentagonalUpTo(uint max) =>
+    public static Dictionary<ulong, ulong> GetAllPentagonalUpTo(ulong max) =>
         GetAllUpTo(5, max);
 
-    public static Dictionary<uint, uint> GetAllHexagonalUpTo(uint max) =>
+    public static Dictionary<ulong, ulong> GetAllHexagonalUpTo(ulong max) =>
         GetAllUpTo(6, max);
 
-    public static Dictionary<uint, uint> GetAllHeptagonalUpTo(uint max) =>
+    public static Dictionary<ulong, ulong> GetAllHeptagonalUpTo(ulong max) =>
         GetAllUpTo(7, max);
 
-    public static Dictionary<uint, uint> GetAllOctagonalUpTo(uint max) =>
+    public static Dictionary<ulong, ulong> GetAllOctagonalUpTo(ulong max) =>
         GetAllUpTo(8, max);
 
     #endregion Methods to get all polygonal numbers up to a certain value
@@ -85,9 +85,8 @@ public class PolygonalNumbers
     /// </summary>
     /// <param name="s"></param>
     /// <param name="x"></param>
-    /// <param name="n"></param>
     /// <returns></returns>
-    public static bool IsPolygonal(uint s, uint x, out uint? n)
+    public static bool IsPolygonal(ulong s, ulong x)
     {
         // Guard.
         if (s < 2)
@@ -97,41 +96,32 @@ public class PolygonalNumbers
         }
         if (x < 1)
         {
-            throw new ArgumentOutOfRangeException(nameof(x),
-                "Must be at least 1.");
+            throw new ArgumentOutOfRangeException(nameof(x), "Must be at least 1.");
         }
 
-        uint s2 = s - 2;
-        uint s4 = s - 4;
-        double dN = (Sqrt((8 * s2 * x) + (s4 * s4)) + s4) / (2 * s2);
-
-        if (double.IsInteger(dN))
-        {
-            n = (uint)dN;
-            return true;
-        }
-
-        n = null;
-        return false;
+        ulong s2 = s - 2;
+        ulong s4 = s - 4;
+        double n = (Sqrt((8 * s2 * x) + (s4 * s4)) + s4) / (2 * s2);
+        return double.IsInteger(n);
     }
 
-    public static bool IsTriangular(uint x, out uint? n) =>
-        IsPolygonal(3, x, out n);
+    public static bool IsTriangular(ulong x) =>
+        IsPolygonal(3, x);
 
-    public static bool IsSquare(uint x, out uint? n) =>
-        IsPolygonal(4, x, out n);
+    public static bool IsSquare(ulong x) =>
+        IsPolygonal(4, x);
 
-    public static bool IsPentagonal(uint x, out uint? n) =>
-        IsPolygonal(5, x, out n);
+    public static bool IsPentagonal(ulong x) =>
+        IsPolygonal(5, x);
 
-    public static bool IsHexagonal(uint x, out uint? n) =>
-        IsPolygonal(6, x, out n);
+    public static bool IsHexagonal(ulong x) =>
+        IsPolygonal(6, x);
 
-    public static bool IsHeptagonal(uint x, out uint? n) =>
-        IsPolygonal(7, x, out n);
+    public static bool IsHeptagonal(ulong x) =>
+        IsPolygonal(7, x);
 
-    public static bool IsOctagonal(uint x, out uint? n) =>
-        IsPolygonal(8, x, out n);
+    public static bool IsOctagonal(ulong x) =>
+        IsPolygonal(8, x);
 
     #endregion Methods to test if a number is polygonal
 }

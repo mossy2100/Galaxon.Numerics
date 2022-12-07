@@ -22,7 +22,7 @@ public class TestPolygonalNumbers
     [TestMethod]
     public void TestGetAllTriangularUpTo()
     {
-        Dictionary<uint, uint> nums = PolygonalNumbers.GetAllTriangularUpTo(25);
+        Dictionary<ulong, ulong> nums = PolygonalNumbers.GetAllTriangularUpTo(25);
         Assert.AreEqual(1u, nums[1]);
         Assert.AreEqual(3u, nums[2]);
         Assert.AreEqual(6u, nums[3]);
@@ -34,20 +34,19 @@ public class TestPolygonalNumbers
     [TestMethod]
     public void TestIsTriangular()
     {
-        uint? n;
-        Assert.IsTrue(PolygonalNumbers.IsTriangular(1, out n));
-        Assert.IsTrue(PolygonalNumbers.IsTriangular(3, out n));
-        Assert.IsTrue(PolygonalNumbers.IsTriangular(6, out n));
-        Assert.IsTrue(PolygonalNumbers.IsTriangular(10, out n));
-        Assert.IsTrue(PolygonalNumbers.IsTriangular(15, out n));
-        Assert.IsTrue(PolygonalNumbers.IsTriangular(21, out n));
+        Assert.IsTrue(PolygonalNumbers.IsTriangular(1));
+        Assert.IsTrue(PolygonalNumbers.IsTriangular(3));
+        Assert.IsTrue(PolygonalNumbers.IsTriangular(6));
+        Assert.IsTrue(PolygonalNumbers.IsTriangular(10));
+        Assert.IsTrue(PolygonalNumbers.IsTriangular(15));
+        Assert.IsTrue(PolygonalNumbers.IsTriangular(21));
 
-        Assert.IsFalse(PolygonalNumbers.IsTriangular(2, out n));
-        Assert.IsFalse(PolygonalNumbers.IsTriangular(4, out n));
-        Assert.IsFalse(PolygonalNumbers.IsTriangular(9, out n));
-        Assert.IsFalse(PolygonalNumbers.IsTriangular(12, out n));
-        Assert.IsFalse(PolygonalNumbers.IsTriangular(20, out n));
-        Assert.IsFalse(PolygonalNumbers.IsTriangular(25, out n));
+        Assert.IsFalse(PolygonalNumbers.IsTriangular(2));
+        Assert.IsFalse(PolygonalNumbers.IsTriangular(4));
+        Assert.IsFalse(PolygonalNumbers.IsTriangular(9));
+        Assert.IsFalse(PolygonalNumbers.IsTriangular(12));
+        Assert.IsFalse(PolygonalNumbers.IsTriangular(20));
+        Assert.IsFalse(PolygonalNumbers.IsTriangular(25));
     }
 
     #endregion Triangular numbers
@@ -69,7 +68,7 @@ public class TestPolygonalNumbers
     [TestMethod]
     public void TestGetAllPentagonalUpTo()
     {
-        Dictionary<uint, uint> nums = PolygonalNumbers.GetAllPentagonalUpTo(60);
+        Dictionary<ulong, ulong> nums = PolygonalNumbers.GetAllPentagonalUpTo(60);
         Assert.AreEqual(1u, nums[1]);
         Assert.AreEqual(5u, nums[2]);
         Assert.AreEqual(12u, nums[3]);
@@ -81,20 +80,19 @@ public class TestPolygonalNumbers
     [TestMethod]
     public void TestIsPentagonal()
     {
-        uint? n;
-        Assert.IsTrue(PolygonalNumbers.IsPentagonal(1, out n));
-        Assert.IsTrue(PolygonalNumbers.IsPentagonal(5, out n));
-        Assert.IsTrue(PolygonalNumbers.IsPentagonal(12, out n));
-        Assert.IsTrue(PolygonalNumbers.IsPentagonal(22, out n));
-        Assert.IsTrue(PolygonalNumbers.IsPentagonal(35, out n));
-        Assert.IsTrue(PolygonalNumbers.IsPentagonal(51, out n));
+        Assert.IsTrue(PolygonalNumbers.IsPentagonal(1));
+        Assert.IsTrue(PolygonalNumbers.IsPentagonal(5));
+        Assert.IsTrue(PolygonalNumbers.IsPentagonal(12));
+        Assert.IsTrue(PolygonalNumbers.IsPentagonal(22));
+        Assert.IsTrue(PolygonalNumbers.IsPentagonal(35));
+        Assert.IsTrue(PolygonalNumbers.IsPentagonal(51));
 
-        Assert.IsFalse(PolygonalNumbers.IsPentagonal(2, out n));
-        Assert.IsFalse(PolygonalNumbers.IsPentagonal(7, out n));
-        Assert.IsFalse(PolygonalNumbers.IsPentagonal(15, out n));
-        Assert.IsFalse(PolygonalNumbers.IsPentagonal(27, out n));
-        Assert.IsFalse(PolygonalNumbers.IsPentagonal(38, out n));
-        Assert.IsFalse(PolygonalNumbers.IsPentagonal(55, out n));
+        Assert.IsFalse(PolygonalNumbers.IsPentagonal(2));
+        Assert.IsFalse(PolygonalNumbers.IsPentagonal(7));
+        Assert.IsFalse(PolygonalNumbers.IsPentagonal(15));
+        Assert.IsFalse(PolygonalNumbers.IsPentagonal(27));
+        Assert.IsFalse(PolygonalNumbers.IsPentagonal(38));
+        Assert.IsFalse(PolygonalNumbers.IsPentagonal(55));
     }
 
     #endregion Pentagonal numbers
@@ -116,7 +114,7 @@ public class TestPolygonalNumbers
     [TestMethod]
     public void TestGetAllHexagonalUpTo()
     {
-        Dictionary<uint, uint> nums = PolygonalNumbers.GetAllHexagonalUpTo(100);
+        Dictionary<ulong, ulong> nums = PolygonalNumbers.GetAllHexagonalUpTo(100);
         Assert.AreEqual(1u, nums[1]);
         Assert.AreEqual(6u, nums[2]);
         Assert.AreEqual(15u, nums[3]);
@@ -129,21 +127,34 @@ public class TestPolygonalNumbers
     [TestMethod]
     public void TestIsHexagonal()
     {
-        uint? n;
-        Assert.IsTrue(PolygonalNumbers.IsHexagonal(1, out n));
-        Assert.IsTrue(PolygonalNumbers.IsHexagonal(6, out n));
-        Assert.IsTrue(PolygonalNumbers.IsHexagonal(15, out n));
-        Assert.IsTrue(PolygonalNumbers.IsHexagonal(28, out n));
-        Assert.IsTrue(PolygonalNumbers.IsHexagonal(45, out n));
-        Assert.IsTrue(PolygonalNumbers.IsHexagonal(66, out n));
+        Assert.IsTrue(PolygonalNumbers.IsHexagonal(1));
+        Assert.IsTrue(PolygonalNumbers.IsHexagonal(6));
+        Assert.IsTrue(PolygonalNumbers.IsHexagonal(15));
+        Assert.IsTrue(PolygonalNumbers.IsHexagonal(28));
+        Assert.IsTrue(PolygonalNumbers.IsHexagonal(45));
+        Assert.IsTrue(PolygonalNumbers.IsHexagonal(66));
 
-        Assert.IsFalse(PolygonalNumbers.IsHexagonal(2, out n));
-        Assert.IsFalse(PolygonalNumbers.IsHexagonal(7, out n));
-        Assert.IsFalse(PolygonalNumbers.IsHexagonal(18, out n));
-        Assert.IsFalse(PolygonalNumbers.IsHexagonal(33, out n));
-        Assert.IsFalse(PolygonalNumbers.IsHexagonal(56, out n));
-        Assert.IsFalse(PolygonalNumbers.IsHexagonal(71, out n));
+        Assert.IsFalse(PolygonalNumbers.IsHexagonal(2));
+        Assert.IsFalse(PolygonalNumbers.IsHexagonal(7));
+        Assert.IsFalse(PolygonalNumbers.IsHexagonal(18));
+        Assert.IsFalse(PolygonalNumbers.IsHexagonal(33));
+        Assert.IsFalse(PolygonalNumbers.IsHexagonal(56));
+        Assert.IsFalse(PolygonalNumbers.IsHexagonal(71));
     }
 
     #endregion Hexagonal numbers
+
+    [TestMethod]
+    public void TestLargeNumber()
+    {
+        ulong n = 40755;
+        Assert.IsTrue(PolygonalNumbers.IsTriangular(n));
+        Assert.IsTrue(PolygonalNumbers.IsPentagonal(n));
+        Assert.IsTrue(PolygonalNumbers.IsHexagonal(n));
+
+        n = 1533776805;
+        Assert.IsTrue(PolygonalNumbers.IsTriangular(n));
+        Assert.IsTrue(PolygonalNumbers.IsPentagonal(n));
+        Assert.IsTrue(PolygonalNumbers.IsHexagonal(n));
+    }
 }
