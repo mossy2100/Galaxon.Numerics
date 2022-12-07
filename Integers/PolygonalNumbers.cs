@@ -1,5 +1,8 @@
 namespace AstroMultimedia.Numerics.Integers;
 
+/// <summary>
+/// <see href="https://en.wikipedia.org/wiki/Polygonal_number" />
+/// </summary>
 public class PolygonalNumbers
 {
     #region Methods to get a polygonal number
@@ -86,7 +89,7 @@ public class PolygonalNumbers
     /// <param name="s"></param>
     /// <param name="x"></param>
     /// <returns></returns>
-    public static bool IsPolygonal(ulong s, ulong x)
+    public static bool IsPolygonal(int s, ulong x)
     {
         // Guard.
         if (s < 2)
@@ -99,9 +102,21 @@ public class PolygonalNumbers
             throw new ArgumentOutOfRangeException(nameof(x), "Must be at least 1.");
         }
 
-        ulong s2 = s - 2;
-        ulong s4 = s - 4;
-        double n = (Sqrt((8 * s2 * x) + (s4 * s4)) + s4) / (2 * s2);
+        // Optimizations.
+        if (x == 1)
+        {
+            // 1 is a polygonal number for all side lengths.
+            return true;
+        }
+        if (x == 2)
+        {
+            // 2 is not a polygonal number for all side lengths.
+            return false;
+        }
+
+        int s2 = s - 2;
+        int s4 = s - 4;
+        double n = (Sqrt((8 * (ulong)s2 * x) + (ulong)(s4 * s4)) + s4) / (2 * s2);
         return double.IsInteger(n);
     }
 

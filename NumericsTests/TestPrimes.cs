@@ -81,7 +81,7 @@ public class TestPrimes
     [TestMethod]
     public void CompareIsPrimeMethods1MillionValues()
     {
-        for (ulong i = 0; i < 1000000; i++)
+        for (ulong i = 0; i < 1_000_000; i++)
         {
             CompareIsPrimeMethods(i);
         }

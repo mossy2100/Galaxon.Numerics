@@ -30,12 +30,13 @@ public struct Fraction : IEquatable<Fraction>, IFormattable, IParsable<Fraction>
 
     /// <summary>
     /// Fractions are not automatically simplified, because Simplify() is slow.
-    /// Simplify() must be called manually as needed.
+    /// Either set simplify = true, or call Simplify() as needed.
     /// </summary>
     /// <param name="numerator"></param>
     /// <param name="denominator"></param>
+    /// <param name="simplify"></param>
     /// <exception cref="ArgumentOutOfRangeException"></exception>
-    public Fraction(BigInteger numerator, BigInteger denominator)
+    public Fraction(BigInteger numerator, BigInteger denominator, bool simplify = false)
     {
         // A fraction with a 0 denominator is undefined.
         if (denominator == 0)
@@ -54,6 +55,12 @@ public struct Fraction : IEquatable<Fraction>, IFormattable, IParsable<Fraction>
             // Ensure the denominator is positive.
             numerator = -numerator;
             denominator = -denominator;
+        }
+
+        // Simplify if necessary.
+        if (simplify)
+        {
+            (numerator, denominator) = Simplify(numerator, denominator);
         }
 
         Numerator = numerator;

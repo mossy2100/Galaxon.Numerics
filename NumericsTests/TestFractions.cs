@@ -84,30 +84,6 @@ public class TestFractions
     }
 
     [TestMethod]
-    public void TestSimplifyRandom()
-    {
-        Random rnd = new();
-        for (int i = 0; i < 10; i++)
-        {
-            while (true)
-            {
-                // Get a random numerator and denominator.
-                int n = rnd.Next(1, 1000);
-                int d = rnd.Next(1, 1000);
-
-                Fraction f1 = new(n, d);
-
-                if (f1.Numerator != n)
-                {
-                    // Fraction was simplified.
-                    Trace.WriteLine($"{n}/{d} simplifies to {f1}");
-                    break;
-                }
-            }
-        }
-    }
-
-    [TestMethod]
     public void TestPowWithIntegerExponent()
     {
         Fraction f = new(2, 3);

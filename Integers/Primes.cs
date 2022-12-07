@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using System.Numerics;
 
 namespace AstroMultimedia.Numerics.Integers;
@@ -10,7 +11,7 @@ public static class Primes
     static Primes()
     {
         // Initialize the cache.
-        Cache = SmallPrimes.ToHashSet();
+        Cache = new SortedSet<ulong>(SmallPrimes);
         MaxValueChecked = 1000;
     }
 
@@ -181,7 +182,7 @@ public static class Primes
     /// <param name="max">The max value to check.</param>
     public static void Eratosthenes(ulong max)
     {
-        // See if we need to do anything.
+        // See if the cache already has all the values we want.
         if (max <= MaxValueChecked)
         {
             return;
@@ -199,8 +200,9 @@ public static class Primes
             ulong batchMax = Min(batchMin + (ulong)Array.MaxLength - 1, max);
             int batchSize = (int)(batchMax - batchMin + 1);
 
-            // Create an array of values, setting items 2 and all odd values greater than 2 to true.
-            // Items 0, 1, and all even values other than 2 will have the default value of false.
+            // Create an array of booleans indicating if a value is prime.
+            // Set the flag for 2 and all odd values greater than 2 to true.
+            // Items 0, 1, and all even values greater than 2 will default to false.
             bool[] isPrime = new bool[batchSize];
             for (ulong n = batchMin; n <= batchMax; n++)
             {
@@ -278,8 +280,20 @@ public static class Primes
     /// </summary>
     public static ulong GetNext(ulong n)
     {
-        // Increment and test until we find one.
+        // Check for 2, as we'll only test odd values.
+        if (n < 2)
+        {
+            return 2;
+        }
+
+        // Initialize p to closest odd number less than or equal to n.
         ulong p = n;
+        if (p % 2 == 0)
+        {
+            p--;
+        }
+
+        // Increment and test until we find one.
         while (true)
         {
             // Check for overflow.
@@ -288,8 +302,8 @@ public static class Primes
                 throw new OverflowException($"There are no prime numbers > {n} but <= {ulong.MaxValue}, the largest value supported.");
             }
 
-            // Check next number.
-            p++;
+            // Check next value.
+            p += 2;
             if (IsPrime(p))
             {
                 return p;
@@ -308,11 +322,23 @@ public static class Primes
             throw new OverflowException("There are no prime numbers < 2.");
         }
 
-        // Decrement and test until we find one.
+        // Check for 2, as we'll only test odd values.
+        if (n == 3)
+        {
+            return 2;
+        }
+
+        // Initialize p to closest odd number greater than or equal to n.
         ulong p = n;
+        if (p % 2 == 0)
+        {
+            p++;
+        }
+
+        // Decrement and test odd numbers until we find one.
         while (true)
         {
-            p--;
+            p -= 2;
             if (IsPrime(p))
             {
                 return p;
@@ -382,12 +408,12 @@ public static class Primes
     /// <summary>
     /// Cache of primes found so far.
     /// </summary>
-    public static readonly HashSet<ulong> Cache;
+    public static readonly SortedSet<ulong> Cache;
 
     /// <summary>
     /// All primes up to 1000.
     /// </summary>
-    public static readonly HashSet<ulong> SmallPrimes = new()
+    public static readonly List<ulong> SmallPrimes = new()
     {
         2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89,
         97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181,
