@@ -97,15 +97,11 @@ public class PolygonalNumbers
             throw new ArgumentOutOfRangeException(nameof(s),
                 "The fewest number of sides a polygon can have is 3.");
         }
-        if (x < 1)
-        {
-            throw new ArgumentOutOfRangeException(nameof(x), "Must be at least 1.");
-        }
 
         // Optimizations.
-        if (x == 1)
+        if (x is 0 or 1)
         {
-            // 1 is a polygonal number for all side lengths.
+            // 0 and 1 are polygonal numbers for all side lengths.
             return true;
         }
         if (x == 2)
