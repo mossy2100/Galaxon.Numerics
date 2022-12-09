@@ -14,7 +14,7 @@ public class TestFractions
         {
             for (int d = 1; d < 10; d++)
             {
-                Fraction f = new(n, d);
+                Fraction f = new (n, d);
                 double x = (double)n / d;
                 Fraction f2 = Fraction.Find(x);
                 Trace.WriteLine($"Testing that {f} == {x}");
@@ -44,7 +44,7 @@ public class TestFractions
     [TestMethod]
     public void TestFindRandom()
     {
-        Random rnd = new();
+        Random rnd = new ();
 
         // Get a random numerator.
         int n = rnd.NextInt32();
@@ -56,7 +56,7 @@ public class TestFractions
             d = rnd.NextInt32();
         }
 
-        Fraction f = new(n, d);
+        Fraction f = new (n, d);
         double x = (double)n / d;
         Fraction f2 = Fraction.Find(x);
         Trace.WriteLine($"f = {f}, x = {x}, f2 = {f2}");
@@ -67,8 +67,8 @@ public class TestFractions
     public void TestFindPi()
     {
         double x = PI;
-        Fraction f = Fraction.Find(x, 1e-9);
-        double y = (double)f;
+        Fraction f = Fraction.Find(x);
+        double y = f;
         Assert.AreEqual(x, y);
         Assert.AreEqual(245850922, f.Numerator);
         Assert.AreEqual(78256779, f.Denominator);
@@ -86,7 +86,7 @@ public class TestFractions
     [TestMethod]
     public void TestPowWithIntegerExponent()
     {
-        Fraction f = new(2, 3);
+        Fraction f = new (2, 3);
         Fraction g = f ^ 2;
         Assert.AreEqual(4, g.Numerator);
         Assert.AreEqual(9, g.Denominator);
@@ -95,7 +95,7 @@ public class TestFractions
     [TestMethod]
     public void TestPowWithNegativeOneExponent()
     {
-        Fraction f = new(2, 3);
+        Fraction f = new (2, 3);
         Fraction g = f ^ -1;
         Assert.AreEqual(3, g.Numerator);
         Assert.AreEqual(2, g.Denominator);
@@ -104,7 +104,7 @@ public class TestFractions
     [TestMethod]
     public void TestPowWithNegativeIntegerExponent()
     {
-        Fraction f = new(2, 3);
+        Fraction f = new (2, 3);
         Fraction g = f ^ -2;
         Assert.AreEqual(9, g.Numerator);
         Assert.AreEqual(4, g.Denominator);
@@ -113,8 +113,8 @@ public class TestFractions
     [TestMethod]
     public void TestPowWithFractionExponent()
     {
-        Fraction f = new(4, 9);
-        Fraction g = new(1, 2);
+        Fraction f = new (4, 9);
+        Fraction g = new (1, 2);
         Fraction h = f ^ g;
         Assert.AreEqual(2, h.Numerator);
         Assert.AreEqual(3, h.Denominator);
@@ -123,7 +123,7 @@ public class TestFractions
     [TestMethod]
     public void TestPowWithDoubleExponent()
     {
-        Fraction f = new(4, 9);
+        Fraction f = new (4, 9);
         double g = 0.5;
         Fraction h = f ^ g;
         Assert.AreEqual(2, h.Numerator);

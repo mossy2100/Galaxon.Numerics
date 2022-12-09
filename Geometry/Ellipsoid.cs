@@ -93,7 +93,8 @@ public class Ellipsoid : IShape3D
         return a > b && b.FuzzyEquals(c);
     }
 
-    public bool IsSpheroid() => IsOblate() || IsProlate();
+    public bool IsSpheroid() =>
+        IsOblate() || IsProlate();
 
     public bool IsScalene()
     {

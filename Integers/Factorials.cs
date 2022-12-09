@@ -22,7 +22,7 @@ public static class Factorials
             throw new ArgumentOutOfRangeException(nameof(n), "Cannot be negative.");
         }
 
-        return (n <= 1) ? 1 : (n * Factorial(n - 1));
+        return n <= 1 ? 1 : n * Factorial(n - 1);
     }
 
     /// <summary>
@@ -52,7 +52,7 @@ public static class Factorials
     /// </summary>
     public static List<List<T>> GetCombinations<T>(List<T> bag, int n)
     {
-        List<List<T>> result = new();
+        List<List<T>> result = new ();
 
         // Combinations of 0 items is undefined.
         if (n == 0)
@@ -79,7 +79,7 @@ public static class Factorials
             // If we only want 1 item, shortcut.
             if (n == 1)
             {
-                List<T> newCombo = new() { bag[i] };
+                List<T> newCombo = new () { bag[i] };
                 result.Add(newCombo);
                 continue;
             }
@@ -102,7 +102,7 @@ public static class Factorials
             List<List<T>> remCombos = GetCombinations(remainder, n - 1);
             foreach (List<T> remCombo in remCombos)
             {
-                List<T> newCombo = new() { bag[i] };
+                List<T> newCombo = new () { bag[i] };
                 newCombo.AddRange(remCombo);
                 result.Add(newCombo);
             }
@@ -167,7 +167,7 @@ public static class Factorials
             remainder.AddRange(remainder2);
 
             // Get all permutations of the remainder.
-            List<List<T>> remPerms = GetPermutations<T>(remainder, n - 1);
+            List<List<T>> remPerms = GetPermutations(remainder, n - 1);
             foreach (List<T> remPerm in remPerms)
             {
                 List<T> perm = new () { item };
@@ -195,7 +195,7 @@ public static class Factorials
                 return new List<string> { chars };
         }
 
-        HashSet<string> result = new();
+        HashSet<string> result = new ();
         for (int i = 0; i < chars.Length; i++)
         {
             char ch = chars[i];

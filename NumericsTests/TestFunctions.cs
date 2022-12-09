@@ -25,13 +25,13 @@ public class TestFunctions
         Assert.AreEqual("one", Functions.NumberToWords(1));
         Assert.AreEqual("negative one", Functions.NumberToWords(-1));
         Assert.AreEqual("one hundred and twenty-three", Functions.NumberToWords(123));
-        Assert.AreEqual("four thousand, three hundred and twenty-one", Functions.NumberToWords(4321));
+        Assert.AreEqual("four thousand, three hundred and twenty-one",
+            Functions.NumberToWords(4321));
         Assert.AreEqual("six million", Functions.NumberToWords(6_000_000));
     }
 
     [TestMethod]
-    public void TestNumbersToWordsMin()
-    {
+    public void TestNumbersToWordsMin() =>
         // -9,223,372,036,854,775,808
         Assert.AreEqual("negative nine quintillion, "
             + "two hundred and twenty-three quadrillion, "
@@ -40,11 +40,9 @@ public class TestFunctions
             + "eight hundred and fifty-four million, "
             + "seven hundred and seventy-five thousand, "
             + "eight hundred and eight", Functions.NumberToWords(long.MinValue));
-    }
 
     [TestMethod]
-    public void TestNumbersToWordsMax()
-    {
+    public void TestNumbersToWordsMax() =>
         // 9,223,372,036,854,775,807
         Assert.AreEqual("nine quintillion, "
             + "two hundred and twenty-three quadrillion, "
@@ -53,7 +51,6 @@ public class TestFunctions
             + "eight hundred and fifty-four million, "
             + "seven hundred and seventy-five thousand, "
             + "eight hundred and seven", Functions.NumberToWords(long.MaxValue));
-    }
 
     [TestMethod]
     public void TestNumDigits()

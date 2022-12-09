@@ -44,9 +44,9 @@ public class BigDecimal : IEquatable<BigDecimal>, IComparable<BigDecimal>
 
     private const int _B = 1_000_000_000;
 
-    private const int _DIGITS_PER_BILLIT = 9;
+    private const int _DigitsPerBillit = 9;
 
-    private const byte _MAX_LENGTH = 12;
+    private const byte _MaxLength = 12;
 
     #endregion Constants
 
@@ -117,7 +117,7 @@ public class BigDecimal : IEquatable<BigDecimal>, IComparable<BigDecimal>
             return;
         }
 
-        Regex rx = new(@"^(-?)(\d+)(\.(\d+))?(e([-+]?\d+))?$", RegexOptions.IgnoreCase);
+        Regex rx = new (@"^(-?)(\d+)(\.(\d+))?(e([-+]?\d+))?$", RegexOptions.IgnoreCase);
         MatchCollection matches = rx.Matches(s);
 
         // Check we got a match.
@@ -147,12 +147,12 @@ public class BigDecimal : IEquatable<BigDecimal>, IComparable<BigDecimal>
         strDigits = TrimDigits(strDigits, ref decMantissa);
 
         // Calculate number of decimal places to shift.
-        int bilMantissa = (int)Floor(decMantissa / (decimal)_DIGITS_PER_BILLIT);
-        int nShift = decMantissa - bilMantissa * _DIGITS_PER_BILLIT;
-        int nLeadingZeros = _DIGITS_PER_BILLIT - 1 - nShift;
+        int bilMantissa = (int)Floor(decMantissa / (decimal)_DigitsPerBillit);
+        int nShift = decMantissa - bilMantissa * _DigitsPerBillit;
+        int nLeadingZeros = _DigitsPerBillit - 1 - nShift;
         int nDigitsWithLeadingZeros = nLeadingZeros + strDigits.Length;
-        int nBillits = (int)Ceiling(nDigitsWithLeadingZeros / (decimal)_DIGITS_PER_BILLIT);
-        int nTrailingZeros = nBillits * _DIGITS_PER_BILLIT - nDigitsWithLeadingZeros;
+        int nBillits = (int)Ceiling(nDigitsWithLeadingZeros / (decimal)_DigitsPerBillit);
+        int nTrailingZeros = nBillits * _DigitsPerBillit - nDigitsWithLeadingZeros;
         strDigits += new string('0', nTrailingZeros);
 
         // Create an array to store the significand.
@@ -160,8 +160,8 @@ public class BigDecimal : IEquatable<BigDecimal>, IComparable<BigDecimal>
         int[] significand = new int[nBillits];
         for (int i = 0; i < nBillits; i++)
         {
-            int start = i * _DIGITS_PER_BILLIT - nLeadingZeros;
-            int end = start + _DIGITS_PER_BILLIT;
+            int start = i * _DigitsPerBillit - nLeadingZeros;
+            int end = start + _DigitsPerBillit;
             if (start < 0)
             {
                 start = 0;
@@ -173,14 +173,17 @@ public class BigDecimal : IEquatable<BigDecimal>, IComparable<BigDecimal>
         Mantissa = bilMantissa;
     }
 
-    public static BigDecimal Clone(BigDecimal bd) => new(bd.Significand, bd.Mantissa);
+    public static BigDecimal Clone(BigDecimal bd) =>
+        new (bd.Significand, bd.Mantissa);
 
-    public static BigDecimal Zero() => new();
+    public static BigDecimal Zero() =>
+        new ();
 
-    public static BigDecimal One() => new(new[] { 1 });
+    public static BigDecimal One() =>
+        new (new[] { 1 });
 
     public static BigDecimal MinValue() =>
-        new(new[]
+        new (new[]
         {
             -999999999, -999999999, -999999999, -999999999, -999999999,
             -999999999, -999999999, -999999999, -999999999, -999999999,
@@ -192,7 +195,7 @@ public class BigDecimal : IEquatable<BigDecimal>, IComparable<BigDecimal>
     /// </summary>
     /// <returns></returns>
     public static BigDecimal MaxValue() =>
-        new(new[]
+        new (new[]
         {
             999999999, 999999999, 999999999, 999999999, 999999999,
             999999999, 999999999, 999999999, 999999999, 999999999,
@@ -203,15 +206,18 @@ public class BigDecimal : IEquatable<BigDecimal>, IComparable<BigDecimal>
     /// Smallest positive value. B^-(2^31)
     /// </summary>
     /// <returns></returns>
-    public static BigDecimal Epsilon() => new(new[] { 1 }, int.MinValue);
+    public static BigDecimal Epsilon() =>
+        new (new[] { 1 }, int.MinValue);
 
     #endregion Constructors and creation methods
 
     #region Overridden methods
 
-    public override bool Equals(object? obj) => obj is BigDecimal bd && Equals(bd);
+    public override bool Equals(object? obj) =>
+        obj is BigDecimal bd && Equals(bd);
 
-    public override int GetHashCode() => HashCode.Combine(Significand, Mantissa);
+    public override int GetHashCode() =>
+        HashCode.Combine(Significand, Mantissa);
 
     public override string ToString()
     {
@@ -225,13 +231,13 @@ public class BigDecimal : IEquatable<BigDecimal>, IComparable<BigDecimal>
         string strSign = IsNegative ? "-" : "";
 
         // Decimal mantissa.
-        int decMantissa = Mantissa * _DIGITS_PER_BILLIT + (_DIGITS_PER_BILLIT - 1);
+        int decMantissa = Mantissa * _DigitsPerBillit + (_DigitsPerBillit - 1);
 
         // Decimal significand.
-        StringBuilder sbSignificand = new();
+        StringBuilder sbSignificand = new ();
         foreach (int billit in Significand)
         {
-            sbSignificand.Append(Math.Abs(billit).ToString().PadLeft(_DIGITS_PER_BILLIT, '0'));
+            sbSignificand.Append(Math.Abs(billit).ToString().PadLeft(_DigitsPerBillit, '0'));
         }
         string strSignificand = TrimDigits(sbSignificand.ToString(), ref decMantissa);
         if (strSignificand.Length > 1)
@@ -286,7 +292,6 @@ public class BigDecimal : IEquatable<BigDecimal>, IComparable<BigDecimal>
     }
 
     /// <summary>
-    ///
     /// </summary>
     /// <param name="other"></param>
     /// <returns></returns>
@@ -342,13 +347,17 @@ public class BigDecimal : IEquatable<BigDecimal>, IComparable<BigDecimal>
 
     #region Comparison operators
 
-    public static bool operator ==(BigDecimal left, BigDecimal right) => left.Equals(right);
+    public static bool operator ==(BigDecimal left, BigDecimal right) =>
+        left.Equals(right);
 
-    public static bool operator !=(BigDecimal left, BigDecimal right) => !left.Equals(right);
+    public static bool operator !=(BigDecimal left, BigDecimal right) =>
+        !left.Equals(right);
 
-    public static bool operator <(BigDecimal left, BigDecimal right) => left.CompareTo(right) < 0;
+    public static bool operator <(BigDecimal left, BigDecimal right) =>
+        left.CompareTo(right) < 0;
 
-    public static bool operator >(BigDecimal left, BigDecimal right) => left.CompareTo(right) > 0;
+    public static bool operator >(BigDecimal left, BigDecimal right) =>
+        left.CompareTo(right) > 0;
 
     public static bool operator <=(BigDecimal left, BigDecimal right) =>
         left.CompareTo(right) is < 0 or 0;
@@ -384,7 +393,8 @@ public class BigDecimal : IEquatable<BigDecimal>, IComparable<BigDecimal>
     /// </summary>
     /// <param name="bd"></param>
     /// <returns></returns>
-    public static BigDecimal operator -(BigDecimal bd) => Negate(bd);
+    public static BigDecimal operator -(BigDecimal bd) =>
+        Negate(bd);
 
     public static BigDecimal Add(BigDecimal bd1, BigDecimal bd2)
     {
@@ -421,10 +431,10 @@ public class BigDecimal : IEquatable<BigDecimal>, IComparable<BigDecimal>
 
         // Cap at maximum length. Add 1 extra at the beginning to allow for
         // overflow and 1 at the end for rounding.
-        const int MAX_LEN2 = _MAX_LENGTH + 2;
-        if (len3 > MAX_LEN2)
+        const int maxLen2 = _MaxLength + 2;
+        if (len3 > maxLen2)
         {
-            len3 = MAX_LEN2;
+            len3 = maxLen2;
             minExp3 = maxExp3 - len3 + 1;
         }
 
@@ -471,11 +481,14 @@ public class BigDecimal : IEquatable<BigDecimal>, IComparable<BigDecimal>
         return new BigDecimal(significand3, maxExp3);
     }
 
-    public static BigDecimal operator +(BigDecimal bd1, BigDecimal bd2) => Add(bd1, bd2);
+    public static BigDecimal operator +(BigDecimal bd1, BigDecimal bd2) =>
+        Add(bd1, bd2);
 
-    public static BigDecimal Subtract(BigDecimal bd1, BigDecimal bd2) => Add(bd1, -bd2);
+    public static BigDecimal Subtract(BigDecimal bd1, BigDecimal bd2) =>
+        Add(bd1, -bd2);
 
-    public static BigDecimal operator -(BigDecimal bd1, BigDecimal bd2) => Subtract(bd1, bd2);
+    public static BigDecimal operator -(BigDecimal bd1, BigDecimal bd2) =>
+        Subtract(bd1, bd2);
 
     public static BigDecimal Multiply(BigDecimal bd1, BigDecimal bd2)
     {
@@ -510,9 +523,9 @@ public class BigDecimal : IEquatable<BigDecimal>, IComparable<BigDecimal>
 
         // Cap at maximum length. Add 1 extra at the beginning to allow for
         // overflow and 1 at the end for rounding.
-        if (len3 > _MAX_LENGTH + 2)
+        if (len3 > _MaxLength + 2)
         {
-            len3 = _MAX_LENGTH + 2;
+            len3 = _MaxLength + 2;
         }
 
         // Initialise result array.
@@ -568,7 +581,8 @@ public class BigDecimal : IEquatable<BigDecimal>, IComparable<BigDecimal>
         return new BigDecimal(significand3, maxExp3);
     }
 
-    public static BigDecimal operator *(BigDecimal bd1, BigDecimal bd2) => Multiply(bd1, bd2);
+    public static BigDecimal operator *(BigDecimal bd1, BigDecimal bd2) =>
+        Multiply(bd1, bd2);
 
     /// <summary>
     /// Computes the division using the Goldschmidt algorithm.
@@ -601,8 +615,8 @@ public class BigDecimal : IEquatable<BigDecimal>, IComparable<BigDecimal>
 
         // Remove the mantissas from the operands. This enables us to calculate
         // f using the decimal type.
-        BigDecimal n = new(numerator.Significand);
-        BigDecimal d = new(denominator.Significand);
+        BigDecimal n = new (numerator.Significand);
+        BigDecimal d = new (denominator.Significand);
 
         // Get a good initial estimate of the multiplication factor.
         BigDecimal f = 1m / (decimal)d;
@@ -634,14 +648,16 @@ public class BigDecimal : IEquatable<BigDecimal>, IComparable<BigDecimal>
         return new BigDecimal(n.Significand, n.Mantissa + resultMantissa);
     }
 
-    public static BigDecimal operator /(BigDecimal bd1, BigDecimal bd2) => Divide(bd1, bd2);
+    public static BigDecimal operator /(BigDecimal bd1, BigDecimal bd2) =>
+        Divide(bd1, bd2);
 
     /// <summary>
     /// Compute the reciprocal of the given value.
     /// </summary>
     /// <param name="bd"></param>
     /// <returns></returns>
-    public static BigDecimal Reciprocal(BigDecimal bd) => Divide(One(), bd);
+    public static BigDecimal Reciprocal(BigDecimal bd) =>
+        Divide(One(), bd);
 
     #endregion Arithmetic methods
 
@@ -654,7 +670,7 @@ public class BigDecimal : IEquatable<BigDecimal>, IComparable<BigDecimal>
     public static BigDecimal FromUInt64(ulong l)
     {
         ulong rem = l;
-        List<int> billits = new();
+        List<int> billits = new ();
         while (rem > 0)
         {
             int billit = (int)(rem % _B);
@@ -716,7 +732,7 @@ public class BigDecimal : IEquatable<BigDecimal>, IComparable<BigDecimal>
                 break;
         }
 
-        int[] billits = new int[_MAX_LENGTH];
+        int[] billits = new int[_MaxLength];
         int cur = 0;
 
         while (rem > 0)
@@ -727,7 +743,7 @@ public class BigDecimal : IEquatable<BigDecimal>, IComparable<BigDecimal>
             rem = frac * _B;
         }
 
-        BigDecimal bd = new(billits, mantissa);
+        BigDecimal bd = new (billits, mantissa);
         return isNegative ? -bd : bd;
     }
 
@@ -810,7 +826,7 @@ public class BigDecimal : IEquatable<BigDecimal>, IComparable<BigDecimal>
                 break;
         }
 
-        int[] billits = new int[_MAX_LENGTH + 1];
+        int[] billits = new int[_MaxLength + 1];
         int cur = 0;
 
         while (rem > 0)
@@ -825,7 +841,7 @@ public class BigDecimal : IEquatable<BigDecimal>, IComparable<BigDecimal>
             rem = frac * _B;
         }
 
-        BigDecimal bd = new(billits, mantissa);
+        BigDecimal bd = new (billits, mantissa);
         return isNegative ? -bd : bd;
     }
 
@@ -839,18 +855,32 @@ public class BigDecimal : IEquatable<BigDecimal>, IComparable<BigDecimal>
     /// If the magnitude of the BigDecimal
     /// is too large to be represented by a double.
     /// </exception>
-    public static double ToDouble(BigDecimal bd) => double.Parse(bd.ToString());
+    public static double ToDouble(BigDecimal bd) =>
+        double.Parse(bd.ToString());
 
-    public static implicit operator BigDecimal(ulong l) => FromUInt64(l);
-    public static implicit operator BigDecimal(long l) => FromInt64(l);
-    public static implicit operator BigDecimal(uint i) => FromUInt64(i);
-    public static implicit operator BigDecimal(int i) => FromInt64(i);
+    public static implicit operator BigDecimal(ulong l) =>
+        FromUInt64(l);
 
-    public static implicit operator BigDecimal(decimal m) => FromDecimal(m);
-    public static explicit operator decimal(BigDecimal bd) => ToDecimal(bd);
+    public static implicit operator BigDecimal(long l) =>
+        FromInt64(l);
 
-    public static implicit operator BigDecimal(double d) => FromDouble(d);
-    public static explicit operator double(BigDecimal bd) => ToDouble(bd);
+    public static implicit operator BigDecimal(uint i) =>
+        FromUInt64(i);
+
+    public static implicit operator BigDecimal(int i) =>
+        FromInt64(i);
+
+    public static implicit operator BigDecimal(decimal m) =>
+        FromDecimal(m);
+
+    public static explicit operator decimal(BigDecimal bd) =>
+        ToDecimal(bd);
+
+    public static implicit operator BigDecimal(double d) =>
+        FromDouble(d);
+
+    public static explicit operator double(BigDecimal bd) =>
+        ToDouble(bd);
 
     #endregion Conversion methods and cast operators
 
@@ -866,29 +896,29 @@ public class BigDecimal : IEquatable<BigDecimal>, IComparable<BigDecimal>
     /// <returns>A new array containing maximum MaxBillits billits.</returns>
     public static int[] Round(int[] significand, ref int mantissa)
     {
-        if (significand.Length <= _MAX_LENGTH)
+        if (significand.Length <= _MaxLength)
         {
             // No rounding to do, so just return a copy of the array.
             return significand[..];
         }
 
-        const int MIDPOINT = 500000000;
+        const int midpoint = 500000000;
 
         // Trim excess digits.
-        int[] result = significand[.._MAX_LENGTH];
+        int[] result = significand[.._MaxLength];
 
         // See if we need to round up the last digit.
-        if (significand[_MAX_LENGTH] > MIDPOINT ||
-            (significand[_MAX_LENGTH] == MIDPOINT && significand[_MAX_LENGTH - 1] % 2 == 1))
+        if (significand[_MaxLength] > midpoint ||
+            significand[_MaxLength] == midpoint && significand[_MaxLength - 1] % 2 == 1)
         {
             result[^1]++;
             FixOverflow(ref result, ref mantissa);
 
             // If an extra digit was prepended due to overflow, the last one
             // must be 0. Lop it off to get the right number of billits.
-            if (result.Length > _MAX_LENGTH)
+            if (result.Length > _MaxLength)
             {
-                result = result[.._MAX_LENGTH];
+                result = result[.._MaxLength];
             }
         }
 

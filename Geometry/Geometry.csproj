@@ -9,13 +9,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Integers\Integers.csproj" />
+        <ProjectReference Include="..\Integers\Integers.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Reference Include="AstroMultimedia.Core.Numbers">
-        <HintPath>..\..\Core\Numbers\bin\Debug\net7.0\AstroMultimedia.Core.Numbers.dll</HintPath>
-      </Reference>
+        <Reference Include="AstroMultimedia.Core.Numbers">
+            <HintPath>..\..\Core\Numbers\bin\Debug\net7.0\AstroMultimedia.Core.Numbers.dll</HintPath>
+        </Reference>
     </ItemGroup>
 
 </Project>

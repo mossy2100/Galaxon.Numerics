@@ -13,10 +13,10 @@ public class RadixNumber : IComparable<RadixNumber>, IEquatable<RadixNumber>, IC
     #region Constants
 
     /// <summary>The minimum radix supported by the type.</summary>
-    public const int MIN_RADIX = 2;
+    public const int MinRadix = 2;
 
     /// <summary>The maximum radix supported by the type.</summary>
-    public const int MAX_RADIX = 36;
+    public const int MaxRadix = 36;
 
     #endregion Constants
 
@@ -26,7 +26,7 @@ public class RadixNumber : IComparable<RadixNumber>, IEquatable<RadixNumber>, IC
     /// Valid digits as a string, supporting up to radix 36. These are the same digits used by Java
     /// and JavaScript.
     /// </summary>
-    public const string DIGITS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    public const string Digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
     /// <summary>Common radixes, which will allow us to use faster internal methods.</summary>
     public static readonly sbyte[] CommonRadixes = { 2, 8, 16 };
@@ -94,11 +94,13 @@ public class RadixNumber : IComparable<RadixNumber>, IEquatable<RadixNumber>, IC
     #region InstanceMethods
 
     /// <summary>Convert a RadixNumber to a string.</summary>
-    public override string ToString() => ValueToDigits(Value, Radix);
+    public override string ToString() =>
+        ValueToDigits(Value, Radix);
 
     /// <summary>Converts number to a given radix.</summary>
     /// <exception cref="ArgumentOutOfRangeException">If the radix is out of range.</exception>
-    public RadixNumber ToRadix(sbyte radix2) => new(Value, radix2);
+    public RadixNumber ToRadix(sbyte radix2) =>
+        new (Value, radix2);
 
     /// <summary>Converts to binary string representation.</summary>
     /// <param name="includePrefix">If to include the "0b" prefix.</param>
@@ -208,20 +210,24 @@ public class RadixNumber : IComparable<RadixNumber>, IEquatable<RadixNumber>, IC
     /// <summary>See if two RadixNum values are equal.</summary>
     /// <param name="radixNum2">Another RadixNum value.</param>
     /// <returns></returns>
-    public bool Equals(RadixNumber? radixNum2) => radixNum2 is not null && Value == radixNum2.Value;
+    public bool Equals(RadixNumber? radixNum2) =>
+        radixNum2 is not null && Value == radixNum2.Value;
 
     /// <summary>See if the RadixNum is equal to the given value.</summary>
     /// <param name="radixNum2">Some other value.</param>
     /// <returns></returns>
-    public override bool Equals(object? radixNum2) => radixNum2 is RadixNumber num2 && Equals(num2);
+    public override bool Equals(object? radixNum2) =>
+        radixNum2 is RadixNumber num2 && Equals(num2);
 
     // /// <summary>Return a hashcode for the object.</summary>
     // /// <returns>The hash code.</returns>
-    public override int GetHashCode() => ToString().GetHashCode();
+    public override int GetHashCode() =>
+        ToString().GetHashCode();
 
     /// <summary>Clone a RadixNumber.</summary>
     /// <returns>The new RadixNumber.</returns>
-    public object Clone() => MemberwiseClone();
+    public object Clone() =>
+        MemberwiseClone();
 
     #endregion InstanceMethods
 
@@ -234,10 +240,10 @@ public class RadixNumber : IComparable<RadixNumber>, IEquatable<RadixNumber>, IC
     /// <exception cref="ArgumentOutOfRangeException">If the radix is out of range.</exception>
     public static void CheckRadix(sbyte radix)
     {
-        if (radix is < MIN_RADIX or > MAX_RADIX)
+        if (radix is < MinRadix or > MaxRadix)
         {
             throw new ArgumentOutOfRangeException(
-                $"Radix must be in the range {MIN_RADIX}..{MAX_RADIX}.");
+                $"Radix must be in the range {MinRadix}..{MaxRadix}.");
         }
     }
 
@@ -303,7 +309,7 @@ public class RadixNumber : IComparable<RadixNumber>, IEquatable<RadixNumber>, IC
                 default:
                     string ucMsg = radix > 10 ? " Letter digits may be lower or upper case." : "";
                     throw new ArgumentFormatException(nameof(digits),
-                        $"A string representing a number in radix (or base) {radix} may only include these digits: {DIGITS[..radix]}.{ucMsg}");
+                        $"A string representing a number in radix (or base) {radix} may only include these digits: {Digits[..radix]}.{ucMsg}");
             }
 
             value = value * (ulong)radix + (ulong)digitValue;
@@ -332,7 +338,7 @@ public class RadixNumber : IComparable<RadixNumber>, IEquatable<RadixNumber>, IC
         }
 
         // Build the output string.
-        StringBuilder digits = new();
+        StringBuilder digits = new ();
 
         while (true)
         {
@@ -340,14 +346,14 @@ public class RadixNumber : IComparable<RadixNumber>, IEquatable<RadixNumber>, IC
             {
                 if (value > 0 || digits.Length == 0)
                 {
-                    digits.Insert(0, DIGITS[(int)value]);
+                    digits.Insert(0, Digits[(int)value]);
                 }
 
                 // We're done.
                 break;
             }
             ulong rem = value % (ulong)radix;
-            digits.Insert(0, DIGITS[(int)rem]);
+            digits.Insert(0, Digits[(int)rem]);
             value = (value - rem) / (ulong)radix;
         }
 
@@ -355,22 +361,28 @@ public class RadixNumber : IComparable<RadixNumber>, IEquatable<RadixNumber>, IC
     }
 
     /// <summary>Convert a string of binary digits into a RadixNum.</summary>
-    public static RadixNumber FromBinString(string digits) => new(digits, 2);
+    public static RadixNumber FromBinString(string digits) =>
+        new (digits, 2);
 
     /// <summary>Convert a string of quaternary digits into a RadixNum.</summary>
-    public static RadixNumber FromQuatString(string digits) => new(digits, 4);
+    public static RadixNumber FromQuatString(string digits) =>
+        new (digits, 4);
 
     /// <summary>Convert a string of octal digits into a RadixNum.</summary>
-    public static RadixNumber FromOctString(string digits) => new(digits, 8);
+    public static RadixNumber FromOctString(string digits) =>
+        new (digits, 8);
 
     /// <summary>Convert a string of decimal digits into a RadixNum.</summary>
-    public static RadixNumber FromDecString(string digits) => new(digits);
+    public static RadixNumber FromDecString(string digits) =>
+        new (digits);
 
     /// <summary>Convert a string of hexadecimal digits into a RadixNum.</summary>
-    public static RadixNumber FromHexString(string digits) => new(digits, 16);
+    public static RadixNumber FromHexString(string digits) =>
+        new (digits, 16);
 
     /// <summary>Convert a string of triacontakaidecimal digits into a RadixNum.</summary>
-    public static RadixNumber FromTriaString(string digits) => new(digits, 32);
+    public static RadixNumber FromTriaString(string digits) =>
+        new (digits, 32);
 
     #endregion StaticMethods
 
@@ -446,7 +458,7 @@ public class RadixNumber : IComparable<RadixNumber>, IEquatable<RadixNumber>, IC
 
     /// <summary>Overload bitwise NOT (~) operator.</summary>
     public static RadixNumber operator ~(RadixNumber radixNum) =>
-        new(~radixNum.Value, radixNum.Radix);
+        new (~radixNum.Value, radixNum.Radix);
 
     /// <summary> Overload bitwise AND (&) operator. </summary>
     public static RadixNumber operator &(RadixNumber radixNum, RadixNumber radixNum2)
@@ -475,7 +487,8 @@ public class RadixNumber : IComparable<RadixNumber>, IEquatable<RadixNumber>, IC
     #region ConversionOperators
 
     /// <summary>Implicit conversion to ulong.</summary>
-    public static implicit operator ulong(RadixNumber radixNum) => radixNum.Value;
+    public static implicit operator ulong(RadixNumber radixNum) =>
+        radixNum.Value;
 
     #endregion ConversionOperators
 

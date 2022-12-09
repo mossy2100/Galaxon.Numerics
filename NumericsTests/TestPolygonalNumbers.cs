@@ -5,19 +5,29 @@ namespace AstroMultimedia.Numerics.Tests;
 [TestClass]
 public class TestPolygonalNumbers
 {
+    [TestMethod]
+    public void TestLargeNumber()
+    {
+        ulong n = 40755;
+        Assert.IsTrue(PolygonalNumbers.IsTriangular(n));
+        Assert.IsTrue(PolygonalNumbers.IsPentagonal(n));
+        Assert.IsTrue(PolygonalNumbers.IsHexagonal(n));
+
+        n = 1533776805;
+        Assert.IsTrue(PolygonalNumbers.IsTriangular(n));
+        Assert.IsTrue(PolygonalNumbers.IsPentagonal(n));
+        Assert.IsTrue(PolygonalNumbers.IsHexagonal(n));
+    }
+
     #region Triangular numbers
 
     [TestMethod]
-    public void TestGetTriangular1()
-    {
+    public void TestGetTriangular1() =>
         Assert.AreEqual(1u, PolygonalNumbers.GetTriangular(1));
-    }
 
     [TestMethod]
-    public void TestGetTriangular5()
-    {
+    public void TestGetTriangular5() =>
         Assert.AreEqual(15u, PolygonalNumbers.GetTriangular(5));
-    }
 
     [TestMethod]
     public void TestGetAllTriangularUpTo()
@@ -54,16 +64,12 @@ public class TestPolygonalNumbers
     #region Pentagonal numbers
 
     [TestMethod]
-    public void TestGetPentagonal1()
-    {
+    public void TestGetPentagonal1() =>
         Assert.AreEqual(1u, PolygonalNumbers.GetPentagonal(1));
-    }
 
     [TestMethod]
-    public void TestGetPentagonal5()
-    {
+    public void TestGetPentagonal5() =>
         Assert.AreEqual(35u, PolygonalNumbers.GetPentagonal(5));
-    }
 
     [TestMethod]
     public void TestGetAllPentagonalUpTo()
@@ -100,16 +106,12 @@ public class TestPolygonalNumbers
     #region Hexagonal numbers
 
     [TestMethod]
-    public void TestGetHexagonal1()
-    {
+    public void TestGetHexagonal1() =>
         Assert.AreEqual(1u, PolygonalNumbers.GetHexagonal(1));
-    }
 
     [TestMethod]
-    public void TestGetHexagonal5()
-    {
+    public void TestGetHexagonal5() =>
         Assert.AreEqual(45u, PolygonalNumbers.GetHexagonal(5));
-    }
 
     [TestMethod]
     public void TestGetAllHexagonalUpTo()
@@ -143,18 +145,4 @@ public class TestPolygonalNumbers
     }
 
     #endregion Hexagonal numbers
-
-    [TestMethod]
-    public void TestLargeNumber()
-    {
-        ulong n = 40755;
-        Assert.IsTrue(PolygonalNumbers.IsTriangular(n));
-        Assert.IsTrue(PolygonalNumbers.IsPentagonal(n));
-        Assert.IsTrue(PolygonalNumbers.IsHexagonal(n));
-
-        n = 1533776805;
-        Assert.IsTrue(PolygonalNumbers.IsTriangular(n));
-        Assert.IsTrue(PolygonalNumbers.IsPentagonal(n));
-        Assert.IsTrue(PolygonalNumbers.IsHexagonal(n));
-    }
 }

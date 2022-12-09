@@ -1,5 +1,4 @@
 using AstroMultimedia.Core.Numbers;
-using AstroMultimedia.Numerics.Integers;
 using AstroMultimedia.Numerics.Types;
 
 namespace AstroMultimedia.Numerics.Tests;
@@ -442,7 +441,7 @@ public class TestBigDecimal
     {
         double d, d2;
         BigDecimal bd;
-        double percent = 1e-13;
+        const double percent = 1e-13;
 
         d = 0;
         bd = BigDecimal.FromDouble(d);
@@ -546,8 +545,8 @@ public class TestBigDecimal
     public void AddZeroToNumberReturnsNumber()
     {
         // Arrange.
-        BigDecimal bd1 = new("5.4321");
-        BigDecimal bd2 = new("0");
+        BigDecimal bd1 = new ("5.4321");
+        BigDecimal bd2 = new ("0");
 
         // Act.
         BigDecimal bd3 = bd1 + bd2;
@@ -560,8 +559,8 @@ public class TestBigDecimal
     public void AddNumberToZeroReturnsNumber()
     {
         // Arrange.
-        BigDecimal bd1 = new("0");
-        BigDecimal bd2 = new("5.4321");
+        BigDecimal bd1 = new ("0");
+        BigDecimal bd2 = new ("5.4321");
 
         // Act.
         BigDecimal bd3 = bd1 + bd2;
@@ -574,8 +573,8 @@ public class TestBigDecimal
     public void AddTest1()
     {
         // Arrange.
-        BigDecimal bd1 = new("1");
-        BigDecimal bd2 = new("1");
+        BigDecimal bd1 = new ("1");
+        BigDecimal bd2 = new ("1");
 
         // Act.
         BigDecimal bd3 = bd1 + bd2;
@@ -588,8 +587,8 @@ public class TestBigDecimal
     public void AddTest2()
     {
         // Arrange.
-        BigDecimal bd1 = new("5.4321");
-        BigDecimal bd2 = new("6.7894");
+        BigDecimal bd1 = new ("5.4321");
+        BigDecimal bd2 = new ("6.7894");
 
         // Act.
         BigDecimal bd3 = bd1 + bd2;
@@ -602,8 +601,8 @@ public class TestBigDecimal
     public void AddTest3()
     {
         // Arrange.
-        BigDecimal bd1 = new("12345");
-        BigDecimal bd2 = new("0.67890");
+        BigDecimal bd1 = new ("12345");
+        BigDecimal bd2 = new ("0.67890");
 
         // Act.
         BigDecimal bd3 = bd1 + bd2;
@@ -616,8 +615,8 @@ public class TestBigDecimal
     public void AddTest4()
     {
         // Arrange.
-        BigDecimal bd1 = new("1e108");
-        BigDecimal bd2 = new("1");
+        BigDecimal bd1 = new ("1e108");
+        BigDecimal bd2 = new ("1");
 
         // Act.
         BigDecimal bd3 = bd1 + bd2;
@@ -631,8 +630,8 @@ public class TestBigDecimal
     public void AddTest5()
     {
         // Arrange.
-        BigDecimal bd1 = new("1e107");
-        BigDecimal bd2 = new("1");
+        BigDecimal bd1 = new ("1e107");
+        BigDecimal bd2 = new ("1");
         string expected = "1.0000000000000000000000000000000000000000000000000"
             + "0000000000000000000000000000000000000000000000000"
             + "000000001E+107";
@@ -685,7 +684,7 @@ public class TestBigDecimal
     {
         decimal m1, m2, mSum;
         BigDecimal bd1, bd2, bdSum;
-        Random rng = new();
+        Random rng = new ();
 
         // Create 1000 pairs of random decimals and add them.
         for (int i = 0; i < 1000; i++)
@@ -716,8 +715,8 @@ public class TestBigDecimal
     public void RoundTest1()
     {
         // Arrange.
-        BigDecimal bd1 = new("1e107");
-        BigDecimal bd2 = new("0.5");
+        BigDecimal bd1 = new ("1e107");
+        BigDecimal bd2 = new ("0.5");
 
         // Act.
         BigDecimal bd3 = bd1 + bd2;
@@ -732,8 +731,8 @@ public class TestBigDecimal
     public void RoundTest2()
     {
         // Arrange.
-        BigDecimal bd1 = new("1E+107");
-        BigDecimal bd2 = new("0.6");
+        BigDecimal bd1 = new ("1E+107");
+        BigDecimal bd2 = new ("0.6");
 
         // Act.
         BigDecimal bd3 = bd1 + bd2;
@@ -749,8 +748,8 @@ public class TestBigDecimal
     public void RoundTest3()
     {
         // Arrange.
-        BigDecimal bd1 = new("1E+107");
-        BigDecimal bd2 = new("1.5");
+        BigDecimal bd1 = new ("1E+107");
+        BigDecimal bd2 = new ("1.5");
 
         // Act.
         BigDecimal bd3 = bd1 + bd2;
@@ -766,8 +765,8 @@ public class TestBigDecimal
     public void SubtractTest1()
     {
         // Arrange.
-        BigDecimal bd1 = new("1");
-        BigDecimal bd2 = new("1");
+        BigDecimal bd1 = new ("1");
+        BigDecimal bd2 = new ("1");
 
         // Act.
         BigDecimal bd3 = bd1 - bd2;
@@ -780,8 +779,8 @@ public class TestBigDecimal
     public void SubtractTest2()
     {
         // Arrange.
-        BigDecimal bd1 = new("1");
-        BigDecimal bd2 = new("0");
+        BigDecimal bd1 = new ("1");
+        BigDecimal bd2 = new ("0");
 
         // Act.
         BigDecimal bd3 = bd1 - bd2;
@@ -794,8 +793,8 @@ public class TestBigDecimal
     public void SubtractTest3()
     {
         // Arrange.
-        BigDecimal bd1 = new("0");
-        BigDecimal bd2 = new("1");
+        BigDecimal bd1 = new ("0");
+        BigDecimal bd2 = new ("1");
 
         // Act.
         BigDecimal bd3 = bd1 - bd2;
@@ -808,8 +807,8 @@ public class TestBigDecimal
     public void SubtractTest4()
     {
         // Arrange.
-        BigDecimal bd1 = new("8");
-        BigDecimal bd2 = new("5");
+        BigDecimal bd1 = new ("8");
+        BigDecimal bd2 = new ("5");
 
         // Act.
         BigDecimal bd3 = bd1 - bd2;
@@ -822,8 +821,8 @@ public class TestBigDecimal
     public void SubtractTest5()
     {
         // Arrange.
-        BigDecimal bd1 = new("5");
-        BigDecimal bd2 = new("8");
+        BigDecimal bd1 = new ("5");
+        BigDecimal bd2 = new ("8");
 
         // Act.
         BigDecimal bd3 = bd1 - bd2;
@@ -836,8 +835,8 @@ public class TestBigDecimal
     public void SubtractTest6()
     {
         // Arrange.
-        BigDecimal bd1 = new("-8");
-        BigDecimal bd2 = new("5");
+        BigDecimal bd1 = new ("-8");
+        BigDecimal bd2 = new ("5");
 
         // Act.
         BigDecimal bd3 = bd1 - bd2;
@@ -850,8 +849,8 @@ public class TestBigDecimal
     public void SubtractTest7()
     {
         // Arrange.
-        BigDecimal bd1 = new("5");
-        BigDecimal bd2 = new("-8");
+        BigDecimal bd1 = new ("5");
+        BigDecimal bd2 = new ("-8");
 
         // Act.
         BigDecimal bd3 = bd1 - bd2;
@@ -864,8 +863,8 @@ public class TestBigDecimal
     public void SubtractTest8()
     {
         // Arrange.
-        BigDecimal bd1 = new("-5");
-        BigDecimal bd2 = new("-8");
+        BigDecimal bd1 = new ("-5");
+        BigDecimal bd2 = new ("-8");
 
         // Act.
         BigDecimal bd3 = bd1 - bd2;
@@ -878,8 +877,8 @@ public class TestBigDecimal
     public void SubtractTest9()
     {
         // Arrange.
-        BigDecimal bd1 = new("-8");
-        BigDecimal bd2 = new("-5");
+        BigDecimal bd1 = new ("-8");
+        BigDecimal bd2 = new ("-5");
 
         // Act.
         BigDecimal bd3 = bd1 - bd2;
@@ -892,8 +891,8 @@ public class TestBigDecimal
     public void SubtractTest10()
     {
         // Arrange.
-        BigDecimal bd1 = new("1");
-        BigDecimal bd2 = new("1");
+        BigDecimal bd1 = new ("1");
+        BigDecimal bd2 = new ("1");
 
         // Act.
         BigDecimal bd3 = bd1 - bd2;
@@ -906,8 +905,8 @@ public class TestBigDecimal
     public void SubtractTest11()
     {
         // Arrange.
-        BigDecimal bd1 = new("67890");
-        BigDecimal bd2 = new("12345");
+        BigDecimal bd1 = new ("67890");
+        BigDecimal bd2 = new ("12345");
 
         // Act.
         BigDecimal bd3 = bd1 - bd2;
@@ -920,8 +919,8 @@ public class TestBigDecimal
     public void SubtractTest12()
     {
         // Arrange.
-        BigDecimal bd1 = new("1234567890");
-        BigDecimal bd2 = new("9.87654321");
+        BigDecimal bd1 = new ("1234567890");
+        BigDecimal bd2 = new ("9.87654321");
 
         // Act.
         BigDecimal bd3 = bd1 - bd2;
@@ -934,8 +933,8 @@ public class TestBigDecimal
     public void SubtractTest13()
     {
         // Arrange.
-        BigDecimal bd1 = new("1E10");
-        BigDecimal bd2 = new("1");
+        BigDecimal bd1 = new ("1E10");
+        BigDecimal bd2 = new ("1");
 
         // Act.
         BigDecimal bd3 = bd1 - bd2;
@@ -948,8 +947,8 @@ public class TestBigDecimal
     public void SubtractTest14()
     {
         // Arrange.
-        BigDecimal bd1 = new("1");
-        BigDecimal bd2 = new("1E+10");
+        BigDecimal bd1 = new ("1");
+        BigDecimal bd2 = new ("1E+10");
 
         // Act.
         BigDecimal bd3 = bd1 - bd2;
@@ -1089,7 +1088,7 @@ public class TestBigDecimal
     {
         double m1, m2, mProd;
         BigDecimal bd1, bd2, bdProd;
-        Random rng = new();
+        Random rng = new ();
         double percent = 0.000001;
 
         // Create 1000 pairs of random decimals and multiply them.
@@ -1239,7 +1238,7 @@ public class TestBigDecimal
     {
         double m1, m2, m3;
         BigDecimal bd1, bd2, bd3;
-        Random rng = new();
+        Random rng = new ();
         double percent = 0.000001;
         int n = 100;
 
@@ -1289,7 +1288,7 @@ public class TestBigDecimal
     {
         double m1, m2;
         BigDecimal bd1, bd2;
-        Random rng = new();
+        Random rng = new ();
         // double percent = 0.001;
         int n = 100;
 

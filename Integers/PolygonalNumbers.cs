@@ -1,9 +1,9 @@
 namespace AstroMultimedia.Numerics.Integers;
 
 /// <summary>
-/// <see href="https://en.wikipedia.org/wiki/Polygonal_number" />
+///     <see href="https://en.wikipedia.org/wiki/Polygonal_number" />
 /// </summary>
-public class PolygonalNumbers
+public static class PolygonalNumbers
 {
     #region Methods to get a polygonal number
 
@@ -112,7 +112,7 @@ public class PolygonalNumbers
 
         int s2 = s - 2;
         int s4 = s - 4;
-        double n = (Sqrt((8 * (ulong)s2 * x) + (ulong)(s4 * s4)) + s4) / (2 * s2);
+        double n = (Sqrt(8 * (ulong)s2 * x + (ulong)(s4 * s4)) + s4) / (2 * s2);
         return double.IsInteger(n);
     }
 

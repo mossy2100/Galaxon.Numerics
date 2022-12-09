@@ -1,5 +1,4 @@
 using System.Numerics;
-using AstroMultimedia.Numerics.Integers;
 using AstroMultimedia.Numerics.Types;
 using DecimalMath;
 
@@ -214,19 +213,21 @@ public class TestDecimalComplexExp
 
     [TestMethod]
     [ExpectedException(typeof(ArithmeticException))]
-    public void PowThrowsWhenZeroRaisedToImagNum() => DecimalComplex.Pow(0, DecimalComplex.I);
+    public void PowThrowsWhenZeroRaisedToImagNum() =>
+        DecimalComplex.Pow(0, DecimalComplex.I);
 
     [TestMethod]
     [ExpectedException(typeof(ArithmeticException))]
-    public void PowThrowsWhenZeroRaisedToNegNum() => DecimalComplex.Pow(0, -1);
+    public void PowThrowsWhenZeroRaisedToNegNum() =>
+        DecimalComplex.Pow(0, -1);
 
     [TestMethod]
     public void PowTest()
     {
         DecimalComplex z1;
-        DecimalComplex w1 = new(3, 4);
+        DecimalComplex w1 = new (3, 4);
         Complex z2;
-        Complex w2 = new(3, 4);
+        Complex w2 = new (3, 4);
 
         z1 = DecimalComplex.Zero;
         z2 = Complex.Zero;

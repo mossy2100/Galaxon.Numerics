@@ -9,23 +9,23 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="DecimalMath.DecimalEx" Version="1.0.2" />
+        <PackageReference Include="DecimalMath.DecimalEx" Version="1.0.2"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Reference Include="AstroMultimedia.Core.Exceptions">
-        <HintPath>..\..\Core\Exceptions\bin\Debug\net7.0\AstroMultimedia.Core.Exceptions.dll</HintPath>
-      </Reference>
-      <Reference Include="AstroMultimedia.Core.Numbers">
-        <HintPath>..\..\Core\Numbers\bin\Debug\net7.0\AstroMultimedia.Core.Numbers.dll</HintPath>
-      </Reference>
-      <Reference Include="AstroMultimedia.Core.Testing">
-        <HintPath>..\..\Core\Testing\bin\Debug\net7.0\AstroMultimedia.Core.Testing.dll</HintPath>
-      </Reference>
+        <Reference Include="AstroMultimedia.Core.Exceptions">
+            <HintPath>..\..\Core\Exceptions\bin\Debug\net7.0\AstroMultimedia.Core.Exceptions.dll</HintPath>
+        </Reference>
+        <Reference Include="AstroMultimedia.Core.Numbers">
+            <HintPath>..\..\Core\Numbers\bin\Debug\net7.0\AstroMultimedia.Core.Numbers.dll</HintPath>
+        </Reference>
+        <Reference Include="AstroMultimedia.Core.Testing">
+            <HintPath>..\..\Core\Testing\bin\Debug\net7.0\AstroMultimedia.Core.Testing.dll</HintPath>
+        </Reference>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Integers\Integers.csproj" />
+        <ProjectReference Include="..\Integers\Integers.csproj"/>
     </ItemGroup>
 
 </Project>

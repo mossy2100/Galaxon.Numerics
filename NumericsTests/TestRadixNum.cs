@@ -6,19 +6,20 @@ namespace AstroMultimedia.Numerics.Tests;
 [TestClass]
 public class TestRadixNum
 {
-    private TestContext TestContext { get; }
+    public TestRadixNum(TestContext testContext) =>
+        TestContext = testContext;
 
-    public TestRadixNum(TestContext testContext) => TestContext = testContext;
+    private TestContext TestContext { get; }
 
     [TestMethod]
     public void TestValueField()
     {
-        for (sbyte radix = RadixNumber.MIN_RADIX; radix <= RadixNumber.MAX_RADIX; radix++)
+        for (sbyte radix = RadixNumber.MinRadix; radix <= RadixNumber.MaxRadix; radix++)
         {
             for (ulong i = 0; i < 100; i++)
             {
                 // Test basic constructor.
-                RadixNumber q = new(0, radix) { Value = i };
+                RadixNumber q = new (0, radix) { Value = i };
 
                 // Get value.
                 ulong j = q.Value;
@@ -32,18 +33,18 @@ public class TestRadixNum
     [TestMethod]
     public void TestConversions()
     {
-        for (sbyte radix = RadixNumber.MIN_RADIX; radix <= RadixNumber.MAX_RADIX; radix++)
+        for (sbyte radix = RadixNumber.MinRadix; radix <= RadixNumber.MaxRadix; radix++)
         {
             for (ulong i = 0; i < 100; i++)
             {
                 // Construct from ulong.
-                RadixNumber q = new(i, radix);
+                RadixNumber q = new (i, radix);
 
                 // Convert to string.
                 string s = q.ToString();
 
                 // Construct second RadixNum from string.
-                RadixNumber q2 = new(s, radix);
+                RadixNumber q2 = new (s, radix);
 
                 // Convert to long.
                 ulong i2 = q2;
@@ -57,12 +58,12 @@ public class TestRadixNum
     [TestMethod]
     public void TestNot()
     {
-        for (sbyte radix = RadixNumber.MIN_RADIX; radix <= RadixNumber.MAX_RADIX; radix++)
+        for (sbyte radix = RadixNumber.MinRadix; radix <= RadixNumber.MaxRadix; radix++)
         {
             for (ulong i = 0; i < 100; i++)
             {
                 // Test basic constructor from int.
-                RadixNumber q = new(i, radix);
+                RadixNumber q = new (i, radix);
 
                 // Test NOT operator.
                 RadixNumber q2 = ~q;
@@ -87,7 +88,7 @@ public class TestRadixNum
 
         foreach (ulong value in values)
         {
-            RadixNumber q = new(value);
+            RadixNumber q = new (value);
 
             string bin = q.ToBinString();
             TestContext.WriteLine(bin);
@@ -124,14 +125,15 @@ public class TestRadixNum
     [TestMethod]
     public void TestConvertDecToOther()
     {
-        const int NUM_TESTS = 10;
-        for (int i = 0; i < NUM_TESTS; i++)
+        const int numTests = 10;
+        for (int i = 0; i < numTests; i++)
         {
             // Generate a random number.
             ulong x = (ulong)new Random().NextInt64(0, long.MaxValue);
 
             // Convert to an alternate radix.
-            sbyte radix = (sbyte)new Random().Next(RadixNumber.MIN_RADIX, RadixNumber.MAX_RADIX + 1);
+            sbyte radix =
+                (sbyte)new Random().Next(RadixNumber.MinRadix, RadixNumber.MaxRadix + 1);
             string s = RadixNumber.ValueToDigits(x, radix);
 
             // Convert back to a number.
@@ -145,15 +147,16 @@ public class TestRadixNum
     [TestMethod]
     public void TestConvertOtherToDec()
     {
-        const int NUM_TESTS = 10;
-        for (int i = 0; i < NUM_TESTS; i++)
+        const int numTests = 10;
+        for (int i = 0; i < numTests; i++)
         {
             // Make a number in an alt radix.
-            sbyte radix = (sbyte)new Random().Next(RadixNumber.MIN_RADIX, RadixNumber.MAX_RADIX + 1);
-            StringBuilder sb = new();
+            sbyte radix =
+                (sbyte)new Random().Next(RadixNumber.MinRadix, RadixNumber.MaxRadix + 1);
+            StringBuilder sb = new ();
             for (int j = 0; j <= 10; j++)
             {
-                sb.Append(RadixNumber.DIGITS[new Random().Next(0, radix)]);
+                sb.Append(RadixNumber.Digits[new Random().Next(0, radix)]);
             }
             string s = sb.ToString().TrimStart('0');
             if (s == "")

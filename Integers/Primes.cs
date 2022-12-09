@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using System.Numerics;
 
 namespace AstroMultimedia.Numerics.Integers;
@@ -97,23 +96,14 @@ public static class Primes
     /// </summary>
     /// <param name="n"></param>
     /// <returns></returns>
-    public static bool IsPrime(ulong n)
-    {
-        // Run through some simple checks first.
-        bool? isPrimeSimple = IsPrimeSimple(n);
-        if (isPrimeSimple.HasValue)
-        {
-            return isPrimeSimple.Value;
-        }
-
-        return MillerRabin(n);
-    }
+    public static bool IsPrime(ulong n) =>
+        IsPrimeSimple(n) ?? MillerRabin(n);
 
     /// <summary>
     /// Check if a number is composite.
     /// </summary>
     public static bool IsComposite(ulong n) =>
-        (n > 1) && !IsPrime(n);
+        n > 1 && !IsPrime(n);
 
     /// <summary>
     /// Use the Miller-Rabin test to see if a number is composite or probably prime.
@@ -174,7 +164,6 @@ public static class Primes
     /// Use the Sieve of Eratosthenes to update the cache for all prime numbers less than or equal
     /// to a given maximum.
     /// <see href="https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes" />
-    ///
     /// The primes are processed in batches of up to Array.MaxLength values per batch.
     /// This is because ulong.MaxValue (the largest value of max) is greater than Array.MaxLength
     /// (the largest array size).
@@ -218,8 +207,8 @@ public static class Primes
             for (ulong p = 3; p <= sqrt; p += 2)
             {
                 // If p is not prime, skip it.
-                if ((p >= batchMin && !isPrime[p - batchMin])
-                    || (p < batchMin && !Cache.Contains(p)))
+                if (p >= batchMin && !isPrime[p - batchMin]
+                    || p < batchMin && !Cache.Contains(p))
                 {
                     continue;
                 }
@@ -266,13 +255,13 @@ public static class Primes
 
     #region Get primes methods
 
-    public static List<ulong> GetPrimesUpTo(ulong n)
+    public static IEnumerable<ulong> GetPrimesUpTo(ulong n)
     {
         // Make sure we've checked all values up to and including n.
         Eratosthenes(n);
 
-        // Return the requested primes, in order.
-        return Cache.Where(p => p <= n).ToList();
+        // Return the requested primes.
+        return Cache.Where(p => p <= n);
     }
 
     /// <summary>
@@ -299,7 +288,8 @@ public static class Primes
             // Check for overflow.
             if (p == ulong.MaxValue)
             {
-                throw new OverflowException($"There are no prime numbers > {n} but <= {ulong.MaxValue}, the largest value supported.");
+                throw new OverflowException(
+                    $"There are no prime numbers > {n} but <= {ulong.MaxValue}, the largest value supported.");
             }
 
             // Check next value.
@@ -356,7 +346,7 @@ public static class Primes
     private static List<ulong> _GetPrimeFactors(ulong n)
     {
         // Result array.
-        List<ulong> factors = new();
+        List<ulong> factors = new ();
 
         // Don't check 0 or 1, which are not prime and have no factors.
         if (n <= 1)
@@ -413,7 +403,7 @@ public static class Primes
     /// <summary>
     /// All primes up to 1000.
     /// </summary>
-    public static readonly List<ulong> SmallPrimes = new()
+    public static readonly List<ulong> SmallPrimes = new ()
     {
         2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89,
         97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181,

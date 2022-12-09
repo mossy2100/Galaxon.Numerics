@@ -54,9 +54,9 @@ public class LongDecimal : IEquatable<LongDecimal>, IComparable<LongDecimal>
 {
     #region Constants
 
-    private const byte _MAX_SIGNIFICAND_LENGTH = 50;
+    private const byte _MaxSignificandLength = 50;
 
-    private const byte _MAX_DIGITS = 2 * _MAX_SIGNIFICAND_LENGTH;
+    private const byte _MaxDigits = 2 * _MaxSignificandLength;
 
     #endregion Constants
 
@@ -135,7 +135,7 @@ public class LongDecimal : IEquatable<LongDecimal>, IComparable<LongDecimal>
                 "String should represent a long decimal value.");
         }
 
-        Regex rx = new(@"^(-?)(\d+)(\.(\d+))?(e(-?\d+))?$", RegexOptions.IgnoreCase);
+        Regex rx = new (@"^(-?)(\d+)(\.(\d+))?(e(-?\d+))?$", RegexOptions.IgnoreCase);
         MatchCollection matches = rx.Matches(s);
 
         // Check we got exactly one match.
@@ -174,36 +174,44 @@ public class LongDecimal : IEquatable<LongDecimal>, IComparable<LongDecimal>
     }
 
     public static LongDecimal Clone(LongDecimal ld) =>
-        new()
+        new ()
         {
             Flags = ld.Flags,
             Significand = ld.Significand[..],
             Mantissa = ld.Mantissa
         };
 
-    private static LongDecimal Zero() => new();
+    private static LongDecimal Zero() =>
+        new ();
 
-    private static LongDecimal NegativeZero() => new(true);
+    private static LongDecimal NegativeZero() =>
+        new (true);
 
-    private static LongDecimal Infinity() => new(false, true);
+    private static LongDecimal Infinity() =>
+        new (false, true);
 
-    private static LongDecimal NegativeInfinity() => new(true, true);
+    private static LongDecimal NegativeInfinity() =>
+        new (true, true);
 
-    private static LongDecimal QuietNaN() => new(false, false, true);
+    private static LongDecimal QuietNaN() =>
+        new (false, false, true);
 
-    private static LongDecimal SignallingNaN() => new(false, false, true, true);
+    private static LongDecimal SignallingNaN() =>
+        new (false, false, true, true);
 
     #endregion Constructors and creation methods
 
     #region Overridden methods
 
-    public override bool Equals(object? obj) => obj is LongDecimal ld && Equals(ld);
+    public override bool Equals(object? obj) =>
+        obj is LongDecimal ld && Equals(ld);
 
-    public override int GetHashCode() => HashCode.Combine(Significand, Mantissa, Flags);
+    public override int GetHashCode() =>
+        HashCode.Combine(Significand, Mantissa, Flags);
 
     public override string ToString()
     {
-        StringBuilder sb = new();
+        StringBuilder sb = new ();
 
         // Sign.
         if (IsNegative)
@@ -276,7 +284,6 @@ public class LongDecimal : IEquatable<LongDecimal>, IComparable<LongDecimal>
     }
 
     /// <summary>
-    ///
     /// </summary>
     /// <param name="other"></param>
     /// <returns></returns>
@@ -335,13 +342,17 @@ public class LongDecimal : IEquatable<LongDecimal>, IComparable<LongDecimal>
 
     #region Comparison operators
 
-    public static bool operator ==(LongDecimal left, LongDecimal right) => left.Equals(right);
+    public static bool operator ==(LongDecimal left, LongDecimal right) =>
+        left.Equals(right);
 
-    public static bool operator !=(LongDecimal left, LongDecimal right) => !left.Equals(right);
+    public static bool operator !=(LongDecimal left, LongDecimal right) =>
+        !left.Equals(right);
 
-    public static bool operator <(LongDecimal left, LongDecimal right) => left.CompareTo(right) < 0;
+    public static bool operator <(LongDecimal left, LongDecimal right) =>
+        left.CompareTo(right) < 0;
 
-    public static bool operator >(LongDecimal left, LongDecimal right) => left.CompareTo(right) > 0;
+    public static bool operator >(LongDecimal left, LongDecimal right) =>
+        left.CompareTo(right) > 0;
 
     public static bool operator <=(LongDecimal left, LongDecimal right) =>
         left.CompareTo(right) is < 0 or 0;
@@ -354,7 +365,7 @@ public class LongDecimal : IEquatable<LongDecimal>, IComparable<LongDecimal>
     #region Arithmetic methods
 
     public static LongDecimal Abs(LongDecimal ld) =>
-        new()
+        new ()
         {
             Significand = ld.Significand[..],
             Mantissa = ld.Mantissa,
@@ -362,14 +373,15 @@ public class LongDecimal : IEquatable<LongDecimal>, IComparable<LongDecimal>
         };
 
     public static LongDecimal Negate(LongDecimal ld) =>
-        new()
+        new ()
         {
             Significand = ld.Significand[..],
             Mantissa = ld.Mantissa,
             Flags = (byte)(ld.IsPositive ? ld.Flags | 1 : ld.Flags & ~1)
         };
 
-    public static LongDecimal operator -(LongDecimal ld) => Negate(ld);
+    public static LongDecimal operator -(LongDecimal ld) =>
+        Negate(ld);
 
     public static LongDecimal Add(LongDecimal ld1, LongDecimal ld2)
     {
@@ -407,14 +419,14 @@ public class LongDecimal : IEquatable<LongDecimal>, IComparable<LongDecimal>
         // and at the end.
         // TODO Calculate resultDigitsLength more accurately based on the number
         // TODO of digits in each operand, to make the number of loops as few as possible.
-        const int RESULT_DIGITS_LEN = _MAX_DIGITS + 2;
-        byte[] resultDigits = new byte[RESULT_DIGITS_LEN];
+        const int resultDigitsLen = _MaxDigits + 2;
+        byte[] resultDigits = new byte[resultDigitsLen];
 
         // Determine the largest possible mantissa of the result.
         int resultMantissa = Max(ld1.Mantissa, ld2.Mantissa) + 1;
 
         // Check if one number is much greater than the other.
-        int smallestExponentChecked = resultMantissa - RESULT_DIGITS_LEN + 1;
+        int smallestExponentChecked = resultMantissa - resultDigitsLen + 1;
         if (smallestExponentChecked > ld2.Mantissa)
         {
             return ld1;
@@ -429,7 +441,7 @@ public class LongDecimal : IEquatable<LongDecimal>, IComparable<LongDecimal>
         byte[] ld2Digits = UnpackDigits(ld2.Significand);
 
         // Add
-        for (int i = 1; i < RESULT_DIGITS_LEN; i++)
+        for (int i = 1; i < resultDigitsLen; i++)
         {
             // What power of ten are we looking at?
             int currentExponent = resultMantissa - i;
@@ -473,7 +485,8 @@ public class LongDecimal : IEquatable<LongDecimal>, IComparable<LongDecimal>
         return new LongDecimal(resultDigits, resultMantissa);
     }
 
-    public static LongDecimal operator +(LongDecimal ld1, LongDecimal ld2) => Add(ld1, ld2);
+    public static LongDecimal operator +(LongDecimal ld1, LongDecimal ld2) =>
+        Add(ld1, ld2);
 
     public static LongDecimal Subtract(LongDecimal ld1, LongDecimal ld2)
     {
@@ -520,14 +533,14 @@ public class LongDecimal : IEquatable<LongDecimal>, IComparable<LongDecimal>
         // Create an array for the result. Leave a spare slot at the end.
         // TODO Calculate resultDigitsLength more accurately based on the number
         // TODO of digits in each operand, to make the number of loops as few as possible.
-        const int RESULT_DIGITS_LEN = _MAX_DIGITS + 1;
-        byte[] resultDigits = new byte[RESULT_DIGITS_LEN];
+        const int resultDigitsLen = _MaxDigits + 1;
+        byte[] resultDigits = new byte[resultDigitsLen];
 
         // Determine the mantissa of the result.
         int resultMantissa = Max(ld1.Mantissa, ld2.Mantissa);
 
         // Check if one number is much greater than the other.
-        int smallestExponentChecked = resultMantissa - RESULT_DIGITS_LEN + 1;
+        int smallestExponentChecked = resultMantissa - resultDigitsLen + 1;
         if (smallestExponentChecked > ld2.Mantissa)
         {
             return ld1;
@@ -544,7 +557,7 @@ public class LongDecimal : IEquatable<LongDecimal>, IComparable<LongDecimal>
         int carry = 0;
 
         // Subtract.
-        for (int i = RESULT_DIGITS_LEN - 1; i >= 0; i--)
+        for (int i = resultDigitsLen - 1; i >= 0; i--)
         {
             int currentExponent = resultMantissa - i;
 
@@ -576,7 +589,8 @@ public class LongDecimal : IEquatable<LongDecimal>, IComparable<LongDecimal>
         return new LongDecimal(resultDigits, resultMantissa);
     }
 
-    public static LongDecimal operator -(LongDecimal ld1, LongDecimal ld2) => Subtract(ld1, ld2);
+    public static LongDecimal operator -(LongDecimal ld1, LongDecimal ld2) =>
+        Subtract(ld1, ld2);
 
     public static LongDecimal Multiply(LongDecimal ld1, LongDecimal ld2)
     {
@@ -668,13 +682,15 @@ public class LongDecimal : IEquatable<LongDecimal>, IComparable<LongDecimal>
         return new LongDecimal(digitsResult, maxExpResult, isNegative);
     }
 
-    public static LongDecimal operator *(LongDecimal ld1, LongDecimal ld2) => Multiply(ld1, ld2);
+    public static LongDecimal operator *(LongDecimal ld1, LongDecimal ld2) =>
+        Multiply(ld1, ld2);
 
     #endregion Arithmetic methods
 
     #region Cast methods
 
-    public static implicit operator LongDecimal(int i) => FromString(i.ToString());
+    public static implicit operator LongDecimal(int i) =>
+        FromString(i.ToString());
 
     public static implicit operator LongDecimal(decimal m) =>
         FromString(m.ToString(CultureInfo.InvariantCulture));
@@ -721,30 +737,32 @@ public class LongDecimal : IEquatable<LongDecimal>, IComparable<LongDecimal>
     /// <returns>A new byte array containing maximum MaxDigits digits.</returns>
     public static byte[] Round(byte[] digits)
     {
-        if (digits.Length <= _MAX_DIGITS)
+        if (digits.Length <= _MaxDigits)
         {
             // No rounding to do, so just return a copy of the array.
             return digits[..];
         }
 
         // Trim excess digits.
-        byte[] result = digits[.._MAX_DIGITS];
+        byte[] result = digits[.._MaxDigits];
         // See if we need to round up the last digit.
-        if (digits[_MAX_DIGITS] > 5 || digits[_MAX_DIGITS] == 5 && digits[_MAX_DIGITS - 1] % 2 == 1)
+        if (digits[_MaxDigits] > 5 || digits[_MaxDigits] == 5 && digits[_MaxDigits - 1] % 2 == 1)
         {
             result[^1]++;
         }
         return result;
     }
 
-    public bool FlagIsSet(Flag flag) => (Flags & (byte)(1 << (byte)flag)) != 0;
+    public bool FlagIsSet(Flag flag) =>
+        (Flags & (byte)(1 << (byte)flag)) != 0;
 
     /// <summary>
     /// Check if an array of bytes contains only zeros.
     /// Can be used for the significand or an array of digits.
     /// </summary>
     /// <returns></returns>
-    private static bool AllZeros(IEnumerable<byte> bytes) => bytes.All(b => b == 0);
+    private static bool AllZeros(IEnumerable<byte> bytes) =>
+        bytes.All(b => b == 0);
 
     /// <summary>
     /// Trim any leading or trailing zeros, adjusting the mantissa if needed.

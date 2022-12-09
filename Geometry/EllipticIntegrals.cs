@@ -4,7 +4,7 @@ namespace AstroMultimedia.Numerics.Geometry;
 
 public static class EllipticIntegrals
 {
-    private const double _DELTA = 1e-12;
+    private const double _Delta = 1e-12;
 
     /// <summary>
     /// Calculate incomplete elliptic integrals of the first and (optionally)
@@ -111,7 +111,7 @@ public static class EllipticIntegrals
             dx = 1 - x / A;
             dy = 1 - y / A;
             dz = 1 - z / A;
-        } while (Functions.Max(Abs(dx), Abs(dy), Abs(dz)) >= _DELTA);
+        } while (Functions.Max(Abs(dx), Abs(dy), Abs(dz)) >= _Delta);
 
         double E2 = dx * dy + dy * dz + dz * dx;
         double E3 = dx * dy * dz;
@@ -157,7 +157,7 @@ public static class EllipticIntegrals
             dx = 1 - x / A;
             dy = 1 - y / A;
             dz = 1 - z / A;
-        } while (Functions.Max(Abs(dx), Abs(dy), Abs(dz)) >= _DELTA);
+        } while (Functions.Max(Abs(dx), Abs(dy), Abs(dz)) >= _Delta);
 
         double dz2 = dz * dz;
         double dz3 = dz2 * dz;

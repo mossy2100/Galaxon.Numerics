@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 using AstroMultimedia.Core.Exceptions;
 
-namespace Maths;
+namespace AstroMultimedia.Numerics.Maths;
 
 public class Equations
 {
@@ -43,7 +43,7 @@ public class Equations
     /// <returns>0, 1, or 2 solutions to the equation, as complex numbers.</returns>
     public static List<Complex> SolveQuadratic(double a, double b, double c)
     {
-        List<Complex> result = new();
+        List<Complex> result = new ();
 
         // Check for a == 0.
         if (a == 0)
@@ -59,7 +59,7 @@ public class Equations
         }
 
         // Calculate the discriminant.
-        double d = (b * b) - (4 * a * c);
+        double d = b * b - 4 * a * c;
 
         // Check for no solutions.
         if (d < 0)

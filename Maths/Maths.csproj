@@ -9,9 +9,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Reference Include="AstroMultimedia.Core.Exceptions">
-        <HintPath>..\..\Core\Exceptions\bin\Debug\net7.0\AstroMultimedia.Core.Exceptions.dll</HintPath>
-      </Reference>
+        <Reference Include="AstroMultimedia.Core.Exceptions">
+            <HintPath>..\..\Core\Exceptions\bin\Debug\net7.0\AstroMultimedia.Core.Exceptions.dll</HintPath>
+        </Reference>
     </ItemGroup>
 
 </Project>

@@ -7,6 +7,11 @@ namespace AstroMultimedia.Numerics.Integers;
 
 public static class Functions
 {
+    public static readonly Func<BigInteger, List<BigInteger>> GetProperDivisors =
+        Memoize<BigInteger, List<BigInteger>>(_GetProperDivisors);
+
+    public static readonly Func<long, List<long>> Collatz = Memoize<long, List<long>>(_Collatz);
+
     /// <summary>
     /// Get the maximum value from a series of values.
     /// Normally this method would be used with numbers, but it can be used for any IComparable.
@@ -81,7 +86,7 @@ public static class Functions
     /// <returns>The memoized version of the pure function.</returns>
     public static Func<T, TResult> Memoize<T, TResult>(Func<T, TResult> f) where T : notnull
     {
-        Dictionary<T, TResult> cache = new();
+        Dictionary<T, TResult> cache = new ();
         return x =>
         {
             if (cache.TryGetValue(x, out TResult? result))
@@ -106,7 +111,7 @@ public static class Functions
             throw new ArgumentOutOfRangeException(nameof(n), "Cannot be negative.");
         }
 
-        List<BigInteger> divisors = new();
+        List<BigInteger> divisors = new ();
 
         // Look for divisors up to the square root.
         for (BigInteger i = 1; i <= XBigInteger.Sqrt(n); i++)
@@ -127,9 +132,6 @@ public static class Functions
         divisors.Sort();
         return divisors;
     }
-
-    public static readonly Func<BigInteger, List<BigInteger>> GetProperDivisors =
-        Memoize<BigInteger, List<BigInteger>>(_GetProperDivisors);
 
     public static List<BigInteger> GetDivisors(BigInteger n)
     {
@@ -177,17 +179,19 @@ public static class Functions
         BigInteger sqrt = (BigInteger)Floor(Sqrt((double)a));
         for (BigInteger d = 2; d <= sqrt; d++)
         {
-            if (a % d == 0)
+            if (a % d != 0)
             {
-                // d is the small divisor of a, get the matching larger one.
-                BigInteger c = a / d;
+                continue;
+            }
 
-                // See if it also divides b.
-                if (b % c == 0)
-                {
-                    // Got it.
-                    return c;
-                }
+            // d is the small divisor of a, get the matching larger one.
+            BigInteger c = a / d;
+
+            // See if it also divides b.
+            if (b % c == 0)
+            {
+                // Got it.
+                return c;
             }
         }
 
@@ -221,12 +225,12 @@ public static class Functions
             throw new ArgumentOutOfRangeException(nameof(n), "Cannot be less than 1.");
         }
 
-        List<long> result = new() { n };
+        List<long> result = new () { n };
 
         if (n > 1)
         {
             // Get the next number.
-            long m = (n % 2 == 0) ? (n / 2) : (3 * n + 1);
+            long m = n % 2 == 0 ? n / 2 : 3 * n + 1;
 
             // Append additional items in the chain.
             result.AddRange(Collatz(m));
@@ -234,8 +238,6 @@ public static class Functions
 
         return result;
     }
-
-    public static readonly Func<long, List<long>> Collatz = Memoize<long, List<long>>(_Collatz);
 
     /// <summary>
     /// Convert a long value to words.
@@ -316,14 +318,14 @@ public static class Functions
                 return $"{quotientStr}{remainderStr}";
 
             default:
-                Dictionary<long, string> multiplierWords = new()
+                Dictionary<long, string> multiplierWords = new ()
                 {
                     { 1000, "thousand" },
                     { 1_000_000, "million" },
                     { 1_000_000_000, "billion" },
                     { 1_000_000_000_000, "trillion" },
                     { 1_000_000_000_000_000, "quadrillion" },
-                    { 1_000_000_000_000_000_000, "quintillion" },
+                    { 1_000_000_000_000_000_000, "quintillion" }
                 };
                 long multiplier = 1_000_000_000_000_000_000;
                 while (n < multiplier)
@@ -369,7 +371,7 @@ public static class Functions
 
     public static List<ulong> GetRotations(long n)
     {
-        List<ulong> result = new();
+        List<ulong> result = new ();
         string nString = n.ToString();
         int nDigits = nString.Length;
         for (int i = 1; i < nDigits; i++)
@@ -565,11 +567,11 @@ public static class Functions
                 "Method only supports values greater than 1.");
         }
 
-        StringBuilder decimals = new();
+        StringBuilder decimals = new ();
         long n = 1;
         long d = x;
         int current = 0;
-        Dictionary<(long n, long d), int> seen = new();
+        Dictionary<(long n, long d), int> seen = new ();
         reptend = null;
 
         while (true)

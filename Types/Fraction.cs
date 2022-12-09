@@ -9,11 +9,9 @@ namespace AstroMultimedia.Numerics.Types;
 
 /// <summary>
 /// Encapsulates a fraction.
-///
 /// Unlike Java's BigRational, the fractions are not automatically simplified (reduced) because
 /// this is a bit slow and not always necessary. So, you have call Simplify() yourself after
 /// when needed.
-///
 /// <see href="https://en.wikipedia.org/wiki/Fraction" />
 /// <see href="https://introcs.cs.princeton.edu/java/92symbolic/BigRational.java.html" />
 /// <see href="https://github.com/danm-de/Fractions" />
@@ -129,7 +127,7 @@ public struct Fraction : IEquatable<Fraction>, IFormattable, IParsable<Fraction>
     public string ToString(string? format, IFormatProvider? formatProvider)
     {
         // Default to the Unicode version.
-        if (String.IsNullOrEmpty(format))
+        if (string.IsNullOrEmpty(format))
         {
             format = "U";
         }
@@ -146,7 +144,7 @@ public struct Fraction : IEquatable<Fraction>, IFormattable, IParsable<Fraction>
 
             default:
                 throw new ArgumentFormatException(nameof(format),
-                    $"The provided format string is not supported.");
+                    "The provided format string is not supported.");
         }
     }
 
@@ -375,7 +373,7 @@ public struct Fraction : IEquatable<Fraction>, IFormattable, IParsable<Fraction>
         BigInteger denominator = BigInteger.Pow(frac.Denominator, exp);
 
         // If the sign is negative, invert the fraction.
-        return (sign < 0)
+        return sign < 0
             ? new Fraction(denominator, numerator)
             : new Fraction(numerator, denominator);
     }
@@ -455,7 +453,7 @@ public struct Fraction : IEquatable<Fraction>, IFormattable, IParsable<Fraction>
     /// Subtraction operator.
     /// </summary>
     public static Fraction operator -(Fraction frac, Fraction frac2) =>
-        frac + (-frac2);
+        frac + -frac2;
 
     /// <summary>
     /// Reciprocal operator.

@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using AstroMultimedia.Core.Time;
 using AstroMultimedia.Numerics.Integers;
 
 namespace AstroMultimedia.Numerics.Tests;
@@ -59,18 +58,18 @@ public class TestPrimes
 
         Trace.WriteLine($"Testing IsPrimeSlow({n})...");
         Primes.ClearCache();
-        long t3 = (long)(DateTime.Now.Ticks / Time.TICKS_PER_MICROSECOND);
+        long t3 = DateTime.Now.Ticks / TimeSpan.TicksPerMicrosecond;
         bool isPrimeSlow = Primes.IsPrimeSlow(n);
-        long t4 = (long)(DateTime.Now.Ticks / Time.TICKS_PER_MICROSECOND);
+        long t4 = DateTime.Now.Ticks / TimeSpan.TicksPerMicrosecond;
         long tSlow = t4 - t3;
         Trace.WriteLine($"IsPrimeSlow(): {n} is " + (isPrimeSlow ? "" : "not ") + "prime.");
         Trace.WriteLine($"IsPrimeSlow() took {tSlow} µs.");
 
         Trace.WriteLine($"Testing IsPrime({n})...");
         Primes.ClearCache();
-        long t1 = (long)(DateTime.Now.Ticks / Time.TICKS_PER_MICROSECOND);
+        long t1 = DateTime.Now.Ticks / TimeSpan.TicksPerMicrosecond;
         bool isPrimeFast = Primes.IsPrime(n);
-        long t2 = (long)(DateTime.Now.Ticks / Time.TICKS_PER_MICROSECOND);
+        long t2 = DateTime.Now.Ticks / TimeSpan.TicksPerMicrosecond;
         long tFast = t2 - t1;
         Trace.WriteLine($"IsPrime(): {n} is " + (isPrimeFast ? "" : "not ") + "prime.");
         Trace.WriteLine($"IsPrime() took {tFast} µs.");
@@ -162,12 +161,12 @@ public class TestPrimes
     }
 
     /// <summary>
-    /// <see href="https://projecteuler.net/problem=10" />
+    ///     <see href="https://projecteuler.net/problem=10" />
     /// </summary>
     [TestMethod]
     public void PrimesSumTest()
     {
-        List<ulong> primes = Primes.GetPrimesUpTo(2_000_000);
+        IEnumerable<ulong> primes = Primes.GetPrimesUpTo(2_000_000);
         ulong total = primes.Aggregate(0ul, (sum, item) => sum + item);
         Assert.AreEqual(142913828922ul, total);
     }
