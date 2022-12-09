@@ -255,13 +255,13 @@ public static class Primes
 
     #region Get primes methods
 
-    public static IEnumerable<ulong> GetPrimesUpTo(ulong n)
+    public static List<ulong> GetPrimesUpTo(ulong n)
     {
         // Make sure we've checked all values up to and including n.
         Eratosthenes(n);
 
         // Return the requested primes.
-        return Cache.Where(p => p <= n);
+        return Cache.Where(p => p <= n).ToList();
     }
 
     /// <summary>
