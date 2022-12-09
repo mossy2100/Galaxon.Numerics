@@ -65,7 +65,7 @@ public struct Fraction : IEquatable<Fraction>, IFormattable, IParsable<Fraction>
         Denominator = denominator;
     }
 
-    public Fraction(BigInteger numerator) : this(numerator, BigInteger.One)
+    public Fraction(BigInteger numerator) : this(numerator, 1)
     {
     }
 
@@ -104,7 +104,7 @@ public struct Fraction : IEquatable<Fraction>, IFormattable, IParsable<Fraction>
         // most practical purposes.
 
         // Compare double equivalents.
-        return ((double)this).FuzzyEquals(frac2);
+        return ((double)this).FuzzyEquals((double)frac2);
     }
 
     public override bool Equals(object? obj) =>
@@ -132,6 +132,12 @@ public struct Fraction : IEquatable<Fraction>, IFormattable, IParsable<Fraction>
             format = "U";
         }
 
+        // If the denominator is 1 then just return the numerator as a string.
+        if (Denominator == 1)
+        {
+            return Numerator.ToString();
+        }
+
         switch (format.ToUpperInvariant())
         {
             // ASCII.
@@ -140,6 +146,17 @@ public struct Fraction : IEquatable<Fraction>, IFormattable, IParsable<Fraction>
 
             // Unicode.
             case "U":
+                return $"{Numerator.ToSuperscriptString()}/{Denominator.ToSubscriptString()}";
+
+            // Mixed.
+            case "M":
+                // Format improper fractions with a quotient and remainder, e.g.
+                if (Numerator > Denominator)
+                {
+                    BigInteger quotient = Numerator / Denominator;
+                    BigInteger remainder = Numerator % Denominator;
+                    return $"{quotient}{remainder.ToSuperscriptString()}/{Denominator.ToSubscriptString()}";
+                }
                 return $"{Numerator.ToSuperscriptString()}/{Denominator.ToSubscriptString()}";
 
             default:
@@ -384,7 +401,7 @@ public struct Fraction : IEquatable<Fraction>, IFormattable, IParsable<Fraction>
     /// doubles to Fractions.
     /// </summary>
     public static Fraction Pow(Fraction frac, double exp) =>
-        Find(Math.Pow(frac, exp));
+        Find(Math.Pow((double)frac, exp));
 
     /// <summary>
     /// Exponentiation (fraction exponent).
@@ -398,7 +415,7 @@ public struct Fraction : IEquatable<Fraction>, IFormattable, IParsable<Fraction>
     /// Find the square root of a fraction as a fraction.
     /// </summary>
     public static Fraction Sqrt(Fraction frac) =>
-        Find(Math.Sqrt(frac));
+        Find(Math.Sqrt((double)frac));
 
     #endregion Arithmetic methods
 
@@ -417,15 +434,15 @@ public struct Fraction : IEquatable<Fraction>, IFormattable, IParsable<Fraction>
         new (numerator);
 
     /// <summary>
-    /// Implicitly cast a double to a fraction.
+    /// Explicitly cast a double to a fraction.
     /// </summary>
-    public static implicit operator Fraction(double x) =>
+    public static explicit operator Fraction(double x) =>
         Find(x);
 
     /// <summary>
-    /// Implicitly cast a fraction to a double.
+    /// Explicitly cast a fraction to a double.
     /// </summary>
-    public static implicit operator double(Fraction frac) =>
+    public static explicit operator double(Fraction frac) =>
         (double)frac.Numerator / (double)frac.Denominator;
 
     #endregion Cast operators
