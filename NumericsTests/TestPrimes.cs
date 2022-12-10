@@ -54,25 +54,25 @@ public class TestPrimes
 
     public void CompareIsPrimeMethods(ulong n)
     {
-        Trace.WriteLine("");
+        // Trace.WriteLine("");
 
-        Trace.WriteLine($"Testing IsPrimeSlow({n})...");
+        // Trace.WriteLine($"Testing IsPrimeSlow({n})...");
         Primes.ClearCache();
-        long t3 = DateTime.Now.Ticks / TimeSpan.TicksPerMicrosecond;
+        // long t3 = DateTime.Now.Ticks / TimeSpan.TicksPerMicrosecond;
         bool isPrimeSlow = Primes.IsPrimeSlow(n);
-        long t4 = DateTime.Now.Ticks / TimeSpan.TicksPerMicrosecond;
-        long tSlow = t4 - t3;
-        Trace.WriteLine($"IsPrimeSlow(): {n} is " + (isPrimeSlow ? "" : "not ") + "prime.");
-        Trace.WriteLine($"IsPrimeSlow() took {tSlow} µs.");
+        // long t4 = DateTime.Now.Ticks / TimeSpan.TicksPerMicrosecond;
+        // long tSlow = t4 - t3;
+        // Trace.WriteLine($"IsPrimeSlow(): {n} is " + (isPrimeSlow ? "" : "not ") + "prime.");
+        // Trace.WriteLine($"IsPrimeSlow() took {tSlow} µs.");
 
-        Trace.WriteLine($"Testing IsPrime({n})...");
+        // Trace.WriteLine($"Testing IsPrime({n})...");
         Primes.ClearCache();
-        long t1 = DateTime.Now.Ticks / TimeSpan.TicksPerMicrosecond;
+        // long t1 = DateTime.Now.Ticks / TimeSpan.TicksPerMicrosecond;
         bool isPrimeFast = Primes.IsPrime(n);
-        long t2 = DateTime.Now.Ticks / TimeSpan.TicksPerMicrosecond;
-        long tFast = t2 - t1;
-        Trace.WriteLine($"IsPrime(): {n} is " + (isPrimeFast ? "" : "not ") + "prime.");
-        Trace.WriteLine($"IsPrime() took {tFast} µs.");
+        // long t2 = DateTime.Now.Ticks / TimeSpan.TicksPerMicrosecond;
+        // long tFast = t2 - t1;
+        // Trace.WriteLine($"IsPrime(): {n} is " + (isPrimeFast ? "" : "not ") + "prime.");
+        // Trace.WriteLine($"IsPrime() took {tFast} µs.");
 
         Assert.AreEqual(isPrimeSlow, isPrimeFast);
     }
@@ -161,7 +161,7 @@ public class TestPrimes
     }
 
     /// <summary>
-    ///     <see href="https://projecteuler.net/problem=10" />
+    /// <see href="https://projecteuler.net/problem=10" />
     /// </summary>
     [TestMethod]
     public void PrimesSumTest()
@@ -169,5 +169,16 @@ public class TestPrimes
         IEnumerable<ulong> primes = Primes.GetPrimesUpTo(2_000_000);
         ulong total = primes.Aggregate(0ul, (sum, item) => sum + item);
         Assert.AreEqual(142913828922ul, total);
+    }
+
+    /// <summary>
+    /// Takes about 3 minutes.
+    /// </summary>
+    [TestMethod]
+    public void TestEratosthenesWithMaxValue()
+    {
+        Primes.Eratosthenes(uint.MaxValue);
+        Assert.AreEqual(203_280_221, Primes.Cache.Count);
+        Assert.AreEqual(4_294_967_291, Primes.Cache.Max());
     }
 }

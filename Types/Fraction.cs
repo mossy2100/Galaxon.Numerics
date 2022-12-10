@@ -10,8 +10,8 @@ namespace AstroMultimedia.Numerics.Types;
 /// <summary>
 /// Encapsulates a fraction.
 /// Unlike Java's BigRational, the fractions are not automatically simplified (reduced) because
-/// this is a bit slow and not always necessary. So, you have call Simplify() yourself after
-/// when needed.
+/// this is a bit slow and not always necessary. So, you can pass true to the constructor, or call
+/// Simplify() yourself when needed.
 /// <see href="https://en.wikipedia.org/wiki/Fraction" />
 /// <see href="https://introcs.cs.princeton.edu/java/92symbolic/BigRational.java.html" />
 /// <see href="https://github.com/danm-de/Fractions" />
@@ -266,7 +266,7 @@ public struct Fraction : IEquatable<Fraction>, IFormattable, IParsable<Fraction>
     /// Find a numerator and denominator that fits the given real value within a given tolerance.
     /// Warning: this can be slow.
     /// </summary>
-    public static Fraction Find(double x, double tolerance = XDouble.DELTA)
+    public static Fraction Find(double x, double tolerance = XDouble.Delta)
     {
         // Optimizations.
         if (x == 0)
@@ -307,6 +307,8 @@ public struct Fraction : IEquatable<Fraction>, IFormattable, IParsable<Fraction>
 
     /// <summary>
     /// Simplify a fraction given as a numerator and denominator.
+    /// I've made this version, which doesn't receive or return a Fraction object, so it can be
+    /// called from the constructor.
     /// </summary>
     public static (BigInteger, BigInteger) Simplify(BigInteger numerator, BigInteger denominator)
     {
@@ -338,7 +340,7 @@ public struct Fraction : IEquatable<Fraction>, IFormattable, IParsable<Fraction>
         // Get the greatest common divisor.
         BigInteger gcd = Functions.GreatestCommonDivisor(numerator, denominator);
 
-        // If we found it, divide.
+        // If we found one greater than 1, divide.
         if (gcd > 1)
         {
             numerator /= gcd;
@@ -356,6 +358,7 @@ public struct Fraction : IEquatable<Fraction>, IFormattable, IParsable<Fraction>
 
     /// <summary>
     /// Find the reciprocal.
+    /// Slightly faster than using 1/frac.
     /// </summary>
     public static Fraction Reciprocal(Fraction frac) =>
         new (frac.Denominator, frac.Numerator);
@@ -474,6 +477,7 @@ public struct Fraction : IEquatable<Fraction>, IFormattable, IParsable<Fraction>
 
     /// <summary>
     /// Reciprocal operator.
+    /// Slightly faster than using 1/frac.
     /// </summary>
     public static Fraction operator ~(Fraction frac) =>
         Reciprocal(frac);

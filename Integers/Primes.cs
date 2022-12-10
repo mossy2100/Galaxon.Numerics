@@ -9,9 +9,9 @@ public static class Primes
     /// </summary>
     static Primes()
     {
-        // Initialize the cache.
-        Cache = new SortedSet<ulong>(SmallPrimes);
-        MaxValueChecked = 1000;
+        // Initialize the primes cache with all primes up to MaxKnown.
+        Cache = new SortedSet<ulong>(KnownPrimes);
+        MaxValueChecked = MaxKnown;
     }
 
     #region Prime tests
@@ -23,23 +23,23 @@ public static class Primes
     /// <returns></returns>
     private static bool? IsPrimeSimple(ulong n)
     {
-        // 0 and 1 are not prime.
-        if (n <= 1)
+        // Quick check for small values.
+        if (n <= MaxKnown)
         {
-            return false;
+            return KnownPrimes.Contains(n);
         }
 
-        // Eliminate small primes.
-        if (n is 2 or 3 or 5 or 7)
+        // See if it's in the cache.
+        if (Cache.Contains(n))
         {
-            Cache.Add(n);
             return true;
         }
 
-        // See if we already checked this value.
+        // If the cache doesn't contain this value but we've already checked it, then it mustn't be
+        // prime.
         if (n <= MaxValueChecked)
         {
-            return Cache.Contains(n);
+            return false;
         }
 
         // Eliminate multiples of small primes.
@@ -54,6 +54,7 @@ public static class Primes
             return false;
         }
 
+        // We don't know.
         return null;
     }
 
@@ -74,8 +75,12 @@ public static class Primes
 
         // Update the cache to ensure we know all the primes less than or equal to the square root,
         // which are the divisors we'll check for.
-        ulong sqrt = (ulong)Floor(Sqrt(n));
-        Eratosthenes(sqrt);
+        ulong sqrt = (ulong)Floor(double.Sqrt(n));
+
+        // If n == ulong.MaxValue then sqrt will be uint.MaxValue + 1, which is too large for the
+        // Eratosthenes function. So, we'll subtract one, which will give the same result, because
+        // uint.MaxValue is odd.
+        Eratosthenes(sqrt > uint.MaxValue ? uint.MaxValue : (uint)sqrt);
 
         // Check if n is prime by checking all known primes up to the square root to see if it's
         // a divisor.
@@ -119,8 +124,7 @@ public static class Primes
         // find any pseudoprimes.
         ulong[] bases = { 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37 };
 
-        // If the number is one of these bases then obviously it's prime, so we don't need to go any
-        // further.
+        // If the number is one of these bases then it's prime, so we don't need to continue.
         if (bases.Contains(n))
         {
             return true;
@@ -164,13 +168,23 @@ public static class Primes
     /// Use the Sieve of Eratosthenes to update the cache for all prime numbers less than or equal
     /// to a given maximum.
     /// <see href="https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes" />
-    /// The primes are processed in batches of up to Array.MaxLength values per batch.
-    /// This is because ulong.MaxValue (the largest value of max) is greater than Array.MaxLength
-    /// (the largest array size).
+    ///
+    /// I've limited the value of max to uint.MaxValue (4,294,967,295) as I think this will be
+    /// adequate for practical purposes, and it means the isComposite cache will not need to be
+    /// larger than Array.MaxSize. Nor will we need to use batches or multiple arrays for
+    /// isComposite.
     /// </summary>
     /// <param name="max">The max value to check.</param>
-    public static void Eratosthenes(ulong max)
+    public static void Eratosthenes(uint max)
     {
+        // To support any value of max up to uint.MaxValue, we need at least 57 values in the cache.
+        // We can easily add a bunch of small primes.
+        if (MaxValueChecked < MaxKnown)
+        {
+            Cache.UnionWith(KnownPrimes);
+            MaxValueChecked = MaxKnown;
+        }
+
         // See if the cache already has all the values we want.
         if (max <= MaxValueChecked)
         {
@@ -178,90 +192,89 @@ public static class Primes
         }
 
         // Get the minimum value to test.
-        ulong min = MaxValueChecked + 1;
+        uint min = (uint)MaxValueChecked + 1;
 
-        // Set the minimum value for the first batch.
-        ulong batchMin = min;
-
-        while (true)
+        // Ensure min is odd.
+        if (min % 2 == 0)
         {
-            // Get the maximum value for this batch.
-            ulong batchMax = Min(batchMin + (ulong)Array.MaxLength - 1, max);
-            int batchSize = (int)(batchMax - batchMin + 1);
+            min++;
+        }
 
-            // Create an array of booleans indicating if a value is prime.
-            // Set the flag for 2 and all odd values greater than 2 to true.
-            // Items 0, 1, and all even values greater than 2 will default to false.
-            bool[] isPrime = new bool[batchSize];
-            for (ulong n = batchMin; n <= batchMax; n++)
+        // Ensure max is odd.
+        if (max % 2 == 0)
+        {
+            max--;
+        }
+
+        // Calculate the array size.
+        int arraySize = (int)((max - min) / 2 + 1);
+
+        // Create an array of booleans indicating if a value is composite.
+        // This is the reverse of the usual setup, but it saves the time of initializing every value
+        // in the array to true. All values in the array will default to false.
+        bool[] isComposite = new bool[arraySize];
+
+        // Remove all multiples of primes, 3 or greater, less than or equal to the square root
+        // of max.
+        uint sqrt = (uint)Floor(Sqrt(max));
+        for (uint p = 3; p <= sqrt; p += 2)
+        {
+            // If p is not prime, skip it.
+            if (p >= min && isComposite[(p - min) / 2])
             {
-                if (n > 1 && (n == 2 || n % 2 == 1))
-                {
-                    isPrime[n - batchMin] = true;
-                }
+                continue;
             }
 
-            // Remove all multiples of primes, 3 or greater, less than or equal to the square root
-            // of batchMax.
-            ulong sqrt = (ulong)Floor(Sqrt(batchMax));
-            for (ulong p = 3; p <= sqrt; p += 2)
+            // Start at the greater of p^2 or the next odd multiple of p equal to or greater
+            // than min.
+            uint start = p * p;
+            if (min > start)
             {
-                // If p is not prime, skip it.
-                if (p >= batchMin && !isPrime[p - batchMin]
-                    || p < batchMin && !Cache.Contains(p))
-                {
-                    continue;
-                }
-
-                // Start at the greater of p^2 or batchMin.
-                ulong start = Max(p * p, batchMin);
-
-                // Get the next odd multiple of p equal to or greater than start.
-                ulong m = (ulong)Ceiling((double)start / p);
+                uint m = (uint)Ceiling((double)min / p);
                 if (m % 2 == 0)
                 {
                     m++;
                 }
-
-                // Remove all odd multiples of p up to batchMax.
-                for (ulong n = m * p; n <= batchMax; n += 2 * p)
-                {
-                    isPrime[n - batchMin] = false;
-                }
+                start = m * p;
             }
 
-            // Update the cache.
-            for (ulong n = batchMin; n <= batchMax; n++)
+            // Remove all odd multiples of p up to max.
+            for (uint i = (start - min) / 2; i < (uint)arraySize; i += p)
             {
-                if (isPrime[n - batchMin])
-                {
-                    Cache.Add(n);
-                }
+                isComposite[i] = true;
             }
-            MaxValueChecked = batchMax;
-
-            // Check if we're done.
-            if (batchMax == max)
-            {
-                break;
-            }
-
-            // Go to the next batch.
-            batchMin += (ulong)Array.MaxLength;
         }
+
+        // Update the cache.
+        for (int i = 0; i < arraySize; i++)
+        {
+            if (!isComposite[i])
+            {
+                Cache.Add(2 * (uint)i + min);
+            }
+        }
+
+        // We can set the maximum value checked to the even above max, because we know it's
+        // composite.
+        MaxValueChecked = max + 1;
     }
 
     #endregion Prime tests
 
     #region Get primes methods
 
-    public static List<ulong> GetPrimesUpTo(ulong n)
+    /// <summary>
+    /// This method only supports up to uint.MaxValue, which is a limitation of Eratosthenes.
+    /// </summary>
+    /// <param name="max"></param>
+    /// <returns></returns>
+    public static List<ulong> GetPrimesUpTo(uint max)
     {
-        // Make sure we've checked all values up to and including n.
-        Eratosthenes(n);
+        // Ensure all values up to and including max have been checked.
+        Eratosthenes(max);
 
         // Return the requested primes.
-        return Cache.Where(p => p <= n).ToList();
+        return Cache.Where(p => p <= max).ToList();
     }
 
     /// <summary>
@@ -401,9 +414,14 @@ public static class Primes
     public static readonly SortedSet<ulong> Cache;
 
     /// <summary>
-    /// All primes up to 1000.
+    /// Primes up to MaxKnown are hard-coded in the class, as an optimization.
     /// </summary>
-    public static readonly List<ulong> SmallPrimes = new ()
+    public const int MaxKnown = 1000;
+
+    /// <summary>
+    /// Primes up to MaxKnown.
+    /// </summary>
+    public static readonly List<ulong> KnownPrimes = new ()
     {
         2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89,
         97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181,
@@ -421,8 +439,8 @@ public static class Primes
     /// </summary>
     public static void ClearCache()
     {
-        MaxValueChecked = 0;
         Cache.Clear();
+        MaxValueChecked = 1;
     }
 
     #endregion Cache stuff
