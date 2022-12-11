@@ -153,21 +153,42 @@ public static class Angle
     /// </summary>
     /// <param name="radians">The size of an angle in radians.</param>
     /// <returns></returns>
-    public static double Sin2(double radians) => Pow(Sin(radians), 2);
+    public static double Sin2(double radians) =>
+        Pow(Sin(radians), 2);
 
     /// <summary>
     /// The square of the sine of an angle in radians.
     /// </summary>
     /// <param name="radians">The size of an angle in radians.</param>
     /// <returns></returns>
-    public static double Cos2(double radians) => Pow(Cos(radians), 2);
+    public static double Cos2(double radians) =>
+        Pow(Cos(radians), 2);
 
     /// <summary>
     /// The square of the tangent of an angle in radians.
     /// </summary>
     /// <param name="radians">The size of an angle in radians.</param>
     /// <returns></returns>
-    public static double Tan2(double radians) => Pow(Tan(radians), 2);
+    public static double Tan2(double radians) =>
+        Pow(Tan(radians), 2);
+
+    /// <summary>
+    /// The sine of an angle in degrees.
+    /// </summary>
+    public static double SinDeg(double degrees) =>
+        Sin(DegToRad(degrees));
+
+    /// <summary>
+    /// The cosine of an angle in degrees.
+    /// </summary>
+    public static double CosDeg(double degrees) =>
+        Cos(DegToRad(degrees));
+
+    /// <summary>
+    /// The tangent of an angle in degrees.
+    /// </summary>
+    public static double TanDeg(double degrees) =>
+        Tan(DegToRad(degrees));
 
     #endregion Trigonometric methods
 
