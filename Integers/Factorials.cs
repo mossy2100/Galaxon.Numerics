@@ -215,5 +215,22 @@ public static class Factorials
     public static readonly Func<string, List<string>> CharPermutations =
         Memoize<string, List<string>>(_CharPermutations);
 
+    /// <summary>
+    /// Sort the digits of the given number in ascending order.
+    /// Returns a string rather than a new ulong to avoid loss of leading 0s.
+    /// </summary>
+    public static string SortDigits(ulong n)
+    {
+        char[] digits = n.ToString().ToCharArray();
+        Array.Sort(digits);
+        return new string(digits);
+    }
+
+    /// <summary>
+    /// Checks to see if one number is a permutation of another.
+    /// </summary>
+    public static bool IsPermutationOf(ulong n, ulong m) =>
+        SortDigits(n) == SortDigits(m);
+
     #endregion Permutations
 }

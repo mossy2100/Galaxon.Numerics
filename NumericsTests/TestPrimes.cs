@@ -181,4 +181,59 @@ public class TestPrimes
         Assert.AreEqual(203_280_221, Primes.Cache.Count);
         Assert.AreEqual(4_294_967_291, Primes.Cache.Max());
     }
+
+    [TestMethod]
+    public void TestTotientTens()
+    {
+        Assert.AreEqual(4ul, Primes.Totient(10));
+        Assert.AreEqual(8ul, Primes.Totient(20));
+        Assert.AreEqual(8ul, Primes.Totient(30));
+        Assert.AreEqual(16ul, Primes.Totient(40));
+        Assert.AreEqual(20ul, Primes.Totient(50));
+        Assert.AreEqual(16ul, Primes.Totient(60));
+        Assert.AreEqual(24ul, Primes.Totient(70));
+        Assert.AreEqual(32ul, Primes.Totient(80));
+        Assert.AreEqual(24ul, Primes.Totient(90));
+        Assert.AreEqual(40ul, Primes.Totient(100));
+    }
+
+    [TestMethod]
+    public void TestTotientMillions()
+    {
+        Assert.AreEqual(400_000ul, Primes.Totient(1_000_000));
+        Assert.AreEqual(800_000ul, Primes.Totient(2_000_000));
+        Assert.AreEqual(800_000ul, Primes.Totient(3_000_000));
+        Assert.AreEqual(1_600_000ul, Primes.Totient(4_000_000));
+        Assert.AreEqual(2_000_000ul, Primes.Totient(5_000_000));
+        Assert.AreEqual(1_600_000ul, Primes.Totient(6_000_000));
+        Assert.AreEqual(2_400_000ul, Primes.Totient(7_000_000));
+        Assert.AreEqual(3_200_000ul, Primes.Totient(8_000_000));
+        Assert.AreEqual(2_400_000ul, Primes.Totient(9_000_000));
+        Assert.AreEqual(4_000_000ul, Primes.Totient(10_000_000));
+    }
+
+    [TestMethod]
+    public void TestPrimeFactors()
+    {
+        CollectionAssert.AreEqual(new List<ulong>(), Primes.PrimeFactors(1));
+        CollectionAssert.AreEqual(new List<ulong> { 2 }, Primes.PrimeFactors(2));
+        CollectionAssert.AreEqual(new List<ulong> { 3 }, Primes.PrimeFactors(3));
+        CollectionAssert.AreEqual(new List<ulong> { 2, 2 }, Primes.PrimeFactors(4));
+        CollectionAssert.AreEqual(new List<ulong> { 5 }, Primes.PrimeFactors(5));
+        CollectionAssert.AreEqual(new List<ulong> { 2, 3 }, Primes.PrimeFactors(6));
+        CollectionAssert.AreEqual(new List<ulong> { 7 }, Primes.PrimeFactors(7));
+        CollectionAssert.AreEqual(new List<ulong> { 2, 2, 2 }, Primes.PrimeFactors(8));
+        CollectionAssert.AreEqual(new List<ulong> { 3, 3 }, Primes.PrimeFactors(9));
+        CollectionAssert.AreEqual(new List<ulong> { 2, 5 }, Primes.PrimeFactors(10));
+        CollectionAssert.AreEqual(new List<ulong> { 11 }, Primes.PrimeFactors(11));
+        CollectionAssert.AreEqual(new List<ulong> { 2, 2, 3 }, Primes.PrimeFactors(12));
+        CollectionAssert.AreEqual(new List<ulong> { 13 }, Primes.PrimeFactors(13));
+        CollectionAssert.AreEqual(new List<ulong> { 2, 7 }, Primes.PrimeFactors(14));
+        CollectionAssert.AreEqual(new List<ulong> { 3, 5 }, Primes.PrimeFactors(15));
+        CollectionAssert.AreEqual(new List<ulong> { 2, 2, 2, 2 }, Primes.PrimeFactors(16));
+        CollectionAssert.AreEqual(new List<ulong> { 17 }, Primes.PrimeFactors(17));
+        CollectionAssert.AreEqual(new List<ulong> { 2, 3, 3 }, Primes.PrimeFactors(18));
+        CollectionAssert.AreEqual(new List<ulong> { 19 }, Primes.PrimeFactors(19));
+        CollectionAssert.AreEqual(new List<ulong> { 2, 2, 5 }, Primes.PrimeFactors(20));
+    }
 }

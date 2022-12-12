@@ -150,15 +150,20 @@ public static class Functions
         {
             return 0;
         }
+
         if (a == 0)
         {
             return b;
         }
+
         if (b == 0 || a == b)
         {
             return a;
         }
-        if (a == 1 || b == 1)
+
+        if (a == 1 || b == 1
+            || (a <= ulong.MaxValue && Primes.IsPrime((ulong)a))
+            || (b <= ulong.MaxValue && Primes.IsPrime((ulong)b)))
         {
             return 1;
         }

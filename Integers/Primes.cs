@@ -1,4 +1,5 @@
 using System.Numerics;
+using AstroMultimedia.Core.Collections;
 
 namespace AstroMultimedia.Numerics.Integers;
 
@@ -356,7 +357,7 @@ public static class Primes
     /// <summary>
     /// Get all prime factors of n.
     /// </summary>
-    private static List<ulong> _GetPrimeFactors(ulong n)
+    private static List<ulong> _PrimeFactors(ulong n)
     {
         // Result array.
         List<ulong> factors = new ();
@@ -374,8 +375,16 @@ public static class Primes
             return factors;
         }
 
-        // For composite numbers, find the prime factors.
-        for (ulong factor = 2; factor <= Sqrt(n); factor++)
+        // Check 2 separately, to reduce the number of loop iterations by half.
+        if (n % 2 == 0)
+        {
+            factors.Add(2);
+            factors.AddRange(PrimeFactors(n / 2));
+            return factors;
+        }
+
+        // Check odd primes.
+        for (ulong factor = 3; factor <= Sqrt(n); factor += 2)
         {
             if (!IsPrime(factor) || n % factor != 0)
             {
@@ -383,22 +392,45 @@ public static class Primes
             }
 
             factors.Add(factor);
-            factors.AddRange(GetPrimeFactors(n / factor));
+            factors.AddRange(PrimeFactors(n / factor));
             break;
         }
+
         return factors;
     }
 
-    public static readonly Func<ulong, List<ulong>> GetPrimeFactors =
-        Functions.Memoize<ulong, List<ulong>>(_GetPrimeFactors);
+    public static readonly Func<ulong, List<ulong>> PrimeFactors =
+        Functions.Memoize<ulong, List<ulong>>(_PrimeFactors);
+
+    private static List<ulong> _DistinctPrimeFactors(ulong n) =>
+        PrimeFactors(n).Distinct().ToList();
+
+    public static readonly Func<ulong, List<ulong>> DistinctPrimeFactors =
+        Functions.Memoize<ulong, List<ulong>>(_DistinctPrimeFactors);
 
     private static int _NumDistinctPrimeFactors(ulong n) =>
-        GetPrimeFactors(n).Distinct().Count();
+        DistinctPrimeFactors(n).Count();
 
     public static readonly Func<ulong, int> NumDistinctPrimeFactors =
         Functions.Memoize<ulong, int>(_NumDistinctPrimeFactors);
 
     #endregion Prime factors methods
+
+    #region Coprime methods
+
+    public static bool AreCoprime(ulong n1, ulong n2) =>
+        Functions.GreatestCommonDivisor(n1, n2) == 1;
+
+    public static ulong Totient(ulong n)
+    {
+        List<ulong> factors = DistinctPrimeFactors(n);
+        double product = factors
+            .Select(factor => (double)factor)
+            .Product(factor => 1.0 - 1.0 / factor);
+        return (ulong)Round(product * n);
+    }
+
+    #endregion Coprime methods
 
     #region Cache stuff
 
