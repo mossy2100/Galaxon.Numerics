@@ -54,20 +54,14 @@ public static class Divisors
         a = BigInteger.Abs(a);
         b = BigInteger.Abs(b);
 
-        // Optimizations.
-        if (a == 0 && b == 0)
-        {
-            return 0;
-        }
-
-        if (a == 0)
-        {
-            return b;
-        }
-
-        if (b == 0 || a == b)
+        if (a == b || b == 0 || (a > 0 && b > a && b % a == 0))
         {
             return a;
+        }
+
+        if (a == 0 || (b > 0 && a > b && a % b == 0))
+        {
+            return b;
         }
 
         if (a == 1 || b == 1
@@ -77,23 +71,7 @@ public static class Divisors
             return 1;
         }
 
-        // See if the smaller number evenly divides the larger.
-        if (b > a && b % a == 0)
-        {
-            return a;
-        }
-        if (a > b && a % b == 0)
-        {
-            return b;
-        }
-
-        // If the larger number is prime then there won't be any common divisors greater than 1.
-        // if (b <= ulong.MaxValue && Primes.IsPrime((ulong)b))
-        // {
-        //     return 1;
-        // }
-
-        return GreatestCommonDivisor(a, b % a);
+        return GreatestCommonDivisor(b, a % b);
 
         // Test potential divisors from b/2 down to 2.
         // for (BigInteger d = b / 2; d >= 2; d--)
