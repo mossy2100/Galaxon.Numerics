@@ -49,45 +49,44 @@ public static class Divisors
         return divisors;
     }
 
-    private static BigInteger _GreatestCommonDivisor(BigInteger a, BigInteger b)
+    /// <summary>
+    /// Cache for GreatestCommonDivisor().
+    /// </summary>
+    private static readonly Dictionary<string, BigInteger> s_gcdCache = new ();
+
+    public static BigInteger GreatestCommonDivisor(BigInteger a, BigInteger b)
     {
+        // Make a and b non-negative, since the GCD will be the same for negative values.
         a = BigInteger.Abs(a);
         b = BigInteger.Abs(b);
 
-        if (a == b || b == 0 || (a > 0 && b > a && b % a == 0))
+        // Make a < b, to reduce the cache size by half.
+        if (a > b)
         {
-            return a;
+            (a, b) = (b, a);
         }
 
-        if (a == 0 || (b > 0 && a > b && a % b == 0))
+        // Optimization/terminating condition.
+        if (a == b || a == 0)
         {
             return b;
         }
 
-        if (a == 1 || b == 1
-            || (a > b && a <= ulong.MaxValue && Primes.IsPrime((ulong)a))
-            || (b > a && b <= ulong.MaxValue && Primes.IsPrime((ulong)b)))
+        // Check the cache.
+        string key = $"{a}/{b}";
+        if (s_gcdCache.ContainsKey(key))
         {
-            return 1;
+            return s_gcdCache[key];
         }
 
-        return GreatestCommonDivisor(b, a % b);
+        // Get the result by recursion.
+        BigInteger gcd = GreatestCommonDivisor(a, b % a);
 
-        // Test potential divisors from b/2 down to 2.
-        // for (BigInteger d = b / 2; d >= 2; d--)
-        // {
-        //     if (a % d == 0 && b % d == 0)
-        //     {
-        //         return d;
-        //     }
-        // }
+        // Store the result in the cache.
+        s_gcdCache[key] = gcd;
 
-        // None found.
-        // return 1;
+        return gcd;
     }
-
-    public static readonly Func<BigInteger, BigInteger, BigInteger> GreatestCommonDivisor =
-        Functions.Memoize2<BigInteger, BigInteger, BigInteger>(_GreatestCommonDivisor);
 
     public static BigInteger LeastCommonMultiple(BigInteger a, BigInteger b)
     {
