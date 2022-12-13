@@ -8,26 +8,26 @@ public class TestFunctions
     [TestMethod]
     public void TestNumDigits1()
     {
-        Assert.AreEqual(1, Functions.NumDigits(0));
-        Assert.AreEqual(1, Functions.NumDigits(1));
-        Assert.AreEqual(1, Functions.NumDigits(2));
-        Assert.AreEqual(1, Functions.NumDigits(9));
-        Assert.AreEqual(2, Functions.NumDigits(10));
-        Assert.AreEqual(2, Functions.NumDigits(11));
-        Assert.AreEqual(2, Functions.NumDigits(99));
-        Assert.AreEqual(3, Functions.NumDigits(100));
+        Assert.AreEqual(1, Digits.NumDigits(0));
+        Assert.AreEqual(1, Digits.NumDigits(1));
+        Assert.AreEqual(1, Digits.NumDigits(2));
+        Assert.AreEqual(1, Digits.NumDigits(9));
+        Assert.AreEqual(2, Digits.NumDigits(10));
+        Assert.AreEqual(2, Digits.NumDigits(11));
+        Assert.AreEqual(2, Digits.NumDigits(99));
+        Assert.AreEqual(3, Digits.NumDigits(100));
     }
 
     [TestMethod]
     public void TestNumbersToWords()
     {
-        Assert.AreEqual("zero", Functions.NumberToWords(0));
-        Assert.AreEqual("one", Functions.NumberToWords(1));
-        Assert.AreEqual("negative one", Functions.NumberToWords(-1));
-        Assert.AreEqual("one hundred and twenty-three", Functions.NumberToWords(123));
+        Assert.AreEqual("zero", NumberStrings.NumberToWords(0));
+        Assert.AreEqual("one", NumberStrings.NumberToWords(1));
+        Assert.AreEqual("negative one", NumberStrings.NumberToWords(-1));
+        Assert.AreEqual("one hundred and twenty-three", NumberStrings.NumberToWords(123));
         Assert.AreEqual("four thousand, three hundred and twenty-one",
-            Functions.NumberToWords(4321));
-        Assert.AreEqual("six million", Functions.NumberToWords(6_000_000));
+            NumberStrings.NumberToWords(4321));
+        Assert.AreEqual("six million", NumberStrings.NumberToWords(6_000_000));
     }
 
     [TestMethod]
@@ -39,7 +39,7 @@ public class TestFunctions
             + "thirty-six billion, "
             + "eight hundred and fifty-four million, "
             + "seven hundred and seventy-five thousand, "
-            + "eight hundred and eight", Functions.NumberToWords(long.MinValue));
+            + "eight hundred and eight", NumberStrings.NumberToWords(long.MinValue));
 
     [TestMethod]
     public void TestNumbersToWordsMax() =>
@@ -50,20 +50,20 @@ public class TestFunctions
             + "thirty-six billion, "
             + "eight hundred and fifty-four million, "
             + "seven hundred and seventy-five thousand, "
-            + "eight hundred and seven", Functions.NumberToWords(long.MaxValue));
+            + "eight hundred and seven", NumberStrings.NumberToWords(long.MaxValue));
 
     [TestMethod]
     public void TestNumDigits()
     {
-        Assert.AreEqual(1, Functions.NumDigits(0));
-        Assert.AreEqual(1, Functions.NumDigits(1));
-        Assert.AreEqual(1, Functions.NumDigits(-1));
-        Assert.AreEqual(1, Functions.NumDigits(9));
-        Assert.AreEqual(1, Functions.NumDigits(-9));
-        Assert.AreEqual(2, Functions.NumDigits(10));
-        Assert.AreEqual(2, Functions.NumDigits(99));
-        Assert.AreEqual(3, Functions.NumDigits(100));
-        Assert.AreEqual(3, Functions.NumDigits(101));
-        Assert.AreEqual(10, Functions.NumDigits(1000000000));
+        Assert.AreEqual(1, Digits.NumDigits(0));
+        Assert.AreEqual(1, Digits.NumDigits(1));
+        Assert.AreEqual(1, Digits.NumDigits(-1));
+        Assert.AreEqual(1, Digits.NumDigits(9));
+        Assert.AreEqual(1, Digits.NumDigits(-9));
+        Assert.AreEqual(2, Digits.NumDigits(10));
+        Assert.AreEqual(2, Digits.NumDigits(99));
+        Assert.AreEqual(3, Digits.NumDigits(100));
+        Assert.AreEqual(3, Digits.NumDigits(101));
+        Assert.AreEqual(10, Digits.NumDigits(1000000000));
     }
 }

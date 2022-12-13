@@ -70,16 +70,12 @@ public static class Divisors
             return a;
         }
 
-        if (a == 1 || b == 1)
+        if (a == 1 || b == 1
+            || (a > b && a <= ulong.MaxValue && Primes.IsPrime((ulong)a))
+            || (b > a && b <= ulong.MaxValue && Primes.IsPrime((ulong)b)))
         {
             return 1;
         }
-
-        // // Make a < b.
-        // if (a > b)
-        // {
-        //     (a, b) = (b, a);
-        // }
 
         // See if the smaller number evenly divides the larger.
         if (b > a && b % a == 0)

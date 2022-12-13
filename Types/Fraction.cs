@@ -338,7 +338,7 @@ public struct Fraction : IEquatable<Fraction>, IFormattable, IParsable<Fraction>
         }
 
         // Get the greatest common divisor.
-        BigInteger gcd = Functions.GreatestCommonDivisor(numerator, denominator);
+        BigInteger gcd = Divisors.GreatestCommonDivisor(numerator, denominator);
 
         // If we found one greater than 1, divide.
         if (gcd > 1)
