@@ -419,7 +419,7 @@ public static class Primes
     #region Coprime methods
 
     public static bool AreCoprime(ulong n1, ulong n2) =>
-        Functions.GreatestCommonDivisor(n1, n2) == 1;
+        Divisors.GreatestCommonDivisor(n1, n2) == 1;
 
     public static ulong Totient(ulong n)
     {
