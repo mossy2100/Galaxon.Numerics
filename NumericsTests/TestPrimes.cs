@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using AstroMultimedia.Core.Numbers;
 using AstroMultimedia.Numerics.Integers;
 
 namespace AstroMultimedia.Numerics.Tests;
@@ -167,7 +168,7 @@ public class TestPrimes
     public void PrimesSumTest()
     {
         IEnumerable<ulong> primes = Primes.GetPrimesUpTo(2_000_000);
-        ulong total = primes.Aggregate(0ul, (sum, item) => sum + item);
+        ulong total = primes.Sum();
         Assert.AreEqual(142913828922ul, total);
     }
 

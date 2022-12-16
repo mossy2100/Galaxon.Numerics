@@ -1,5 +1,5 @@
 using System.Numerics;
-using AstroMultimedia.Core.Collections;
+using AstroMultimedia.Core.Numbers;
 
 namespace AstroMultimedia.Numerics.Integers;
 
@@ -178,30 +178,29 @@ public static class Primes
     /// <param name="max">The max value to check.</param>
     public static void Eratosthenes(uint max)
     {
-        // To support any value of max up to uint.MaxValue, we need at least 57 values in the cache.
-        // We can easily add a bunch of small primes.
-        if (MaxValueChecked < MaxKnown)
-        {
-            Cache.UnionWith(KnownPrimes);
-            MaxValueChecked = MaxKnown;
-        }
-
         // See if the cache already has all the values we want.
         if (max <= MaxValueChecked)
         {
             return;
         }
 
+        // To support any value of max up to uint.MaxValue, we need at least 56 values in the cache,
+        // because int.MaxValue - Array.MaxLength == 56.
+        // We can easily solve this by adding a bunch of small known primes.
+        if (MaxValueChecked < MaxKnown)
+        {
+            Cache.UnionWith(KnownPrimes);
+            MaxValueChecked = MaxKnown;
+        }
+
         // Get the minimum value to test.
         uint min = (uint)MaxValueChecked + 1;
 
-        // Ensure min is odd.
+        // Ensure min and max are odd.
         if (min % 2 == 0)
         {
             min++;
         }
-
-        // Ensure max is odd.
         if (max % 2 == 0)
         {
             max--;
@@ -265,17 +264,40 @@ public static class Primes
     #region Get primes methods
 
     /// <summary>
-    /// This method only supports up to uint.MaxValue, which is a limitation of Eratosthenes.
+    /// Get all primes up to and including a maximum value.
+    /// The result will be ordered.
     /// </summary>
-    /// <param name="max"></param>
-    /// <returns></returns>
-    public static List<ulong> GetPrimesUpTo(uint max)
+    /// <param name="max">The maximum value.</param>
+    /// <returns>The list of primes.</returns>
+    public static List<ulong> GetPrimesUpTo(ulong max)
     {
-        // Ensure all values up to and including max have been checked.
-        Eratosthenes(max);
+        // Get a subset of the cache if possible.
+        if (max <= MaxValueChecked)
+        {
+            return Cache.Where(p => p <= max).ToList();
+        }
 
-        // Return the requested primes.
-        return Cache.Where(p => p <= max).ToList();
+        // We can use Eratosthenes up to uint.MaxValue.
+        if (max <= uint.MaxValue)
+        {
+            // Ensure all values up to and including max have been checked.
+            Eratosthenes((uint)max);
+            return Cache.ToList();
+        }
+
+        // Start with Eratosthenes up to the maximum value it supports.
+        Eratosthenes(uint.MaxValue);
+
+        // Get the rest of the values using fast IsPrime(), which will add new primes to the cache
+        // as it goes.
+        for (ulong i = (ulong)uint.MaxValue + 1; i <= max; i++)
+        {
+            _ = IsPrime(i);
+        }
+        MaxValueChecked = max;
+
+        // Return a copy of the cache, which now contains the requested primes.
+        return Cache.ToList();
     }
 
     /// <summary>
@@ -362,13 +384,13 @@ public static class Primes
         // Result array.
         List<ulong> factors = new ();
 
-        // Don't check 0 or 1, which are not prime and have no factors.
+        // 0 and 1 are not prime and have no factors.
         if (n <= 1)
         {
             return factors;
         }
 
-        // If it's prime then include itself.
+        // If it's prime then include itself and nothing else.
         if (IsPrime(n))
         {
             factors.Add(n);
@@ -386,14 +408,12 @@ public static class Primes
         // Check odd primes.
         for (ulong factor = 3; factor <= Sqrt(n); factor += 2)
         {
-            if (!IsPrime(factor) || n % factor != 0)
+            if (IsPrime(factor) && n % factor == 0)
             {
-                continue;
+                factors.Add(factor);
+                factors.AddRange(PrimeFactors(n / factor));
+                break;
             }
-
-            factors.Add(factor);
-            factors.AddRange(PrimeFactors(n / factor));
-            break;
         }
 
         return factors;
@@ -421,6 +441,11 @@ public static class Primes
     public static bool AreCoprime(ulong n1, ulong n2) =>
         Divisors.GreatestCommonDivisor(n1, n2) == 1;
 
+    /// <summary>
+    /// Count how many numbers are coprime to, and less than, a given number.
+    /// </summary>
+    /// <param name="n"></param>
+    /// <returns></returns>
     public static ulong Totient(ulong n)
     {
         List<ulong> factors = DistinctPrimeFactors(n);

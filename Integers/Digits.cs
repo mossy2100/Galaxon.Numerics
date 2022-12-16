@@ -59,4 +59,7 @@ public static class Digits
         }
         return result;
     }
+
+    public static BigInteger SumFactorialDigits(BigInteger n) =>
+        n.ToString().Select(c => Factorials.Factorial(c - '0')).Sum();
 }

@@ -54,22 +54,30 @@ public static class Divisors
     /// </summary>
     private static readonly Dictionary<string, BigInteger> s_gcdCache = new ();
 
+    /// <summary>
+    /// Determine the greatest common divisor of two integers.
+    /// Synonyms: greatest common factor, highest common factor.
+    /// </summary>
     public static BigInteger GreatestCommonDivisor(BigInteger a, BigInteger b)
     {
-        // Make a and b non-negative, since the GCD will be the same for negative values.
+        // Make a and b non-negative, since the result will be the same for negative values.
         a = BigInteger.Abs(a);
         b = BigInteger.Abs(b);
 
-        // Make a < b, to reduce the cache size by half.
+        // Make a < b, to reduce the cache size by half and simplify terminating conditions.
         if (a > b)
         {
             (a, b) = (b, a);
         }
 
-        // Optimization/terminating condition.
+        // Optimization/terminating conditions.
         if (a == b || a == 0)
         {
             return b;
+        }
+        if (a == 1)
+        {
+            return 1;
         }
 
         // Check the cache.
@@ -96,7 +104,7 @@ public static class Divisors
             return 0;
         }
 
-        return BigInteger.Abs(a) * (BigInteger.Abs(b) / GreatestCommonDivisor(a, b));
+        return a * (b / GreatestCommonDivisor(a, b));
     }
 
     /// <summary>

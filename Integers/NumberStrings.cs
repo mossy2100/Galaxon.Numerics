@@ -1,3 +1,4 @@
+using System.Numerics;
 using System.Text;
 
 namespace AstroMultimedia.Numerics.Integers;
@@ -173,4 +174,16 @@ public static class NumberStrings
             current++;
         }
     }
+
+    /// <summary>
+    /// Format a number as a string of superscript characters.
+    /// </summary>
+    public static string ToSuperscript<T>(this T n) where T : INumberBase<T> =>
+        string.Format(new SuperAndSubscriptFormatter(), "{0:sup}", n);
+
+    /// <summary>
+    /// Format a number as a string of subscript characters.
+    /// </summary>
+    public static string ToSubscript<T>(this T n) where T : INumberBase<T> =>
+        string.Format(new SuperAndSubscriptFormatter(), "{0:sub}", n);
 }

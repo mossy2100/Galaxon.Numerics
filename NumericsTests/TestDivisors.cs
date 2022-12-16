@@ -1,6 +1,6 @@
 using AstroMultimedia.Numerics.Integers;
 
-namespace AstroMultimedia.Numerics.Tests;
+namespace AstroMtimedia.Numerics.Tests;
 
 [TestClass]
 public class TestDivisors

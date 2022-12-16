@@ -24,6 +24,9 @@
         <Reference Include="AstroMultimedia.Core.Numbers">
             <HintPath>..\..\Core\Numbers\bin\Debug\net7.0\AstroMultimedia.Core.Numbers.dll</HintPath>
         </Reference>
+        <Reference Include="AstroMultimedia.Core.Strings">
+          <HintPath>..\..\Core\Strings\bin\Debug\net7.0\AstroMultimedia.Core.Strings.dll</HintPath>
+        </Reference>
     </ItemGroup>
 
 </Project>

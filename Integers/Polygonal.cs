@@ -3,7 +3,7 @@ namespace AstroMultimedia.Numerics.Integers;
 /// <summary>
 ///     <see href="https://en.wikipedia.org/wiki/Polygonal_number" />
 /// </summary>
-public static class PolygonalNumbers
+public static class Polygonal
 {
     #region Methods to get a polygonal number
 
@@ -53,10 +53,15 @@ public static class PolygonalNumbers
     {
         Dictionary<ulong, ulong> result = new ();
         ulong n = 0;
-        while (n <= max)
+        while (true)
         {
             n++;
-            result[n] = Get(s, n);
+            ulong pn = Get(s, n);
+            if (pn > max)
+            {
+                break;
+            }
+            result[n] = pn;
         }
         return result;
     }

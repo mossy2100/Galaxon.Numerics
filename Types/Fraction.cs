@@ -146,7 +146,7 @@ public struct Fraction : IEquatable<Fraction>, IFormattable, IParsable<Fraction>
 
             // Unicode.
             case "U":
-                return $"{Numerator.ToSuperscriptString()}/{Denominator.ToSubscriptString()}";
+                return $"{Numerator.ToSuperscript()}/{Denominator.ToSubscript()}";
 
             // Mixed.
             case "M":
@@ -155,9 +155,9 @@ public struct Fraction : IEquatable<Fraction>, IFormattable, IParsable<Fraction>
                 {
                     BigInteger quotient = Numerator / Denominator;
                     BigInteger remainder = Numerator % Denominator;
-                    return $"{quotient}{remainder.ToSuperscriptString()}/{Denominator.ToSubscriptString()}";
+                    return $"{quotient}{remainder.ToSuperscript()}/{Denominator.ToSubscript()}";
                 }
-                return $"{Numerator.ToSuperscriptString()}/{Denominator.ToSubscriptString()}";
+                return $"{Numerator.ToSuperscript()}/{Denominator.ToSubscript()}";
 
             default:
                 throw new ArgumentFormatException(nameof(format),
