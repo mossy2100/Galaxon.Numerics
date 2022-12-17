@@ -49,6 +49,9 @@ public static class Divisors
         return divisors;
     }
 
+    public static BigInteger SumDivisors(BigInteger n) =>
+        GetDivisors(n).Sum();
+
     /// <summary>
     /// Cache for GreatestCommonDivisor().
     /// </summary>
