@@ -30,7 +30,6 @@ public static class Partitions
         {
             // Positive k term.
             int arg = n - k * (3 * k - 1) / 2;
-            Console.WriteLine(arg);
             if (arg < 0)
             {
                 break;
@@ -39,7 +38,6 @@ public static class Partitions
 
             // Negative k term.
             arg = n - k * (3 * k + 1) / 2;
-            Console.WriteLine(arg);
             if (arg < 0)
             {
                 break;
