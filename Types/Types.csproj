@@ -9,7 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="DecimalMath.DecimalEx" Version="1.0.2"/>
+        <PackageReference Include="DecimalMath.DecimalEx" Version="1.0.2" />
     </ItemGroup>
 
     <ItemGroup>
@@ -25,7 +25,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Integers\Integers.csproj"/>
+        <ProjectReference Include="..\Integers\Integers.csproj" />
     </ItemGroup>
 
 </Project>

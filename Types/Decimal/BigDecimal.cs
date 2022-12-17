@@ -686,7 +686,7 @@ public class BigDecimal : IEquatable<BigDecimal>, IComparable<BigDecimal>
     /// </summary>
     /// <param name="l">A signed long value.</param>
     public static BigDecimal FromInt64(long l) =>
-        l < 0 ? -FromUInt64(Integers.Abs(l)) : FromUInt64((ulong)l);
+        l < 0 ? -FromUInt64(XUlong.Abs(l)) : FromUInt64((ulong)l);
 
     public static BigDecimal FromDecimal(decimal d)
     {
