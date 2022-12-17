@@ -7,7 +7,7 @@ namespace AstroMultimedia.Numerics.Tests;
 public class TestPartitions
 {
     [TestMethod]
-    public void TestPSmall()
+    public void TestPDigits()
     {
         Assert.AreEqual(1, Partitions.P(0));
         Assert.AreEqual(1, Partitions.P(1));
@@ -19,21 +19,12 @@ public class TestPartitions
         Assert.AreEqual(15, Partitions.P(7));
         Assert.AreEqual(22, Partitions.P(8));
         Assert.AreEqual(30, Partitions.P(9));
-        Assert.AreEqual(42, Partitions.P(10));
-        Assert.AreEqual(56, Partitions.P(11));
-        Assert.AreEqual(77, Partitions.P(12));
-        Assert.AreEqual(101, Partitions.P(13));
-        Assert.AreEqual(135, Partitions.P(14));
-        Assert.AreEqual(176, Partitions.P(15));
-        Assert.AreEqual(231, Partitions.P(16));
-        Assert.AreEqual(297, Partitions.P(17));
-        Assert.AreEqual(385, Partitions.P(18));
-        Assert.AreEqual(490, Partitions.P(19));
     }
 
     [TestMethod]
     public void TestPTens()
     {
+        Assert.AreEqual(42, Partitions.P(10));
         Assert.AreEqual(627, Partitions.P(20));
         Assert.AreEqual(5604, Partitions.P(30));
         Assert.AreEqual(37338, Partitions.P(40));

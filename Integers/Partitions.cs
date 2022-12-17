@@ -1,4 +1,5 @@
 using System.Numerics;
+using AstroMultimedia.Numerics.Maths;
 
 namespace AstroMultimedia.Numerics.Integers;
 
@@ -20,44 +21,36 @@ public static class Partitions
             return 1;
         }
 
-        // Get the signs and arguments so we can calculate the smaller partitions first.
-        // This wiil avoid a stack overflow.
-        // The results of P() are cached due to memoization of the method.
-        List<(int sign, ushort arg)> terms = new ();
-        int k = 1;
-        int s = 1;
-        while (true)
-        {
-            // Positive k term.
-            int arg = n - k * (3 * k - 1) / 2;
-            if (arg < 0)
-            {
-                break;
-            }
-            terms.Add((s, (ushort)arg));
+        // Calculate the maximum value for k, our starting value.
+        List<Complex> solutions = Equations.SolveQuadratic(3, -1, -2 * n);
+        int maxK = (int)solutions.Max(cx => Abs(cx.Real));
 
-            // Negative k term.
-            arg = n - k * (3 * k + 1) / 2;
-            if (arg < 0)
-            {
-                break;
-            }
-            terms.Add((s, (ushort)arg));
-
-            // Go to next pair.
-            k++;
-            s = -s;
-        }
-
-        // Order the terms by argument so we calculate the smaller ones first.
-        terms = terms.OrderBy(t => t.arg).ToList();
-
-        // Sum the terms.
+        // Calculate the sum by adding terms from smallest to largest,
+        // which means looping on k from the maximum down to 1.
+        // We add terms from smallest to largest so we're computing terms containing the smaller
+        // partitions first, which prevents stack overflow errors.
         BigInteger sum = 0;
-        foreach ((int sign, ushort arg) in terms)
+        int sign = (int)Pow(-1, maxK + 1);
+        for (int k = maxK; k > 0; k--)
         {
-            sum += sign * P(arg);
+            // Add the term for positive k.
+            int arg = n - k * (3 * k - 1) / 2;
+            if (arg >= 0)
+            {
+                sum += sign * P((ushort)arg);
+            }
+
+            // Add the term for negative k.
+            arg = n - k * (3 * k + 1) / 2;
+            if (arg >= 0)
+            {
+                sum += sign * P((ushort)arg);
+            }
+
+            // Flip the sign.
+            sign = -sign;
         }
+
         return sum;
     }
 
