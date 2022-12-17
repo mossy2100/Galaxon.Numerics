@@ -1,5 +1,4 @@
 using System.Numerics;
-using AstroMultimedia.Numerics.Maths;
 
 namespace AstroMultimedia.Numerics.Integers;
 
@@ -21,36 +20,41 @@ public static class Partitions
             return 1;
         }
 
-        // Calculate the maximum value for k, our starting value.
-        List<Complex> solutions = Equations.SolveQuadratic(3, -1, -2 * n);
-        int maxK = (int)solutions.Max(cx => Abs(cx.Real));
-
-        // Calculate the sum by adding terms from smallest to largest,
-        // which means looping on k from the maximum down to 1.
-        // We add terms from smallest to largest so we're computing terms containing the smaller
-        // partitions first, which prevents stack overflow errors.
-        BigInteger sum = 0;
-        int sign = (int)Pow(-1, maxK + 1);
-        for (int k = maxK; k > 0; k--)
+        // Get the signs and arguments so we can calculate the smaller partitions first.
+        // This will avoid a stack overflow.
+        // The results of P() are cached due to memoization of the method.
+        List<(int sign, ushort arg)> terms = new ();
+        int k = 1;
+        int sign = 1;
+        while (true)
         {
-            // Add the term for positive k.
+            // Positive k term.
             int arg = n - k * (3 * k - 1) / 2;
-            if (arg >= 0)
+            if (arg < 0)
             {
-                sum += sign * P((ushort)arg);
+                break;
             }
+            terms.Add((sign, (ushort)arg));
 
-            // Add the term for negative k.
+            // Negative k term.
             arg = n - k * (3 * k + 1) / 2;
-            if (arg >= 0)
+            if (arg < 0)
             {
-                sum += sign * P((ushort)arg);
+                break;
             }
+            terms.Add((sign, (ushort)arg));
 
-            // Flip the sign.
+            // Go to next pair.
+            k++;
             sign = -sign;
         }
 
+        // Sum the terms from smallest to largest.
+        BigInteger sum = 0;
+        for (int i = terms.Count - 1; i >= 0; i--)
+        {
+            sum += terms[i].sign * P(terms[i].arg);
+        }
         return sum;
     }
 
