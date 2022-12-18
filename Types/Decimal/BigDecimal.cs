@@ -617,7 +617,7 @@ public struct BigDecimal : IFloatingPoint<BigDecimal>, ICloneable, IPowerFunctio
             strExponent = exponent.ToString(format == "N" ? "N" : "D", provider);
             strExponent = unicode
                 ? $"×10{strExponent.ToSuperscript(1)}"
-                : (exponent < 0) ? $"E{strExponent}" : $"E+{strExponent}";
+                : (exponent < 0) ? $"E{strExponent}" : $"E{nfi.PositiveSign}{strExponent}";
         }
 
         return $"{strSignificand}{strExponent}";
@@ -629,38 +629,85 @@ public struct BigDecimal : IFloatingPoint<BigDecimal>, ICloneable, IPowerFunctio
         throw new NotImplementedException();
 
     /// <inheritdoc />
-    public static BigDecimal Parse(string s, IFormatProvider? provider) =>
-        throw new NotImplementedException();
+    public static BigDecimal Parse(string s, IFormatProvider? provider)
+    {
+        // Remove any whitespace or underscore characters from the string.
+        s = Regex.Replace(s, @"[\s_]", "");
+
+        // Get a NumberFormatInfo object so we know what characters to look for.
+        NumberFormatInfo nfi = provider as NumberFormatInfo ?? NumberFormatInfo.InvariantInfo;
+
+        // Check the string format and extract salient info.
+        string strSign = $"[{nfi.NegativeSign}{nfi.PositiveSign}]?";
+        Match match = Regex.Match(s,
+            $@"^(?<integer>{strSign}\d+)({nfi.NumberDecimalSeparator}(?<fraction>\d+))?(e(?<exponent>{strSign}\d+))?$",
+            RegexOptions.IgnoreCase);
+        if (!match.Success)
+        {
+            throw new ArgumentFormatException(nameof(s), "Invalid format.");
+        }
+
+        // Get the parts.
+        string strInteger = match.Groups["integer"].Value;
+        string strFraction = match.Groups["fraction"].Value;
+        string strExponent = match.Groups["exponent"].Value;
+
+        // Construct the result object.
+        BigInteger significand = BigInteger.Parse(strInteger + strFraction, provider);
+        BigInteger exponent = (strExponent == "") ? 0 : BigInteger.Parse(strExponent, provider);
+        exponent -= strFraction.Length;
+        return new BigDecimal(significand, exponent);
+    }
 
     /// <inheritdoc />
+    /// <remarks>Ignoring style parameter for now.</remarks>
     public static BigDecimal Parse(string s, NumberStyles style, IFormatProvider? provider) =>
-        throw new NotImplementedException();
+        Parse(s, provider);
 
     /// <inheritdoc />
     public static BigDecimal Parse(ReadOnlySpan<char> s, IFormatProvider? provider) =>
-        throw new NotImplementedException();
+        Parse(new string(s), provider);
 
     /// <inheritdoc />
+    /// <remarks>Ignoring style parameter for now.</remarks>
     public static BigDecimal Parse(ReadOnlySpan<char> s, NumberStyles style, IFormatProvider? provider) =>
-        throw new NotImplementedException();
+        Parse(new string(s), provider);
 
     /// <inheritdoc />
-    public static bool TryParse(string? s, IFormatProvider? provider, out BigDecimal result) =>
-        throw new NotImplementedException();
+    public static bool TryParse(string? s, IFormatProvider? provider, out BigDecimal result)
+    {
+        if (s == null)
+        {
+            result = Zero;
+            return false;
+        }
+        try
+        {
+            result = Parse(s, provider);
+            return true;
+        }
+        catch (ArgumentFormatException e)
+        {
+            result = Zero;
+            return false;
+        }
+    }
 
     /// <inheritdoc />
+    /// <remarks>Ignoring style parameter for now.</remarks>
     public static bool TryParse(string? s, NumberStyles style, IFormatProvider? provider,
         out BigDecimal result) =>
-        throw new NotImplementedException();
+        TryParse(s, provider, out result);
 
     /// <inheritdoc />
     public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, out BigDecimal result) =>
-        throw new NotImplementedException();
+        TryParse(new string(s), provider, out result);
 
     /// <inheritdoc />
+    /// <remarks>Ignoring style parameter for now.</remarks>
     public static bool TryParse(ReadOnlySpan<char> s, NumberStyles style, IFormatProvider? provider,
         out BigDecimal result) =>
-        throw new NotImplementedException();
+        TryParse(new string(s), provider, out result);
 
     #endregion Methods for parsing and formatting
 
