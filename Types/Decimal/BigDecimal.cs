@@ -6,7 +6,8 @@ using AstroMultimedia.Core.Strings;
 
 namespace AstroMultimedia.Numerics.Types;
 
-public struct BigDecimal : INumber<BigDecimal>
+public struct BigDecimal : IFloatingPoint<BigDecimal>, ICloneable, IPowerFunctions<BigDecimal>,
+    IRootFunctions<BigDecimal>, IExponentialFunctions<BigDecimal>, ILogarithmicFunctions<BigDecimal>
 {
     #region Constructors
 
@@ -50,6 +51,9 @@ public struct BigDecimal : INumber<BigDecimal>
     public static BigDecimal One { get; } = new (1, 0);
 
     /// <inheritdoc />
+    public static BigDecimal NegativeOne { get; } = new (-1, 0);
+
+    /// <inheritdoc />
     public static int Radix { get; } = 10;
 
     /// <inheritdoc />
@@ -59,6 +63,75 @@ public struct BigDecimal : INumber<BigDecimal>
     public static BigDecimal MultiplicativeIdentity { get; } = One;
 
     #endregion Static properties
+
+    #region Constants
+
+    /// <inheritdoc />
+    /// <remarks>
+    /// Euler's number (e) to 100 decimal places.
+    /// If you need more, you can get up to 10,000 decimal places here:
+    /// <see href="https://www.math.utah.edu/~pa/math/e" />
+    /// </remarks>
+    public static BigDecimal E { get; } = Parse("2."
+        + "7182818284 5904523536 0287471352 6624977572 4709369995 "
+        + "9574966967 6277240766 3035354759 4571382178 5251664274", null);
+
+    /// <inheritdoc />
+    /// <remarks>
+    /// The circle constant (π) to 100 decimal places.
+    /// If you need more, you can get up to 10,000 decimal places here:
+    /// <see href="https://www.math.utah.edu/~pa/math/pi" />
+    /// </remarks>
+    public static BigDecimal Pi { get; } = Parse("3."
+        + "1415926535 8979323846 2643383279 5028841971 6939937510 "
+        + "5820974944 5923078164 0628620899 8628034825 3421170679", null);
+
+    /// <inheritdoc />
+    /// <remarks>
+    /// The other circle constant (τ = 2π) to 100 decimal places.
+    /// If you need more, you can get up to 10,000 decimal places here:
+    /// <see href="https://tauday.com/tau-digits" />
+    /// </remarks>
+    public static BigDecimal Tau { get; } = Parse("6."
+        + "2831853071 7958647692 5286766559 0057683943 3879875021 "
+        + "1641949889 1846156328 1257241799 7256069650 6842341360", null);
+
+    /// <summary>
+    /// The golden ratio to 100 decimal places.
+    /// </summary>
+    public static BigDecimal Phi { get; } = Parse("1."
+        + "6180339887 4989484820 4586834365 6381177203 0917980576 "
+        + "2862135448 6227052604 6281890244 9707207204 1893911374", null);
+
+    /// <summary>
+    /// The square root of 2 to 100 decimal places.
+    /// </summary>
+    public static BigDecimal Sqrt2 { get; } = Parse("1."
+        + "4142135623 7309504880 1688724209 6980785696 7187537694 "
+        + "8073176679 7379907324 7846210703 8850387534 3276415727", null);
+
+    /// <summary>
+    /// The square root of 10 to 100 decimal places.
+    /// </summary>
+    public static BigDecimal Sqrt10 { get; } = Parse("3."
+        + "1622776601 6837933199 8893544432 7185337195 5513932521 "
+        + "6826857504 8527925944 3863923822 1344248108 3793002952", null);
+
+    /// <summary>
+    /// The natural logarithm of 2 to 100 decimal places.
+    /// </summary>
+    public static BigDecimal Ln2 { get; } = Parse("0."
+        + "6931471805 5994530941 7232121458 1765680755 0013436025 "
+        + "5254120680 0094933936 2196969471 5605863326 9964186875", null);
+
+    /// <summary>
+    /// The natural logarithm of 10 to 100 decimal places.
+    /// </summary>
+    public static BigDecimal Ln10 { get; } = Parse("2."
+        + "3025850929 9404568401 7991454684 3642076011 0148862877 "
+        + "2976033327 9009675726 0967735248 0235997205 0895982983", null);
+
+    #endregion Constants
 
     #region Arithmetic operators
 
@@ -110,99 +183,85 @@ public struct BigDecimal : INumber<BigDecimal>
     public static BigDecimal operator %(BigDecimal left, BigDecimal right) =>
         throw new NotImplementedException();
 
+    /// <summary>
+    /// Exponentiation operator.
+    /// </summary>
+    public static BigDecimal operator ^(BigDecimal left, BigDecimal right) =>
+        Pow(left, right);
+
     #endregion Arithmetic operators
 
-    #region Arithmetic methods
+    #region Miscellaneous methods
 
-    /// <summary>
-    /// Get the absolute value of the number.
-    /// </summary>
+    /// <inheritdoc />
+    public object Clone() =>
+        (BigDecimal)MemberwiseClone();
+
+    /// <inheritdoc />
     public static BigDecimal Abs(BigDecimal value) =>
         new (BigInteger.Abs(value.Significand), value.Exponent);
 
-    /// <summary>
-    /// Modify the provided significand and exponent as needed to find the canonical form.
-    /// Static form of the method, for use in the constructor.
-    /// </summary>
-    /// <returns>The two updated BigIntegers.</returns>
-    private static (BigInteger , BigInteger) MakeCanonical(BigInteger significand,
-        BigInteger exponent)
-    {
-        // Canonical form of zero.
-        if (significand == 0)
-        {
-            exponent = 0;
-        }
-        // Canonical form of other values.
-        else
-        {
-            // Remove trailing 0s from the significand by incrementing the exponent.
-            while (significand % 10 == 0)
-            {
-                significand /= 10;
-                exponent++;
-            }
-        }
-        return (significand, exponent);
-    }
-
-    /// <summary>
-    /// Make the value into its canonical form.
-    /// Any trailing 0s on the significand are removed, and this information is transferred to the
-    /// exponent.
-    /// This method mutates the object; it doesn't return a new object like most of the other
-    /// methods, because no information is lost.
-    /// </summary>
-    /// <returns>The instance, which is useful for method chaining.</returns>
-    private BigDecimal MakeCanonical()
-    {
-        (Significand, Exponent) = MakeCanonical(Significand, Exponent);
-        return this;
-    }
-
-    /// <summary>
-    /// Round off a value to a certain number of decimal places.
-    /// </summary>
-    public static BigDecimal Round(BigDecimal bd, int nDecimalPlaces = 0) =>
+    /// <inheritdoc />
+    public static BigDecimal Round(BigDecimal x, int digits, MidpointRounding mode) =>
         throw new NotImplementedException();
 
+    /// <inheritdoc />
+    public int GetSignificandByteCount() =>
+        Significand.GetByteCount();
+
+    /// <inheritdoc />
+    public int GetSignificandBitLength() =>
+        GetSignificandByteCount() * 8;
+
+    /// <inheritdoc />
+    public int GetExponentByteCount() =>
+        Exponent.GetByteCount();
+
+    /// <inheritdoc />
+    public int GetExponentShortestBitLength() =>
+        GetExponentByteCount() * 8;
+
     /// <summary>
-    /// Adjust the parts of one of the values so both have the same exponent.
-    /// If necessary, a new object will be created rather than mutate the provided one.
+    /// Shared logic for
+    /// <see cref="TryWriteSignificandBigEndian" />
+    /// <see cref="TryWriteSignificandLittleEndian" />
+    /// <see cref="TryWriteExponentBigEndian" />
+    /// <see cref="TryWriteExponentLittleEndian" />
     /// </summary>
-    private static (BigDecimal, BigDecimal) Align(BigDecimal x, BigDecimal y)
+    public bool TryWrite(BigInteger bi, Span<byte> destination, out int bytesWritten,
+        bool isBigEndian)
     {
-        // See if there's anything to do.
-        if (x.Exponent == y.Exponent)
+        byte[] bytes = bi.ToByteArray(false, isBigEndian);
+        try
         {
-            return (x, y);
+            bytes.CopyTo(destination);
+            bytesWritten = bytes.Length;
+            return true;
         }
-
-        // Get a and b as proxies for the operation so we don't mutate the original values.
-        BigDecimal a;
-        BigDecimal b;
-        if (x.Exponent < y.Exponent)
+        catch
         {
-            a = x;
-            b = (BigDecimal)y.MemberwiseClone();
+            bytesWritten = 0;
+            return false;
         }
-        else
-        {
-            a = (BigDecimal)y.MemberwiseClone();
-            b = x;
-        }
-
-        // Shift b until they're aligned.
-        while (b.Exponent > a.Exponent)
-        {
-            b.Significand *= 10;
-            b.Exponent--;
-        }
-
-        return (a, b);
     }
 
-    #endregion Arithmetic methods
+    /// <inheritdoc />
+    public bool TryWriteSignificandBigEndian(Span<byte> destination, out int bytesWritten) =>
+        TryWrite(Significand, destination, out bytesWritten, true);
+
+    /// <inheritdoc />
+    public bool TryWriteSignificandLittleEndian(Span<byte> destination, out int bytesWritten) =>
+        TryWrite(Significand, destination, out bytesWritten, false);
+
+    /// <inheritdoc />
+    public bool TryWriteExponentBigEndian(Span<byte> destination, out int bytesWritten) =>
+        TryWrite(Exponent, destination, out bytesWritten, true);
+
+    /// <inheritdoc />
+    public bool TryWriteExponentLittleEndian(Span<byte> destination, out int bytesWritten) =>
+        TryWrite(Exponent, destination, out bytesWritten, false);
+
+    #endregion Miscellaneous methods
 
     #region Inspection methods
 
@@ -632,4 +691,124 @@ public struct BigDecimal : INumber<BigDecimal>
         throw new NotImplementedException();
 
     #endregion Conversion methods
+
+    #region Exponentiation and logarithm methods
+
+    public static BigDecimal Pow(BigDecimal x, BigDecimal y) =>
+        throw new NotImplementedException();
+
+    public static BigDecimal Sqrt(BigDecimal x) =>
+        throw new NotImplementedException();
+
+    public static BigDecimal Cbrt(BigDecimal x) =>
+        throw new NotImplementedException();
+
+    public static BigDecimal Hypot(BigDecimal x, BigDecimal y) =>
+        throw new NotImplementedException();
+
+    public static BigDecimal RootN(BigDecimal x, int n) =>
+        throw new NotImplementedException();
+
+    public static BigDecimal Exp(BigDecimal x) =>
+        throw new NotImplementedException();
+
+    public static BigDecimal Exp2(BigDecimal x) =>
+        throw new NotImplementedException();
+
+    public static BigDecimal Exp10(BigDecimal x) =>
+        throw new NotImplementedException();
+
+    public static BigDecimal Log(BigDecimal x) =>
+        throw new NotImplementedException();
+
+    public static BigDecimal Log(BigDecimal x, BigDecimal newBase) =>
+        throw new NotImplementedException();
+
+    public static BigDecimal Log2(BigDecimal x) =>
+        throw new NotImplementedException();
+
+    public static BigDecimal Log10(BigDecimal x) =>
+        throw new NotImplementedException();
+
+    #endregion Exponentiation and logarithm methods
+
+    #region Private methods
+
+    /// <summary>
+    /// Adjust the parts of one of the values so both have the same exponent.
+    /// If necessary, a new object will be created rather than mutate the provided one.
+    /// </summary>
+    private static (BigDecimal, BigDecimal) Align(BigDecimal x, BigDecimal y)
+    {
+        // See if there's anything to do.
+        if (x.Exponent == y.Exponent)
+        {
+            return (x, y);
+        }
+
+        // Get a and b as proxies for the operation so we don't mutate the original values.
+        BigDecimal a;
+        BigDecimal b;
+        if (x.Exponent < y.Exponent)
+        {
+            a = x;
+            b = (BigDecimal)y.MemberwiseClone();
+        }
+        else
+        {
+            a = (BigDecimal)y.MemberwiseClone();
+            b = x;
+        }
+
+        // Shift b until they're aligned.
+        while (b.Exponent > a.Exponent)
+        {
+            b.Significand *= 10;
+            b.Exponent--;
+        }
+
+        return (a, b);
+    }
+
+    /// <summary>
+    /// Modify the provided significand and exponent as needed to find the canonical form.
+    /// Static form of the method, for use in the constructor.
+    /// </summary>
+    /// <returns>The two updated BigIntegers.</returns>
+    private static (BigInteger , BigInteger) MakeCanonical(BigInteger significand,
+        BigInteger exponent)
+    {
+        // Canonical form of zero.
+        if (significand == 0)
+        {
+            exponent = 0;
+        }
+        // Canonical form of other values.
+        else
+        {
+            // Remove trailing 0s from the significand by incrementing the exponent.
+            while (significand % 10 == 0)
+            {
+                significand /= 10;
+                exponent++;
+            }
+        }
+        return (significand, exponent);
+    }
+
+    /// <summary>
+    /// Make the value into its canonical form.
+    /// Any trailing 0s on the significand are removed, and this information is transferred to the
+    /// exponent.
+    /// This method mutates the object; it doesn't return a new object like most of the other
+    /// methods, because no information is lost.
+    /// </summary>
+    /// <returns>The instance, which is useful for method chaining.</returns>
+    private BigDecimal MakeCanonical()
+    {
+        (Significand, Exponent) = MakeCanonical(Significand, Exponent);
+        return this;
+    }
+
+    #endregion Private methods
 }
