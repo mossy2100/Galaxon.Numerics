@@ -6,7 +6,7 @@ using AstroMultimedia.Core.Strings;
 
 namespace AstroMultimedia.Numerics.Types;
 
-public struct BigDecimal : INumber<BigDecimal>, ICloneable
+public struct BigDecimal : INumber<BigDecimal>
 {
     #region Constructors
 
@@ -64,28 +64,43 @@ public struct BigDecimal : INumber<BigDecimal>, ICloneable
 
     /// <inheritdoc />
     public static BigDecimal operator +(BigDecimal value) =>
-        throw new NotImplementedException();
+        (BigDecimal)value.MemberwiseClone();
 
     /// <inheritdoc />
-    public static BigDecimal operator +(BigDecimal left, BigDecimal right) =>
-        throw new NotImplementedException();
+    public static BigDecimal operator +(BigDecimal left, BigDecimal right)
+    {
+        (BigDecimal x, BigDecimal y) = Align(left, right);
+        BigDecimal result = new BigDecimal(x.Significand + y.Significand, x.Exponent);
+        return result.MakeCanonical();
+    }
 
     /// <inheritdoc />
     public static BigDecimal operator ++(BigDecimal value) =>
-        throw new NotImplementedException();
+        value + One;
 
     /// <inheritdoc />
     public static BigDecimal operator -(BigDecimal value) =>
-        throw new NotImplementedException();
+        new (-value.Significand, value.Exponent);
 
-    public static BigDecimal operator -(BigDecimal left, BigDecimal right) =>
-        throw new NotImplementedException();
+    /// <inheritdoc />
+    public static BigDecimal operator -(BigDecimal left, BigDecimal right)
+    {
+        (BigDecimal x, BigDecimal y) = Align(left, right);
+        BigDecimal result = new (x.Significand - y.Significand, x.Exponent);
+        return result.MakeCanonical();
+    }
 
+    /// <inheritdoc />
     public static BigDecimal operator --(BigDecimal value) =>
-        throw new NotImplementedException();
+        value - One;
 
-    public static BigDecimal operator *(BigDecimal left, BigDecimal right) =>
-        throw new NotImplementedException();
+    /// <inheritdoc />
+    public static BigDecimal operator *(BigDecimal left, BigDecimal right)
+    {
+        BigDecimal result =
+            new (left.Significand * right.Significand, left.Exponent + right.Exponent);
+        return result.MakeCanonical();
+    }
 
     public static BigDecimal operator /(BigDecimal left, BigDecimal right) =>
         throw new NotImplementedException();
@@ -98,14 +113,6 @@ public struct BigDecimal : INumber<BigDecimal>, ICloneable
     #region Arithmetic methods
 
     /// <summary>
-    /// Make a copy of the object.
-    /// Note, this returns an object, not a BigDecimal, so be aware of that when using the method.
-    /// This is a requirement of the ICloneable interface.
-    /// </summary>
-    public object Clone() =>
-        new BigDecimal(Significand, Exponent);
-
-    /// <summary>
     /// Get the absolute value of the number.
     /// </summary>
     public static BigDecimal Abs(BigDecimal value) =>
@@ -116,7 +123,7 @@ public struct BigDecimal : INumber<BigDecimal>, ICloneable
     /// Static form of the method, for use in the constructor.
     /// </summary>
     /// <returns>The two updated BigIntegers.</returns>
-    public static (BigInteger , BigInteger) MakeCanonical(BigInteger significand,
+    private static (BigInteger , BigInteger) MakeCanonical(BigInteger significand,
         BigInteger exponent)
     {
         // Canonical form of zero.
@@ -145,7 +152,7 @@ public struct BigDecimal : INumber<BigDecimal>, ICloneable
     /// methods, because no information is lost.
     /// </summary>
     /// <returns>The instance, which is useful for method chaining.</returns>
-    public BigDecimal MakeCanonical()
+    private BigDecimal MakeCanonical()
     {
         (Significand, Exponent) = MakeCanonical(Significand, Exponent);
         return this;
@@ -156,10 +163,43 @@ public struct BigDecimal : INumber<BigDecimal>, ICloneable
     /// </summary>
     /// <param name="bd"></param>
     /// <returns></returns>
-    public static BigDecimal Round(BigDecimal bd, int nDecimalPlaces = 0)
+    public static BigDecimal Round(BigDecimal bd, int nDecimalPlaces = 0) =>
+        throw new NotImplementedException();
+
+    /// <summary>
+    /// Adjust the parts of one of the values so both have the same exponent.
+    /// If necessary, a new object will be created rather than mutate the provided one.
+    /// </summary>
+    private static (BigDecimal, BigDecimal) Align(BigDecimal x, BigDecimal y)
     {
-        // TODO
-        return new ();
+        // See if there's anything to do.
+        if (x.Exponent == y.Exponent)
+        {
+            return (x, y);
+        }
+
+        // Get a and b as proxies for the operation so we don't mutate the original values.
+        BigDecimal a;
+        BigDecimal b;
+        if (x.Exponent < y.Exponent)
+        {
+            a = x;
+            b = (BigDecimal)y.MemberwiseClone();
+        }
+        else
+        {
+            a = (BigDecimal)y.MemberwiseClone();
+            b = x;
+        }
+
+        // Shift b until they're aligned.
+        while (b.Exponent > a.Exponent)
+        {
+            b.Significand *= 10;
+            b.Exponent--;
+        }
+
+        return (a, b);
     }
 
     #endregion Arithmetic methods
@@ -182,54 +222,95 @@ public struct BigDecimal : INumber<BigDecimal>, ICloneable
 
     /// <summary>
     /// The value will be an integer if in canonical form and the exponent is >= 0.
-    /// However, if the
     /// </summary>
     /// <param name="value"></param>
     /// <returns></returns>
     public static bool IsInteger(BigDecimal value) =>
         value.MakeCanonical().Exponent >= 0;
 
-    public static bool IsOddInteger(BigDecimal value) =>
-        throw new NotImplementedException();
+    /// <inheritdoc />
+    public static bool IsOddInteger(BigDecimal value)
+    {
+        if (!IsInteger(value))
+        {
+            return false;
+        }
 
-    public static bool IsEvenInteger(BigDecimal value) =>
-        throw new NotImplementedException();
+        // If the exponent is > 0 then it's a multiple of 10, and therefore even.
+        if (value.Exponent > 0)
+        {
+            return false;
+        }
 
-    public static bool IsFinite(BigDecimal value) =>
-        throw new NotImplementedException();
+        // Check if it's odd.
+        return value.Significand % 2 == 1;
+    }
 
-    public static bool IsImaginaryNumber(BigDecimal value) =>
-        throw new NotImplementedException();
+    /// <inheritdoc />
+    public static bool IsEvenInteger(BigDecimal value)
+    {
+        if (!IsInteger(value))
+        {
+            return false;
+        }
 
-    public static bool IsInfinity(BigDecimal value) =>
-        throw new NotImplementedException();
+        // If the exponent is > 0 then it's a multiple of 10, and therefore even.
+        if (value.Exponent > 0)
+        {
+            return true;
+        }
 
-    public static bool IsNaN(BigDecimal value) =>
-        throw new NotImplementedException();
+        // Check if it's even.
+        return value.Significand % 2 == 0;
+    }
 
-    public static bool IsNegative(BigDecimal value) =>
-        throw new NotImplementedException();
-
-    public static bool IsNegativeInfinity(BigDecimal value) =>
-        throw new NotImplementedException();
-
-    public static bool IsNormal(BigDecimal value) =>
-        throw new NotImplementedException();
-
-    public static bool IsPositive(BigDecimal value) =>
-        throw new NotImplementedException();
-
-    public static bool IsPositiveInfinity(BigDecimal value) =>
-        throw new NotImplementedException();
-
-    public static bool IsRealNumber(BigDecimal value) =>
-        throw new NotImplementedException();
-
-    public static bool IsSubnormal(BigDecimal value) =>
-        throw new NotImplementedException();
-
+    /// <inheritdoc />
     public static bool IsZero(BigDecimal value) =>
-        throw new NotImplementedException();
+        value.Significand == 0;
+
+    /// <inheritdoc />
+    public static bool IsNegative(BigDecimal value) =>
+        value.Significand < 0;
+
+    /// <inheritdoc />
+    public static bool IsPositive(BigDecimal value) =>
+        value.Significand > 0;
+
+    /// <inheritdoc />
+    public static bool IsFinite(BigDecimal value) =>
+        true;
+
+    /// <inheritdoc />
+    public static bool IsInfinity(BigDecimal value) =>
+        false;
+
+    /// <inheritdoc />
+    public static bool IsNegativeInfinity(BigDecimal value) =>
+        false;
+
+    /// <inheritdoc />
+    public static bool IsPositiveInfinity(BigDecimal value) =>
+        false;
+
+    /// <inheritdoc />
+    public static bool IsRealNumber(BigDecimal value) =>
+        true;
+
+    /// <inheritdoc />
+    public static bool IsImaginaryNumber(BigDecimal value) =>
+        false;
+
+    /// <inheritdoc />
+    public static bool IsNormal(BigDecimal value) =>
+        true;
+
+    /// <inheritdoc />
+    public static bool IsSubnormal(BigDecimal value) =>
+        false;
+
+    /// <inheritdoc />
+    public static bool IsNaN(BigDecimal value) =>
+        false;
 
     #endregion Inspection methods
 
