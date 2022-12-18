@@ -48,7 +48,7 @@ public enum Flag
 /// etc.
 /// In theory the maximum number of digits could be configurable, but this would
 /// add another byte per object.
-/// Mantissa: 4 bytes. One ordinary signed int.
+/// Exponent: 4 bytes. One ordinary signed int.
 /// </summary>
 public class LongDecimal : IEquatable<LongDecimal>, IComparable<LongDecimal>
 {
@@ -64,7 +64,7 @@ public class LongDecimal : IEquatable<LongDecimal>, IComparable<LongDecimal>
 
     private byte[] Significand { get; init; }
 
-    private int Mantissa { get; init; }
+    private int Exponent { get; init; }
 
     private byte Flags { get; init; }
 
@@ -103,10 +103,10 @@ public class LongDecimal : IEquatable<LongDecimal>, IComparable<LongDecimal>
     /// <summary>
     /// Construct a number from an array of digits.
     /// </summary>
-    public LongDecimal(byte[] digits, int mantissa = 0, bool isNegative = false)
+    public LongDecimal(byte[] digits, int exponent = 0, bool isNegative = false)
     {
-        Significand = PackDigits(Round(TrimZeros(digits, ref mantissa)));
-        Mantissa = mantissa;
+        Significand = PackDigits(Round(TrimZeros(digits, ref exponent)));
+        Exponent = exponent;
         Flags = (byte)(isNegative ? 1 : 0);
     }
 
@@ -117,7 +117,7 @@ public class LongDecimal : IEquatable<LongDecimal>, IComparable<LongDecimal>
         bool isNaN = false, bool isSignalling = false)
     {
         Significand = Array.Empty<byte>();
-        Mantissa = 0;
+        Exponent = 0;
         Flags = (byte)((isNegative ? 1 : 0) | (isInfinity ? 2 : 0)
             | (isNaN ? 4 : 0) | (isSignalling ? 8 : 0));
     }
@@ -165,12 +165,12 @@ public class LongDecimal : IEquatable<LongDecimal>, IComparable<LongDecimal>
             digits[i++] = (byte)(c - '0');
         }
 
-        // Determine the mantissa.
-        string strMantissa = groups[6].Value;
-        int mantissa = (strMantissa == "" ? 0 : int.Parse(strMantissa))
+        // Determine the exponent.
+        string strExponent = groups[6].Value;
+        int exponent = (strExponent == "" ? 0 : int.Parse(strExponent))
             + strDigitsBeforeDecimal.Length - 1;
 
-        return new LongDecimal(digits, mantissa, isNegative);
+        return new LongDecimal(digits, exponent, isNegative);
     }
 
     public static LongDecimal Clone(LongDecimal ld) =>
@@ -178,7 +178,7 @@ public class LongDecimal : IEquatable<LongDecimal>, IComparable<LongDecimal>
         {
             Flags = ld.Flags,
             Significand = ld.Significand[..],
-            Mantissa = ld.Mantissa
+            Exponent = ld.Exponent
         };
 
     private static LongDecimal Zero() =>
@@ -207,7 +207,7 @@ public class LongDecimal : IEquatable<LongDecimal>, IComparable<LongDecimal>
         obj is LongDecimal ld && Equals(ld);
 
     public override int GetHashCode() =>
-        HashCode.Combine(Significand, Mantissa, Flags);
+        HashCode.Combine(Significand, Exponent, Flags);
 
     public override string ToString()
     {
@@ -220,15 +220,15 @@ public class LongDecimal : IEquatable<LongDecimal>, IComparable<LongDecimal>
         }
 
         // Significand.
-        int mantissa = Mantissa;
+        int exponent = Exponent;
         if (Significand.Length == 0)
         {
             sb.Append('0');
-            mantissa = 0;
+            exponent = 0;
         }
         else
         {
-            byte[] digits = TrimZeros(UnpackDigits(Significand), ref mantissa);
+            byte[] digits = TrimZeros(UnpackDigits(Significand), ref exponent);
             if (digits.Length == 0)
             {
                 sb.Append(0);
@@ -247,10 +247,10 @@ public class LongDecimal : IEquatable<LongDecimal>, IComparable<LongDecimal>
             }
         }
 
-        // Add the mantissa if needed.
-        if (mantissa != 0)
+        // Add the exponent if needed.
+        if (exponent != 0)
         {
-            sb.Append($"e{mantissa}");
+            sb.Append($"e{exponent}");
         }
 
         return sb.ToString();
@@ -267,8 +267,8 @@ public class LongDecimal : IEquatable<LongDecimal>, IComparable<LongDecimal>
             return false;
         }
 
-        // Compare flags and mantissa.
-        if (Flags != other.Flags || Mantissa != other.Mantissa)
+        // Compare flags and exponent.
+        if (Flags != other.Flags || Exponent != other.Exponent)
         {
             return false;
         }
@@ -306,16 +306,16 @@ public class LongDecimal : IEquatable<LongDecimal>, IComparable<LongDecimal>
             return 1;
         }
 
-        // Check mantissa.
-        if (Mantissa < other.Mantissa)
+        // Check exponent.
+        if (Exponent < other.Exponent)
         {
             return -1;
         }
-        if (Mantissa > other.Mantissa)
+        if (Exponent > other.Exponent)
         {
             return 1;
         }
-        // Mantissas are equal.
+        // Exponents are equal.
 
         // Check significand.
         int nBytes = Max(Significand.Length, other.Significand.Length);
@@ -368,7 +368,7 @@ public class LongDecimal : IEquatable<LongDecimal>, IComparable<LongDecimal>
         new ()
         {
             Significand = ld.Significand[..],
-            Mantissa = ld.Mantissa,
+            Exponent = ld.Exponent,
             Flags = (byte)(ld.Flags & ~1)
         };
 
@@ -376,7 +376,7 @@ public class LongDecimal : IEquatable<LongDecimal>, IComparable<LongDecimal>
         new ()
         {
             Significand = ld.Significand[..],
-            Mantissa = ld.Mantissa,
+            Exponent = ld.Exponent,
             Flags = (byte)(ld.IsPositive ? ld.Flags | 1 : ld.Flags & ~1)
         };
 
@@ -422,16 +422,16 @@ public class LongDecimal : IEquatable<LongDecimal>, IComparable<LongDecimal>
         const int resultDigitsLen = _MaxDigits + 2;
         byte[] resultDigits = new byte[resultDigitsLen];
 
-        // Determine the largest possible mantissa of the result.
-        int resultMantissa = Max(ld1.Mantissa, ld2.Mantissa) + 1;
+        // Determine the largest possible exponent of the result.
+        int resultExponent = Max(ld1.Exponent, ld2.Exponent) + 1;
 
         // Check if one number is much greater than the other.
-        int smallestExponentChecked = resultMantissa - resultDigitsLen + 1;
-        if (smallestExponentChecked > ld2.Mantissa)
+        int smallestExponentChecked = resultExponent - resultDigitsLen + 1;
+        if (smallestExponentChecked > ld2.Exponent)
         {
             return ld1;
         }
-        if (smallestExponentChecked > ld1.Mantissa)
+        if (smallestExponentChecked > ld1.Exponent)
         {
             return ld2;
         }
@@ -444,11 +444,11 @@ public class LongDecimal : IEquatable<LongDecimal>, IComparable<LongDecimal>
         for (int i = 1; i < resultDigitsLen; i++)
         {
             // What power of ten are we looking at?
-            int currentExponent = resultMantissa - i;
+            int currentExponent = resultExponent - i;
 
             // Get the indexes we need to check the digit arrays.
-            int index1 = ld1.Mantissa - currentExponent;
-            int index2 = ld2.Mantissa - currentExponent;
+            int index1 = ld1.Exponent - currentExponent;
+            int index2 = ld2.Exponent - currentExponent;
 
             // If both are beyond the limits of the digit arrays, we can stop
             // here.
@@ -482,7 +482,7 @@ public class LongDecimal : IEquatable<LongDecimal>, IComparable<LongDecimal>
         }
 
         // Construct the result object.
-        return new LongDecimal(resultDigits, resultMantissa);
+        return new LongDecimal(resultDigits, resultExponent);
     }
 
     public static LongDecimal operator +(LongDecimal ld1, LongDecimal ld2) =>
@@ -536,16 +536,16 @@ public class LongDecimal : IEquatable<LongDecimal>, IComparable<LongDecimal>
         const int resultDigitsLen = _MaxDigits + 1;
         byte[] resultDigits = new byte[resultDigitsLen];
 
-        // Determine the mantissa of the result.
-        int resultMantissa = Max(ld1.Mantissa, ld2.Mantissa);
+        // Determine the exponent of the result.
+        int resultExponent = Max(ld1.Exponent, ld2.Exponent);
 
         // Check if one number is much greater than the other.
-        int smallestExponentChecked = resultMantissa - resultDigitsLen + 1;
-        if (smallestExponentChecked > ld2.Mantissa)
+        int smallestExponentChecked = resultExponent - resultDigitsLen + 1;
+        if (smallestExponentChecked > ld2.Exponent)
         {
             return ld1;
         }
-        if (smallestExponentChecked > ld1.Mantissa)
+        if (smallestExponentChecked > ld1.Exponent)
         {
             return ld2;
         }
@@ -559,16 +559,16 @@ public class LongDecimal : IEquatable<LongDecimal>, IComparable<LongDecimal>
         // Subtract.
         for (int i = resultDigitsLen - 1; i >= 0; i--)
         {
-            int currentExponent = resultMantissa - i;
+            int currentExponent = resultExponent - i;
 
             // Get the digit from ld1.
-            int index1 = ld1.Mantissa - currentExponent;
+            int index1 = ld1.Exponent - currentExponent;
             int digit1 = index1 >= 0 && index1 < ld1Digits.Length
                 ? ld1Digits[index1]
                 : 0;
 
             // Get the digit from ld2, adding the carry.
-            int index2 = ld2.Mantissa - currentExponent;
+            int index2 = ld2.Exponent - currentExponent;
             int digit2 = (index2 >= 0 && index2 < ld2Digits.Length
                 ? ld2Digits[index2]
                 : 0) + carry;
@@ -586,7 +586,7 @@ public class LongDecimal : IEquatable<LongDecimal>, IComparable<LongDecimal>
         }
 
         // Construct the result object.
-        return new LongDecimal(resultDigits, resultMantissa);
+        return new LongDecimal(resultDigits, resultExponent);
     }
 
     public static LongDecimal operator -(LongDecimal ld1, LongDecimal ld2) =>
@@ -613,8 +613,8 @@ public class LongDecimal : IEquatable<LongDecimal>, IComparable<LongDecimal>
         byte[] digits2 = UnpackDigits(ld2.Significand);
 
         // Get the minimum exponent for each operand.
-        int maxExp1 = ld1.Mantissa;
-        int maxExp2 = ld2.Mantissa;
+        int maxExp1 = ld1.Exponent;
+        int maxExp2 = ld2.Exponent;
 
         // There could be a trailing zero in either of the digits array if there
         // was an odd number of digits in the significand, which is possible
@@ -627,7 +627,7 @@ public class LongDecimal : IEquatable<LongDecimal>, IComparable<LongDecimal>
         int minExp2 = maxExp2 - digits2.Length + 1;
 
         // Get the min and max possible exponents for the result.
-        // The max exponent will be the mantissa.
+        // The max exponent will be the exponent.
         int maxExpResult = maxExp1 + maxExp2 + 1;
         int minExpResult = minExp1 + minExp2;
 
@@ -765,12 +765,12 @@ public class LongDecimal : IEquatable<LongDecimal>, IComparable<LongDecimal>
         bytes.All(b => b == 0);
 
     /// <summary>
-    /// Trim any leading or trailing zeros, adjusting the mantissa if needed.
+    /// Trim any leading or trailing zeros, adjusting the exponent if needed.
     /// </summary>
     /// <param name="digits"></param>
-    /// <param name="mantissa"></param>
+    /// <param name="exponent"></param>
     /// <returns></returns>
-    public static byte[] TrimZeros(byte[] digits, ref int mantissa)
+    public static byte[] TrimZeros(byte[] digits, ref int exponent)
     {
         // Find the first and last non-zero bytes in the array.
         int? first = null;
@@ -787,12 +787,12 @@ public class LongDecimal : IEquatable<LongDecimal>, IComparable<LongDecimal>
         // Check for zero.
         if (first is null)
         {
-            mantissa = 0;
+            exponent = 0;
             return Array.Empty<byte>();
         }
 
-        // Adjust the mantissa.
-        mantissa -= first.Value;
+        // Adjust the exponent.
+        exponent -= first.Value;
 
         // Copy the bytes into the result without the leading or trailing zeros.
         return digits[first.Value..(last!.Value + 1)];
