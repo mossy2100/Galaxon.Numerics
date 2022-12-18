@@ -70,7 +70,7 @@ public struct BigDecimal : INumber<BigDecimal>
     public static BigDecimal operator +(BigDecimal left, BigDecimal right)
     {
         (BigDecimal x, BigDecimal y) = Align(left, right);
-        BigDecimal result = new BigDecimal(x.Significand + y.Significand, x.Exponent);
+        BigDecimal result = new (x.Significand + y.Significand, x.Exponent);
         return result.MakeCanonical();
     }
 
@@ -102,9 +102,11 @@ public struct BigDecimal : INumber<BigDecimal>
         return result.MakeCanonical();
     }
 
+    /// <inheritdoc />
     public static BigDecimal operator /(BigDecimal left, BigDecimal right) =>
         throw new NotImplementedException();
 
+    /// <inheritdoc />
     public static BigDecimal operator %(BigDecimal left, BigDecimal right) =>
         throw new NotImplementedException();
 
@@ -161,8 +163,6 @@ public struct BigDecimal : INumber<BigDecimal>
     /// <summary>
     /// Round off a value to a certain number of decimal places.
     /// </summary>
-    /// <param name="bd"></param>
-    /// <returns></returns>
     public static BigDecimal Round(BigDecimal bd, int nDecimalPlaces = 0) =>
         throw new NotImplementedException();
 
@@ -316,15 +316,19 @@ public struct BigDecimal : INumber<BigDecimal>
 
     #region Comparison methods
 
+    /// <inheritdoc />
     public int CompareTo(object? obj) =>
         throw new NotImplementedException();
 
+    /// <inheritdoc />
     public int CompareTo(BigDecimal other) =>
         throw new NotImplementedException();
 
+    /// <inheritdoc />
     public bool Equals(BigDecimal other) =>
         Significand == other.Significand && Exponent == other.Exponent;
 
+    /// <inheritdoc />
     public override bool Equals(object? obj)
     {
         if (obj is BigDecimal bd)
@@ -334,6 +338,7 @@ public struct BigDecimal : INumber<BigDecimal>
         return false;
     }
 
+    /// <inheritdoc />
     public override int GetHashCode() =>
         HashCode.Combine(Significand, Exponent);
 
@@ -389,21 +394,27 @@ public struct BigDecimal : INumber<BigDecimal>
 
     #region Comparison operators
 
+    /// <inheritdoc />
     public static bool operator ==(BigDecimal left, BigDecimal right) =>
         left.Equals(right);
 
+    /// <inheritdoc />
     public static bool operator !=(BigDecimal left, BigDecimal right) =>
         !left.Equals(right);
 
+    /// <inheritdoc />
     public static bool operator >(BigDecimal left, BigDecimal right) =>
         throw new NotImplementedException();
 
+    /// <inheritdoc />
     public static bool operator >=(BigDecimal left, BigDecimal right) =>
         throw new NotImplementedException();
 
+    /// <inheritdoc />
     public static bool operator <(BigDecimal left, BigDecimal right) =>
         throw new NotImplementedException();
 
+    /// <inheritdoc />
     public static bool operator <=(BigDecimal left, BigDecimal right) =>
         throw new NotImplementedException();
 
@@ -455,10 +466,7 @@ public struct BigDecimal : INumber<BigDecimal>
         }
 
         // Set the default format provider.
-        if (provider == null)
-        {
-            provider = NumberFormatInfo.InvariantInfo;
-        }
+        provider ??= NumberFormatInfo.InvariantInfo;
 
         // Check for special case, G, which will return the more compact of E and F.
         if (format == "G")
@@ -475,8 +483,6 @@ public struct BigDecimal : INumber<BigDecimal>
         string strSignificand = "";
         string strAbsSignificand;
         string strSign;
-        string strZeros;
-        string strDecimalPart;
         BigInteger exponent = Exponent;
         switch (format)
         {
@@ -496,40 +502,45 @@ public struct BigDecimal : INumber<BigDecimal>
                 {
                     strSignificand = Significand.ToString("D", provider);
                 }
-                else if (Exponent < 0)
-                {
-                    strAbsSignificand = BigInteger.Abs(Significand).ToString();
-                    strSign = Significand < 0 ? nfi.NegativeSign : "";
-                    strZeros = XString.Repeat("0", -Exponent);
-                    strSignificand = $"{strZeros}{strAbsSignificand}";
-                    strSignificand = $"{strSign}{strSignificand[..1]}{nfi.NumberDecimalSeparator}{strSignificand[1..]}";
-
-                    // Get the decimal part.
-                    int nPrecision = precision ?? nfi.NumberDecimalDigits;
-                    strDecimalPart = strSignificand[1..];
-                    if (strDecimalPart.Length < nPrecision)
-                    {
-                        strDecimalPart += XString.Repeat("0", nPrecision - strDecimalPart.Length);
-                    }
-                    else if (strDecimalPart.Length > nPrecision)
-                    {
-                        strDecimalPart = strDecimalPart[..(nPrecision + 1)];
-                    }
-
-                    exponent = 0;
-                }
                 else
                 {
-                    // Exponent > 0
-                    strAbsSignificand = BigInteger.Abs(Significand).ToString();
-                    strSign = Significand < 0 ? "-" : "";
-                    strZeros = XString.Repeat("0", Exponent);
-                    int nPrecision = precision ?? nfi.NumberDecimalDigits;
-                    strDecimalPart = precision == 0
-                        ? ""
-                        : $"{nfi.NumberDecimalSeparator}{XString.Repeat("0", nPrecision)}";
-                    strSignificand = $"{strSign}{strAbsSignificand}{strZeros}{strDecimalPart}";
-                    exponent = 0;
+                    string strZeros;
+                    string strDecimalPart;
+                    if (Exponent < 0)
+                    {
+                        strAbsSignificand = BigInteger.Abs(Significand).ToString();
+                        strSign = Significand < 0 ? nfi.NegativeSign : "";
+                        strZeros = XString.Repeat("0", -Exponent);
+                        strSignificand = $"{strZeros}{strAbsSignificand}";
+                        strSignificand = $"{strSign}{strSignificand[..1]}{nfi.NumberDecimalSeparator}{strSignificand[1..]}";
+
+                        // Get the decimal part.
+                        int nPrecision = precision ?? nfi.NumberDecimalDigits;
+                        strDecimalPart = strSignificand[1..];
+                        if (strDecimalPart.Length < nPrecision)
+                        {
+                            strDecimalPart += XString.Repeat("0", nPrecision - strDecimalPart.Length);
+                        }
+                        else if (strDecimalPart.Length > nPrecision)
+                        {
+                            strDecimalPart = strDecimalPart[..(nPrecision + 1)];
+                        }
+
+                        exponent = 0;
+                    }
+                    else
+                    {
+                        // Exponent > 0
+                        strAbsSignificand = BigInteger.Abs(Significand).ToString();
+                        strSign = Significand < 0 ? "-" : "";
+                        strZeros = XString.Repeat("0", Exponent);
+                        int nPrecision = precision ?? nfi.NumberDecimalDigits;
+                        strDecimalPart = precision == 0
+                            ? ""
+                            : $"{nfi.NumberDecimalSeparator}{XString.Repeat("0", nPrecision)}";
+                        strSignificand = $"{strSign}{strAbsSignificand}{strZeros}{strDecimalPart}";
+                        exponent = 0;
+                    }
                 }
                 break;
 
