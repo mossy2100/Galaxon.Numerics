@@ -4,13 +4,13 @@ using AstroMultimedia.Numerics.Types;
 namespace AstroMultimedia.Numerics.Tests;
 
 [TestClass]
-public class TestBigDecimal
+public class TestGigadecimal
 {
     // [TestMethod]
     // public void DigitsToSignificandTest()
     // {
     //     byte[] digits = { 1, 2, 3, 4, 5 };
-    //     byte[] significand = BigDecimal.PackDigits(digits);
+    //     byte[] significand = Gigadecimal.PackDigits(digits);
     //     Assert.AreEqual(18, significand[0]);
     //     Assert.AreEqual(52, significand[1]);
     //     Assert.AreEqual(80, significand[2]);
@@ -20,7 +20,7 @@ public class TestBigDecimal
     // public void SignificandToDigitsTest()
     // {
     //     byte[] significand = { 18, 52, 80, 0 };
-    //     byte[] digits = BigDecimal.UnpackDigits(significand);
+    //     byte[] digits = Gigadecimal.UnpackDigits(significand);
     //     Assert.AreEqual(1, digits[0]);
     //     Assert.AreEqual(2, digits[1]);
     //     Assert.AreEqual(3, digits[2]);
@@ -35,23 +35,23 @@ public class TestBigDecimal
     public void FromStringPositiveValuesTest()
     {
         string s;
-        BigDecimal bd;
+        Gigadecimal bd;
 
         s = "0";
-        bd = new BigDecimal(s);
+        bd = new Gigadecimal(s);
         Assert.AreEqual(false, bd.IsNegative);
         Assert.AreEqual(0, bd.Significand.Length);
         Assert.AreEqual(0, bd.Mantissa);
 
         s = "12345";
-        bd = new BigDecimal(s);
+        bd = new Gigadecimal(s);
         Assert.AreEqual(false, bd.IsNegative);
         Assert.AreEqual(1, bd.Significand.Length);
         Assert.AreEqual(12345, bd.Significand[0]);
         Assert.AreEqual(0, bd.Mantissa);
 
         s = "1234567890";
-        bd = new BigDecimal(s);
+        bd = new Gigadecimal(s);
         Assert.AreEqual(false, bd.IsNegative);
         Assert.AreEqual(2, bd.Significand.Length);
         Assert.AreEqual(1, bd.Significand[0]);
@@ -59,7 +59,7 @@ public class TestBigDecimal
         Assert.AreEqual(1, bd.Mantissa);
 
         s = "1.2345";
-        bd = new BigDecimal(s);
+        bd = new Gigadecimal(s);
         Assert.AreEqual(false, bd.IsNegative);
         Assert.AreEqual(2, bd.Significand.Length);
         Assert.AreEqual(1, bd.Significand[0]);
@@ -67,7 +67,7 @@ public class TestBigDecimal
         Assert.AreEqual(0, bd.Mantissa);
 
         s = "1.2345e10"; // 12_345_000_000
-        bd = new BigDecimal(s);
+        bd = new Gigadecimal(s);
         Assert.AreEqual(false, bd.IsNegative);
         Assert.AreEqual(2, bd.Significand.Length);
         Assert.AreEqual(12, bd.Significand[0]);
@@ -75,7 +75,7 @@ public class TestBigDecimal
         Assert.AreEqual(1, bd.Mantissa);
 
         s = "123.45e10";
-        bd = new BigDecimal(s);
+        bd = new Gigadecimal(s);
         Assert.AreEqual(false, bd.IsNegative);
         Assert.AreEqual(2, bd.Significand.Length);
         Assert.AreEqual(1234, bd.Significand[0]);
@@ -83,7 +83,7 @@ public class TestBigDecimal
         Assert.AreEqual(1, bd.Mantissa);
 
         s = "123.45e-10";
-        bd = new BigDecimal(s);
+        bd = new Gigadecimal(s);
         Assert.AreEqual(false, bd.IsNegative);
         Assert.AreEqual(2, bd.Significand.Length);
         Assert.AreEqual(12, bd.Significand[0]);
@@ -95,17 +95,17 @@ public class TestBigDecimal
     public void FromStringNegativeValuesTest()
     {
         string s;
-        BigDecimal bd;
+        Gigadecimal bd;
 
         s = "-12345";
-        bd = new BigDecimal(s);
+        bd = new Gigadecimal(s);
         Assert.AreEqual(true, bd.IsNegative);
         Assert.AreEqual(1, bd.Significand.Length);
         Assert.AreEqual(-12345, bd.Significand[0]);
         Assert.AreEqual(0, bd.Mantissa);
 
         s = "-1234567890";
-        bd = new BigDecimal(s);
+        bd = new Gigadecimal(s);
         Assert.AreEqual(true, bd.IsNegative);
         Assert.AreEqual(2, bd.Significand.Length);
         Assert.AreEqual(-1, bd.Significand[0]);
@@ -113,7 +113,7 @@ public class TestBigDecimal
         Assert.AreEqual(1, bd.Mantissa);
 
         s = "-1.2345";
-        bd = new BigDecimal(s);
+        bd = new Gigadecimal(s);
         Assert.AreEqual(true, bd.IsNegative);
         Assert.AreEqual(2, bd.Significand.Length);
         Assert.AreEqual(-1, bd.Significand[0]);
@@ -121,7 +121,7 @@ public class TestBigDecimal
         Assert.AreEqual(0, bd.Mantissa);
 
         s = "-1.2345e10";
-        bd = new BigDecimal(s);
+        bd = new Gigadecimal(s);
         Assert.AreEqual(true, bd.IsNegative);
         Assert.AreEqual(2, bd.Significand.Length);
         Assert.AreEqual(-12, bd.Significand[0]);
@@ -129,7 +129,7 @@ public class TestBigDecimal
         Assert.AreEqual(1, bd.Mantissa);
 
         s = "-123.45e10";
-        bd = new BigDecimal(s);
+        bd = new Gigadecimal(s);
         Assert.AreEqual(true, bd.IsNegative);
         Assert.AreEqual(2, bd.Significand.Length);
         Assert.AreEqual(-1234, bd.Significand[0]);
@@ -137,7 +137,7 @@ public class TestBigDecimal
         Assert.AreEqual(1, bd.Mantissa);
 
         s = "-123.45e-10";
-        bd = new BigDecimal(s);
+        bd = new Gigadecimal(s);
         Assert.AreEqual(true, bd.IsNegative);
         Assert.AreEqual(2, bd.Significand.Length);
         Assert.AreEqual(-12, bd.Significand[0]);
@@ -148,19 +148,19 @@ public class TestBigDecimal
     [TestMethod]
     public void ToStringTest()
     {
-        BigDecimal bd;
+        Gigadecimal bd;
         int[] digits = { 111111111, 222222222, 333333333, 444444444, 555555555 };
 
-        bd = new BigDecimal();
+        bd = new Gigadecimal();
         Assert.AreEqual("0", bd.ToString());
 
-        bd = new BigDecimal(digits);
+        bd = new Gigadecimal(digits);
         Assert.AreEqual("1.11111111222222222333333333444444444555555555E+8", bd.ToString());
 
-        bd = new BigDecimal(digits, 1);
+        bd = new Gigadecimal(digits, 1);
         Assert.AreEqual("1.11111111222222222333333333444444444555555555E+17", bd.ToString());
 
-        bd = new BigDecimal(digits, -1);
+        bd = new Gigadecimal(digits, -1);
         Assert.AreEqual("1.11111111222222222333333333444444444555555555E-1", bd.ToString());
     }
 
@@ -168,23 +168,23 @@ public class TestBigDecimal
     public void FromUInt64Test()
     {
         ulong ul;
-        BigDecimal bd;
+        Gigadecimal bd;
 
         ul = 0;
-        bd = BigDecimal.FromUInt64(ul);
+        bd = Gigadecimal.FromUInt64(ul);
         Assert.AreEqual(false, bd.IsNegative);
         Assert.AreEqual(0, bd.Significand.Length);
         Assert.AreEqual(0, bd.Mantissa);
 
         ul = 12345;
-        bd = BigDecimal.FromUInt64(ul);
+        bd = Gigadecimal.FromUInt64(ul);
         Assert.AreEqual(false, bd.IsNegative);
         Assert.AreEqual(1, bd.Significand.Length);
         Assert.AreEqual(12345, bd.Significand[0]);
         Assert.AreEqual(0, bd.Mantissa);
 
         ul = 1234567890;
-        bd = BigDecimal.FromUInt64(ul);
+        bd = Gigadecimal.FromUInt64(ul);
         Assert.AreEqual(false, bd.IsNegative);
         Assert.AreEqual(2, bd.Significand.Length);
         Assert.AreEqual(1, bd.Significand[0]);
@@ -193,7 +193,7 @@ public class TestBigDecimal
 
         // 18,446,744,073,709,551,615
         ul = ulong.MaxValue;
-        bd = BigDecimal.FromUInt64(ul);
+        bd = Gigadecimal.FromUInt64(ul);
         Assert.AreEqual(false, bd.IsNegative);
         Assert.AreEqual(3, bd.Significand.Length);
         Assert.AreEqual(18, bd.Significand[0]);
@@ -206,30 +206,30 @@ public class TestBigDecimal
     public void FromInt64Test()
     {
         long l;
-        BigDecimal bd;
+        Gigadecimal bd;
 
         l = 0;
-        bd = BigDecimal.FromInt64(l);
+        bd = Gigadecimal.FromInt64(l);
         Assert.AreEqual(false, bd.IsNegative);
         Assert.AreEqual(0, bd.Significand.Length);
         Assert.AreEqual(0, bd.Mantissa);
 
         l = 12345;
-        bd = BigDecimal.FromInt64(l);
+        bd = Gigadecimal.FromInt64(l);
         Assert.AreEqual(false, bd.IsNegative);
         Assert.AreEqual(1, bd.Significand.Length);
         Assert.AreEqual(12345, bd.Significand[0]);
         Assert.AreEqual(0, bd.Mantissa);
 
         l = -12345;
-        bd = BigDecimal.FromInt64(l);
+        bd = Gigadecimal.FromInt64(l);
         Assert.AreEqual(true, bd.IsNegative);
         Assert.AreEqual(1, bd.Significand.Length);
         Assert.AreEqual(-12345, bd.Significand[0]);
         Assert.AreEqual(0, bd.Mantissa);
 
         l = 1234567890;
-        bd = BigDecimal.FromInt64(l);
+        bd = Gigadecimal.FromInt64(l);
         Assert.AreEqual(false, bd.IsNegative);
         Assert.AreEqual(2, bd.Significand.Length);
         Assert.AreEqual(1, bd.Significand[0]);
@@ -237,7 +237,7 @@ public class TestBigDecimal
         Assert.AreEqual(1, bd.Mantissa);
 
         l = -1234567890;
-        bd = BigDecimal.FromInt64(l);
+        bd = Gigadecimal.FromInt64(l);
         Assert.AreEqual(true, bd.IsNegative);
         Assert.AreEqual(2, bd.Significand.Length);
         Assert.AreEqual(-1, bd.Significand[0]);
@@ -246,7 +246,7 @@ public class TestBigDecimal
 
         // 9,223,372,036,854,775,807
         l = long.MaxValue;
-        bd = BigDecimal.FromInt64(l);
+        bd = Gigadecimal.FromInt64(l);
         Assert.AreEqual(false, bd.IsNegative);
         Assert.AreEqual(3, bd.Significand.Length);
         Assert.AreEqual(9, bd.Significand[0]);
@@ -256,7 +256,7 @@ public class TestBigDecimal
 
         // -9,223,372,036,854,775,808
         l = long.MinValue;
-        bd = BigDecimal.FromInt64(l);
+        bd = Gigadecimal.FromInt64(l);
         Assert.AreEqual(true, bd.IsNegative);
         Assert.AreEqual(3, bd.Significand.Length);
         Assert.AreEqual(-9, bd.Significand[0]);
@@ -269,37 +269,37 @@ public class TestBigDecimal
     public void FromDecimalPositiveValuesTest()
     {
         decimal d;
-        BigDecimal bd;
+        Gigadecimal bd;
 
         d = 0;
-        bd = BigDecimal.FromDecimal(d);
+        bd = Gigadecimal.FromDecimal(d);
         Assert.AreEqual(false, bd.IsNegative);
         Assert.AreEqual(0, bd.Significand.Length);
         Assert.AreEqual(0, bd.Mantissa);
 
         d = 1.2345m;
-        bd = BigDecimal.FromDecimal(d);
+        bd = Gigadecimal.FromDecimal(d);
         Assert.AreEqual(false, bd.IsNegative);
         Assert.AreEqual(1, bd.Significand[0]);
         Assert.AreEqual(234500000, bd.Significand[1]);
         Assert.AreEqual(0, bd.Mantissa);
 
         d = 1.2345e10m;
-        bd = BigDecimal.FromDecimal(d);
+        bd = Gigadecimal.FromDecimal(d);
         Assert.AreEqual(false, bd.IsNegative);
         Assert.AreEqual(12, bd.Significand[0]);
         Assert.AreEqual(345000000, bd.Significand[1]);
         Assert.AreEqual(1, bd.Mantissa);
 
         d = 123.45e10m;
-        bd = BigDecimal.FromDecimal(d);
+        bd = Gigadecimal.FromDecimal(d);
         Assert.AreEqual(false, bd.IsNegative);
         Assert.AreEqual(1234, bd.Significand[0]);
         Assert.AreEqual(500000000, bd.Significand[1]);
         Assert.AreEqual(1, bd.Mantissa);
 
         d = 123.45e-10m;
-        bd = BigDecimal.FromDecimal(d);
+        bd = Gigadecimal.FromDecimal(d);
         Assert.AreEqual(false, bd.IsNegative);
         Assert.AreEqual(12, bd.Significand[0]);
         Assert.AreEqual(345000000, bd.Significand[1]);
@@ -307,7 +307,7 @@ public class TestBigDecimal
 
         // 79,228,162,514,264,337,593,543,950,335
         d = decimal.MaxValue;
-        bd = BigDecimal.FromDecimal(d);
+        bd = Gigadecimal.FromDecimal(d);
         Assert.AreEqual(false, bd.IsNegative);
         Assert.AreEqual(4, bd.Significand.Length);
         Assert.AreEqual(79, bd.Significand[0]);
@@ -317,7 +317,7 @@ public class TestBigDecimal
         Assert.AreEqual(3, bd.Mantissa);
 
         d = 1e-28m;
-        bd = BigDecimal.FromDecimal(d);
+        bd = Gigadecimal.FromDecimal(d);
         Assert.AreEqual(false, bd.IsNegative);
         Assert.AreEqual(1, bd.Significand.Length);
         Assert.AreEqual(100000000, bd.Significand[0]);
@@ -328,31 +328,31 @@ public class TestBigDecimal
     public void FromDecimalNegativeValuesTest()
     {
         decimal d;
-        BigDecimal bd;
+        Gigadecimal bd;
 
         d = -1.2345m;
-        bd = BigDecimal.FromDecimal(d);
+        bd = Gigadecimal.FromDecimal(d);
         Assert.AreEqual(true, bd.IsNegative);
         Assert.AreEqual(-1, bd.Significand[0]);
         Assert.AreEqual(-234500000, bd.Significand[1]);
         Assert.AreEqual(0, bd.Mantissa);
 
         d = -1.2345e10m;
-        bd = BigDecimal.FromDecimal(d);
+        bd = Gigadecimal.FromDecimal(d);
         Assert.AreEqual(true, bd.IsNegative);
         Assert.AreEqual(-12, bd.Significand[0]);
         Assert.AreEqual(-345000000, bd.Significand[1]);
         Assert.AreEqual(1, bd.Mantissa);
 
         d = -123.45e10m;
-        bd = BigDecimal.FromDecimal(d);
+        bd = Gigadecimal.FromDecimal(d);
         Assert.AreEqual(true, bd.IsNegative);
         Assert.AreEqual(-1234, bd.Significand[0]);
         Assert.AreEqual(-500000000, bd.Significand[1]);
         Assert.AreEqual(1, bd.Mantissa);
 
         d = -123.45e-10m;
-        bd = BigDecimal.FromDecimal(d);
+        bd = Gigadecimal.FromDecimal(d);
         Assert.AreEqual(true, bd.IsNegative);
         Assert.AreEqual(-12, bd.Significand[0]);
         Assert.AreEqual(-345000000, bd.Significand[1]);
@@ -360,7 +360,7 @@ public class TestBigDecimal
 
         // -79,228,162,514,264,337,593,543,950,335
         d = decimal.MinValue;
-        bd = BigDecimal.FromDecimal(d);
+        bd = Gigadecimal.FromDecimal(d);
         Assert.AreEqual(true, bd.IsNegative);
         Assert.AreEqual(4, bd.Significand.Length);
         Assert.AreEqual(-79, bd.Significand[0]);
@@ -370,7 +370,7 @@ public class TestBigDecimal
         Assert.AreEqual(3, bd.Mantissa);
 
         d = -1e-28m;
-        bd = BigDecimal.FromDecimal(d);
+        bd = Gigadecimal.FromDecimal(d);
         Assert.AreEqual(true, bd.IsNegative);
         Assert.AreEqual(1, bd.Significand.Length);
         Assert.AreEqual(-100000000, bd.Significand[0]);
@@ -381,37 +381,37 @@ public class TestBigDecimal
     public void FromDoublePositiveValuesTest()
     {
         double d;
-        BigDecimal bd;
+        Gigadecimal bd;
 
         d = 0;
-        bd = BigDecimal.FromDouble(d);
+        bd = Gigadecimal.FromDouble(d);
         Assert.AreEqual(false, bd.IsNegative);
         Assert.AreEqual(0, bd.Significand.Length);
         Assert.AreEqual(0, bd.Mantissa);
 
         d = 1.2345;
-        bd = BigDecimal.FromDouble(d);
+        bd = Gigadecimal.FromDouble(d);
         Assert.AreEqual(false, bd.IsNegative);
         Assert.AreEqual(1, bd.Significand[0]);
         Assert.AreEqual(234500000, bd.Significand[1], 1);
         Assert.AreEqual(0, bd.Mantissa);
 
         d = 1.2345e10;
-        bd = BigDecimal.FromDouble(d);
+        bd = Gigadecimal.FromDouble(d);
         Assert.AreEqual(false, bd.IsNegative);
         Assert.AreEqual(12, bd.Significand[0]);
         Assert.AreEqual(345000000, bd.Significand[1], 1);
         Assert.AreEqual(1, bd.Mantissa);
 
         d = 123.45e10;
-        bd = BigDecimal.FromDouble(d);
+        bd = Gigadecimal.FromDouble(d);
         Assert.AreEqual(false, bd.IsNegative);
         Assert.AreEqual(1234, bd.Significand[0]);
         Assert.AreEqual(500000000, bd.Significand[1], 1);
         Assert.AreEqual(1, bd.Mantissa);
 
         d = 123.45e-10;
-        bd = BigDecimal.FromDouble(d);
+        bd = Gigadecimal.FromDouble(d);
         Assert.AreEqual(false, bd.IsNegative);
         Assert.AreEqual(12, bd.Significand[0]);
         Assert.AreEqual(345000000, bd.Significand[1], 1);
@@ -419,7 +419,7 @@ public class TestBigDecimal
 
         // 1.7976931348623157E+308
         d = double.MaxValue;
-        bd = BigDecimal.FromDouble(d);
+        bd = Gigadecimal.FromDouble(d);
         Assert.AreEqual(false, bd.IsNegative);
         Assert.AreEqual(179, bd.Significand[0]);
         Assert.AreEqual(769313486, bd.Significand[1]);
@@ -428,7 +428,7 @@ public class TestBigDecimal
 
         // 4.94065645841247E-324
         d = double.Epsilon;
-        bd = BigDecimal.FromDouble(d);
+        bd = Gigadecimal.FromDouble(d);
         Assert.AreEqual(false, bd.IsNegative);
         Assert.AreEqual(4, bd.Significand[0]);
         Assert.AreEqual(940656458, bd.Significand[1]);
@@ -440,49 +440,49 @@ public class TestBigDecimal
     public void ToDoublePositiveValuesTest()
     {
         double d, d2;
-        BigDecimal bd;
+        Gigadecimal bd;
         const double percent = 1e-13;
 
         d = 0;
-        bd = BigDecimal.FromDouble(d);
+        bd = Gigadecimal.FromDouble(d);
         d2 = (double)bd;
         Console.WriteLine($"d={d:G17}, bd={bd}, d2={d2:G17}");
         Assert.AreEqual(d, d2, percent);
 
         d = 1.2345;
-        bd = BigDecimal.FromDouble(d);
+        bd = Gigadecimal.FromDouble(d);
         d2 = (double)bd;
         Console.WriteLine($"d={d:G17}, bd={bd}, d2={d2:G17}");
         XAssert.AreEqualPercent(d, d2, percent);
 
         d = 1.2345e10;
-        bd = BigDecimal.FromDouble(d);
+        bd = Gigadecimal.FromDouble(d);
         d2 = (double)bd;
         Console.WriteLine($"d={d:G17}, bd={bd}, d2={d2:G17}");
         XAssert.AreEqualPercent(d, d2, percent);
 
         d = 123.45e10;
-        bd = BigDecimal.FromDouble(d);
+        bd = Gigadecimal.FromDouble(d);
         d2 = (double)bd;
         Console.WriteLine($"d={d:G17}, bd={bd}, d2={d2:G17}");
         XAssert.AreEqualPercent(d, d2, percent);
 
         d = 123.45e-10;
-        bd = BigDecimal.FromDouble(d);
+        bd = Gigadecimal.FromDouble(d);
         d2 = (double)bd;
         Console.WriteLine($"d={d:G17}, bd={bd}, d2={d2:G17}");
         XAssert.AreEqualPercent(d, d2, percent);
 
         // 1.7976931348623157E+308
         d = double.MaxValue;
-        bd = BigDecimal.FromDouble(d);
+        bd = Gigadecimal.FromDouble(d);
         d2 = (double)bd;
         Console.WriteLine($"d={d:G17}, bd={bd}, d2={d2:G17}");
         XAssert.AreEqualPercent(d, d2, percent);
 
         // // 4.94065645841247E-324
         // d = double.Epsilon;
-        // bd = BigDecimal.FromDouble(d);
+        // bd = Gigadecimal.FromDouble(d);
         // d2 = (double)bd;
         // Console.WriteLine($"d={d:G17}, bd={bd}, d2={d2:G17}");
         // XAssert.AreEqualPercent(d, d2, percent);
@@ -492,31 +492,31 @@ public class TestBigDecimal
     public void FromDoubleNegativeValuesTest()
     {
         double d;
-        BigDecimal bd;
+        Gigadecimal bd;
 
         d = -1.2345;
-        bd = BigDecimal.FromDouble(d);
+        bd = Gigadecimal.FromDouble(d);
         Assert.AreEqual(true, bd.IsNegative);
         Assert.AreEqual(-1, bd.Significand[0]);
         Assert.AreEqual(-234500000, bd.Significand[1], 1);
         Assert.AreEqual(0, bd.Mantissa);
 
         d = -1.2345e10;
-        bd = BigDecimal.FromDouble(d);
+        bd = Gigadecimal.FromDouble(d);
         Assert.AreEqual(true, bd.IsNegative);
         Assert.AreEqual(-12, bd.Significand[0]);
         Assert.AreEqual(-345000000, bd.Significand[1], 1);
         Assert.AreEqual(1, bd.Mantissa);
 
         d = -123.45e10;
-        bd = BigDecimal.FromDouble(d);
+        bd = Gigadecimal.FromDouble(d);
         Assert.AreEqual(true, bd.IsNegative);
         Assert.AreEqual(-1234, bd.Significand[0]);
         Assert.AreEqual(-500000000, bd.Significand[1], 1);
         Assert.AreEqual(1, bd.Mantissa);
 
         d = -123.45e-10;
-        bd = BigDecimal.FromDouble(d);
+        bd = Gigadecimal.FromDouble(d);
         Assert.AreEqual(true, bd.IsNegative);
         Assert.AreEqual(-12, bd.Significand[0]);
         Assert.AreEqual(-345000000, bd.Significand[1], 1);
@@ -524,7 +524,7 @@ public class TestBigDecimal
 
         // -1.7976931348623157E+308
         d = double.MinValue;
-        bd = BigDecimal.FromDouble(d);
+        bd = Gigadecimal.FromDouble(d);
         Assert.AreEqual(true, bd.IsNegative);
         Assert.AreEqual(-179, bd.Significand[0]);
         Assert.AreEqual(-769313486, bd.Significand[1]);
@@ -533,7 +533,7 @@ public class TestBigDecimal
 
         // -4.94065645841247E-324
         d = -double.Epsilon;
-        bd = BigDecimal.FromDouble(d);
+        bd = Gigadecimal.FromDouble(d);
         Assert.AreEqual(true, bd.IsNegative);
         Assert.AreEqual(-4, bd.Significand[0]);
         Assert.AreEqual(-940656458, bd.Significand[1]);
@@ -545,11 +545,11 @@ public class TestBigDecimal
     public void AddZeroToNumberReturnsNumber()
     {
         // Arrange.
-        BigDecimal bd1 = new ("5.4321");
-        BigDecimal bd2 = new ("0");
+        Gigadecimal bd1 = new ("5.4321");
+        Gigadecimal bd2 = new ("0");
 
         // Act.
-        BigDecimal bd3 = bd1 + bd2;
+        Gigadecimal bd3 = bd1 + bd2;
 
         // Assert.
         Assert.AreEqual("5.4321", bd3.ToString());
@@ -559,11 +559,11 @@ public class TestBigDecimal
     public void AddNumberToZeroReturnsNumber()
     {
         // Arrange.
-        BigDecimal bd1 = new ("0");
-        BigDecimal bd2 = new ("5.4321");
+        Gigadecimal bd1 = new ("0");
+        Gigadecimal bd2 = new ("5.4321");
 
         // Act.
-        BigDecimal bd3 = bd1 + bd2;
+        Gigadecimal bd3 = bd1 + bd2;
 
         // Assert.
         Assert.AreEqual("5.4321", bd3.ToString());
@@ -573,11 +573,11 @@ public class TestBigDecimal
     public void AddTest1()
     {
         // Arrange.
-        BigDecimal bd1 = new ("1");
-        BigDecimal bd2 = new ("1");
+        Gigadecimal bd1 = new ("1");
+        Gigadecimal bd2 = new ("1");
 
         // Act.
-        BigDecimal bd3 = bd1 + bd2;
+        Gigadecimal bd3 = bd1 + bd2;
 
         // Assert.
         Assert.AreEqual("2", bd3.ToString());
@@ -587,11 +587,11 @@ public class TestBigDecimal
     public void AddTest2()
     {
         // Arrange.
-        BigDecimal bd1 = new ("5.4321");
-        BigDecimal bd2 = new ("6.7894");
+        Gigadecimal bd1 = new ("5.4321");
+        Gigadecimal bd2 = new ("6.7894");
 
         // Act.
-        BigDecimal bd3 = bd1 + bd2;
+        Gigadecimal bd3 = bd1 + bd2;
 
         // Assert.
         Assert.AreEqual("1.22215E+1", bd3.ToString());
@@ -601,11 +601,11 @@ public class TestBigDecimal
     public void AddTest3()
     {
         // Arrange.
-        BigDecimal bd1 = new ("12345");
-        BigDecimal bd2 = new ("0.67890");
+        Gigadecimal bd1 = new ("12345");
+        Gigadecimal bd2 = new ("0.67890");
 
         // Act.
-        BigDecimal bd3 = bd1 + bd2;
+        Gigadecimal bd3 = bd1 + bd2;
 
         // Assert.
         Assert.AreEqual("1.23456789E+4", bd3.ToString());
@@ -615,11 +615,11 @@ public class TestBigDecimal
     public void AddTest4()
     {
         // Arrange.
-        BigDecimal bd1 = new ("1e108");
-        BigDecimal bd2 = new ("1");
+        Gigadecimal bd1 = new ("1e108");
+        Gigadecimal bd2 = new ("1");
 
         // Act.
-        BigDecimal bd3 = bd1 + bd2;
+        Gigadecimal bd3 = bd1 + bd2;
 
         // Assert.
         string s = bd3.ToString();
@@ -630,14 +630,14 @@ public class TestBigDecimal
     public void AddTest5()
     {
         // Arrange.
-        BigDecimal bd1 = new ("1e107");
-        BigDecimal bd2 = new ("1");
+        Gigadecimal bd1 = new ("1e107");
+        Gigadecimal bd2 = new ("1");
         string expected = "1.0000000000000000000000000000000000000000000000000"
             + "0000000000000000000000000000000000000000000000000"
             + "000000001E+107";
 
         // Act.
-        BigDecimal bd3 = bd1 + bd2;
+        Gigadecimal bd3 = bd1 + bd2;
 
         // Assert.
         string s = bd3.ToString();
@@ -648,7 +648,7 @@ public class TestBigDecimal
     public void ConvertToAndFromDecimalTest()
     {
         decimal m;
-        BigDecimal bd;
+        Gigadecimal bd;
 
         m = 0;
         bd = m;
@@ -683,7 +683,7 @@ public class TestBigDecimal
     public void RandomAddTest()
     {
         decimal m1, m2, mSum;
-        BigDecimal bd1, bd2, bdSum;
+        Gigadecimal bd1, bd2, bdSum;
         Random rng = new ();
 
         // Create 1000 pairs of random decimals and add them.
@@ -715,11 +715,11 @@ public class TestBigDecimal
     public void RoundTest1()
     {
         // Arrange.
-        BigDecimal bd1 = new ("1e107");
-        BigDecimal bd2 = new ("0.5");
+        Gigadecimal bd1 = new ("1e107");
+        Gigadecimal bd2 = new ("0.5");
 
         // Act.
-        BigDecimal bd3 = bd1 + bd2;
+        Gigadecimal bd3 = bd1 + bd2;
 
         string expected = "1E+107";
         // Assert.
@@ -731,11 +731,11 @@ public class TestBigDecimal
     public void RoundTest2()
     {
         // Arrange.
-        BigDecimal bd1 = new ("1E+107");
-        BigDecimal bd2 = new ("0.6");
+        Gigadecimal bd1 = new ("1E+107");
+        Gigadecimal bd2 = new ("0.6");
 
         // Act.
-        BigDecimal bd3 = bd1 + bd2;
+        Gigadecimal bd3 = bd1 + bd2;
 
         string expected = "1.0000000000000000000000000000000000000000000000000"
             + "0000000000000000000000000000000000000000000000000000000001E+107";
@@ -748,11 +748,11 @@ public class TestBigDecimal
     public void RoundTest3()
     {
         // Arrange.
-        BigDecimal bd1 = new ("1E+107");
-        BigDecimal bd2 = new ("1.5");
+        Gigadecimal bd1 = new ("1E+107");
+        Gigadecimal bd2 = new ("1.5");
 
         // Act.
-        BigDecimal bd3 = bd1 + bd2;
+        Gigadecimal bd3 = bd1 + bd2;
 
         string expected = "1.0000000000000000000000000000000000000000000000000"
             + "0000000000000000000000000000000000000000000000000000000002E+107";
@@ -765,11 +765,11 @@ public class TestBigDecimal
     public void SubtractTest1()
     {
         // Arrange.
-        BigDecimal bd1 = new ("1");
-        BigDecimal bd2 = new ("1");
+        Gigadecimal bd1 = new ("1");
+        Gigadecimal bd2 = new ("1");
 
         // Act.
-        BigDecimal bd3 = bd1 - bd2;
+        Gigadecimal bd3 = bd1 - bd2;
 
         // Assert.
         Assert.AreEqual("0", bd3.ToString());
@@ -779,11 +779,11 @@ public class TestBigDecimal
     public void SubtractTest2()
     {
         // Arrange.
-        BigDecimal bd1 = new ("1");
-        BigDecimal bd2 = new ("0");
+        Gigadecimal bd1 = new ("1");
+        Gigadecimal bd2 = new ("0");
 
         // Act.
-        BigDecimal bd3 = bd1 - bd2;
+        Gigadecimal bd3 = bd1 - bd2;
 
         // Assert.
         Assert.AreEqual("1", bd3.ToString());
@@ -793,11 +793,11 @@ public class TestBigDecimal
     public void SubtractTest3()
     {
         // Arrange.
-        BigDecimal bd1 = new ("0");
-        BigDecimal bd2 = new ("1");
+        Gigadecimal bd1 = new ("0");
+        Gigadecimal bd2 = new ("1");
 
         // Act.
-        BigDecimal bd3 = bd1 - bd2;
+        Gigadecimal bd3 = bd1 - bd2;
 
         // Assert.
         Assert.AreEqual("-1", bd3.ToString());
@@ -807,11 +807,11 @@ public class TestBigDecimal
     public void SubtractTest4()
     {
         // Arrange.
-        BigDecimal bd1 = new ("8");
-        BigDecimal bd2 = new ("5");
+        Gigadecimal bd1 = new ("8");
+        Gigadecimal bd2 = new ("5");
 
         // Act.
-        BigDecimal bd3 = bd1 - bd2;
+        Gigadecimal bd3 = bd1 - bd2;
 
         // Assert.
         Assert.AreEqual("3", bd3.ToString());
@@ -821,11 +821,11 @@ public class TestBigDecimal
     public void SubtractTest5()
     {
         // Arrange.
-        BigDecimal bd1 = new ("5");
-        BigDecimal bd2 = new ("8");
+        Gigadecimal bd1 = new ("5");
+        Gigadecimal bd2 = new ("8");
 
         // Act.
-        BigDecimal bd3 = bd1 - bd2;
+        Gigadecimal bd3 = bd1 - bd2;
 
         // Assert.
         Assert.AreEqual("-3", bd3.ToString());
@@ -835,11 +835,11 @@ public class TestBigDecimal
     public void SubtractTest6()
     {
         // Arrange.
-        BigDecimal bd1 = new ("-8");
-        BigDecimal bd2 = new ("5");
+        Gigadecimal bd1 = new ("-8");
+        Gigadecimal bd2 = new ("5");
 
         // Act.
-        BigDecimal bd3 = bd1 - bd2;
+        Gigadecimal bd3 = bd1 - bd2;
 
         // Assert.
         Assert.AreEqual("-1.3E+1", bd3.ToString());
@@ -849,11 +849,11 @@ public class TestBigDecimal
     public void SubtractTest7()
     {
         // Arrange.
-        BigDecimal bd1 = new ("5");
-        BigDecimal bd2 = new ("-8");
+        Gigadecimal bd1 = new ("5");
+        Gigadecimal bd2 = new ("-8");
 
         // Act.
-        BigDecimal bd3 = bd1 - bd2;
+        Gigadecimal bd3 = bd1 - bd2;
 
         // Assert.
         Assert.AreEqual("1.3E+1", bd3.ToString());
@@ -863,11 +863,11 @@ public class TestBigDecimal
     public void SubtractTest8()
     {
         // Arrange.
-        BigDecimal bd1 = new ("-5");
-        BigDecimal bd2 = new ("-8");
+        Gigadecimal bd1 = new ("-5");
+        Gigadecimal bd2 = new ("-8");
 
         // Act.
-        BigDecimal bd3 = bd1 - bd2;
+        Gigadecimal bd3 = bd1 - bd2;
 
         // Assert.
         Assert.AreEqual("3", bd3.ToString());
@@ -877,11 +877,11 @@ public class TestBigDecimal
     public void SubtractTest9()
     {
         // Arrange.
-        BigDecimal bd1 = new ("-8");
-        BigDecimal bd2 = new ("-5");
+        Gigadecimal bd1 = new ("-8");
+        Gigadecimal bd2 = new ("-5");
 
         // Act.
-        BigDecimal bd3 = bd1 - bd2;
+        Gigadecimal bd3 = bd1 - bd2;
 
         // Assert.
         Assert.AreEqual("-3", bd3.ToString());
@@ -891,11 +891,11 @@ public class TestBigDecimal
     public void SubtractTest10()
     {
         // Arrange.
-        BigDecimal bd1 = new ("1");
-        BigDecimal bd2 = new ("1");
+        Gigadecimal bd1 = new ("1");
+        Gigadecimal bd2 = new ("1");
 
         // Act.
-        BigDecimal bd3 = bd1 - bd2;
+        Gigadecimal bd3 = bd1 - bd2;
 
         // Assert.
         Assert.AreEqual("0", bd3.ToString());
@@ -905,11 +905,11 @@ public class TestBigDecimal
     public void SubtractTest11()
     {
         // Arrange.
-        BigDecimal bd1 = new ("67890");
-        BigDecimal bd2 = new ("12345");
+        Gigadecimal bd1 = new ("67890");
+        Gigadecimal bd2 = new ("12345");
 
         // Act.
-        BigDecimal bd3 = bd1 - bd2;
+        Gigadecimal bd3 = bd1 - bd2;
 
         // Assert.
         Assert.AreEqual("5.5545E+4", bd3.ToString());
@@ -919,11 +919,11 @@ public class TestBigDecimal
     public void SubtractTest12()
     {
         // Arrange.
-        BigDecimal bd1 = new ("1234567890");
-        BigDecimal bd2 = new ("9.87654321");
+        Gigadecimal bd1 = new ("1234567890");
+        Gigadecimal bd2 = new ("9.87654321");
 
         // Act.
-        BigDecimal bd3 = bd1 - bd2;
+        Gigadecimal bd3 = bd1 - bd2;
 
         // Assert.
         Assert.AreEqual("1.23456788012345679E+9", bd3.ToString());
@@ -933,11 +933,11 @@ public class TestBigDecimal
     public void SubtractTest13()
     {
         // Arrange.
-        BigDecimal bd1 = new ("1E10");
-        BigDecimal bd2 = new ("1");
+        Gigadecimal bd1 = new ("1E10");
+        Gigadecimal bd2 = new ("1");
 
         // Act.
-        BigDecimal bd3 = bd1 - bd2;
+        Gigadecimal bd3 = bd1 - bd2;
 
         // Assert.
         Assert.AreEqual("9.999999999E+9", bd3.ToString());
@@ -947,11 +947,11 @@ public class TestBigDecimal
     public void SubtractTest14()
     {
         // Arrange.
-        BigDecimal bd1 = new ("1");
-        BigDecimal bd2 = new ("1E+10");
+        Gigadecimal bd1 = new ("1");
+        Gigadecimal bd2 = new ("1E+10");
 
         // Act.
-        BigDecimal bd3 = bd1 - bd2;
+        Gigadecimal bd3 = bd1 - bd2;
 
         // Assert.
         Assert.AreEqual("-9.999999999E+9", bd3.ToString());
@@ -961,11 +961,11 @@ public class TestBigDecimal
     public void MultiplyTest1()
     {
         // Arrange.
-        BigDecimal bd1 = 0;
-        BigDecimal bd2 = 1.234m;
+        Gigadecimal bd1 = 0;
+        Gigadecimal bd2 = 1.234m;
 
         // Act.
-        BigDecimal bd3 = bd1 * bd2;
+        Gigadecimal bd3 = bd1 * bd2;
 
         // Assert.
         Assert.AreEqual(0, bd3);
@@ -975,11 +975,11 @@ public class TestBigDecimal
     public void MultiplyTest2()
     {
         // Arrange.
-        BigDecimal bd1 = 6.789m;
-        BigDecimal bd2 = 0;
+        Gigadecimal bd1 = 6.789m;
+        Gigadecimal bd2 = 0;
 
         // Act.
-        BigDecimal bd3 = bd1 * bd2;
+        Gigadecimal bd3 = bd1 * bd2;
 
         // Assert.
         Assert.AreEqual(0, bd3);
@@ -989,11 +989,11 @@ public class TestBigDecimal
     public void MultiplyTest4()
     {
         // Arrange.
-        BigDecimal bd1 = 6.789m;
-        BigDecimal bd2 = 1;
+        Gigadecimal bd1 = 6.789m;
+        Gigadecimal bd2 = 1;
 
         // Act.
-        BigDecimal bd3 = bd1 * bd2;
+        Gigadecimal bd3 = bd1 * bd2;
 
         // Assert.
         Assert.AreEqual(6.789m, bd3);
@@ -1003,11 +1003,11 @@ public class TestBigDecimal
     public void MultiplyTest5()
     {
         // Arrange.
-        BigDecimal bd1 = 2350m;
-        BigDecimal bd2 = 15.67m;
+        Gigadecimal bd1 = 2350m;
+        Gigadecimal bd2 = 15.67m;
 
         // Act.
-        BigDecimal bd3 = bd1 * bd2;
+        Gigadecimal bd3 = bd1 * bd2;
 
         // Assert.
         Assert.AreEqual(36824.5m, bd3);
@@ -1017,11 +1017,11 @@ public class TestBigDecimal
     public void MultiplyTest6()
     {
         // Arrange.
-        BigDecimal bd1 = 1.23e20m;
-        BigDecimal bd2 = 6.78e-12m;
+        Gigadecimal bd1 = 1.23e20m;
+        Gigadecimal bd2 = 6.78e-12m;
 
         // Act.
-        BigDecimal bd3 = bd1 * bd2;
+        Gigadecimal bd3 = bd1 * bd2;
 
         // Assert.
         Assert.AreEqual(833940000m, bd3);
@@ -1031,11 +1031,11 @@ public class TestBigDecimal
     public void MultiplyTest7()
     {
         // Arrange.
-        BigDecimal bd1 = -10000m;
-        BigDecimal bd2 = 0.5m;
+        Gigadecimal bd1 = -10000m;
+        Gigadecimal bd2 = 0.5m;
 
         // Act.
-        BigDecimal bd3 = bd1 * bd2;
+        Gigadecimal bd3 = bd1 * bd2;
 
         // Assert.
         Assert.AreEqual(-5000m, bd3);
@@ -1045,11 +1045,11 @@ public class TestBigDecimal
     public void MultiplyTest8()
     {
         // Arrange.
-        BigDecimal bd1 = -9.8712m;
-        BigDecimal bd2 = 481267111m;
+        Gigadecimal bd1 = -9.8712m;
+        Gigadecimal bd2 = 481267111m;
 
         // Act.
-        BigDecimal bd3 = bd1 * bd2;
+        Gigadecimal bd3 = bd1 * bd2;
 
         // Assert.
         Assert.AreEqual(-4750683906.1032m, bd3);
@@ -1059,11 +1059,11 @@ public class TestBigDecimal
     public void MultiplyTest9()
     {
         // Arrange.
-        BigDecimal bd1 = -0.0001234m;
-        BigDecimal bd2 = -6789.543m;
+        Gigadecimal bd1 = -0.0001234m;
+        Gigadecimal bd2 = -6789.543m;
 
         // Act.
-        BigDecimal bd3 = bd1 * bd2;
+        Gigadecimal bd3 = bd1 * bd2;
 
         // Assert.
         Assert.AreEqual(0.8378296062m, bd3);
@@ -1073,11 +1073,11 @@ public class TestBigDecimal
     public void MultiplyTest10()
     {
         // Arrange.
-        BigDecimal bd1 = 9.9999m;
-        BigDecimal bd2 = 99999.9m;
+        Gigadecimal bd1 = 9.9999m;
+        Gigadecimal bd2 = 99999.9m;
 
         // Act.
-        BigDecimal bd3 = bd1 * bd2;
+        Gigadecimal bd3 = bd1 * bd2;
 
         // Assert.
         Assert.AreEqual(999989.00001m, bd3);
@@ -1087,7 +1087,7 @@ public class TestBigDecimal
     public void RandomMultiplyTest()
     {
         double m1, m2, mProd;
-        BigDecimal bd1, bd2, bdProd;
+        Gigadecimal bd1, bd2, bdProd;
         Random rng = new ();
         double percent = 0.000001;
 
@@ -1130,17 +1130,17 @@ public class TestBigDecimal
     [TestMethod]
     public void ReciprocalTest1()
     {
-        BigDecimal x, y;
+        Gigadecimal x, y;
 
         x = 2;
-        y = BigDecimal.Reciprocal(x);
+        y = Gigadecimal.Reciprocal(x);
         Assert.AreEqual(1, y.Length);
         Assert.AreEqual(500000000, y.Significand[0]);
         Assert.AreEqual(-1, y.Mantissa);
         Console.WriteLine(y);
 
         x = 3;
-        y = BigDecimal.Reciprocal(x);
+        y = Gigadecimal.Reciprocal(x);
         Assert.AreEqual(12, y.Length);
         Assert.AreEqual(333333333, y.Significand[0]);
         Assert.AreEqual(333333333, y.Significand[1]);
@@ -1158,21 +1158,21 @@ public class TestBigDecimal
         Console.WriteLine(y);
 
         x = 4;
-        y = BigDecimal.Reciprocal(x);
+        y = Gigadecimal.Reciprocal(x);
         Assert.AreEqual(1, y.Length);
         Assert.AreEqual(250000000, y.Significand[0]);
         Assert.AreEqual(-1, y.Mantissa);
         Console.WriteLine(y);
 
         x = 5;
-        y = BigDecimal.Reciprocal(x);
+        y = Gigadecimal.Reciprocal(x);
         Assert.AreEqual(1, y.Length);
         Assert.AreEqual(200000000, y.Significand[0]);
         Assert.AreEqual(-1, y.Mantissa);
         Console.WriteLine(y);
 
         x = 6;
-        y = BigDecimal.Reciprocal(x);
+        y = Gigadecimal.Reciprocal(x);
         Assert.AreEqual(12, y.Length);
         Assert.AreEqual(166666666, y.Significand[0]);
         Assert.AreEqual(666666666, y.Significand[1]);
@@ -1190,7 +1190,7 @@ public class TestBigDecimal
         Console.WriteLine(y);
 
         x = 7;
-        y = BigDecimal.Reciprocal(x);
+        y = Gigadecimal.Reciprocal(x);
         Assert.AreEqual(12, y.Length);
         Assert.AreEqual(142857142, y.Significand[0]);
         Assert.AreEqual(857142857, y.Significand[1]);
@@ -1208,14 +1208,14 @@ public class TestBigDecimal
         Console.WriteLine(y);
 
         x = 8;
-        y = BigDecimal.Reciprocal(x);
+        y = Gigadecimal.Reciprocal(x);
         Assert.AreEqual(1, y.Length);
         Assert.AreEqual(125000000, y.Significand[0]);
         Assert.AreEqual(-1, y.Mantissa);
         Console.WriteLine(y);
 
         x = 9;
-        y = BigDecimal.Reciprocal(x);
+        y = Gigadecimal.Reciprocal(x);
         Assert.AreEqual(12, y.Length);
         Assert.AreEqual(111111111, y.Significand[0]);
         Assert.AreEqual(111111111, y.Significand[1]);
@@ -1237,7 +1237,7 @@ public class TestBigDecimal
     public void RandomDivideTest()
     {
         double m1, m2, m3;
-        BigDecimal bd1, bd2, bd3;
+        Gigadecimal bd1, bd2, bd3;
         Random rng = new ();
         double percent = 0.000001;
         int n = 100;
@@ -1265,7 +1265,7 @@ public class TestBigDecimal
 
                 bd1 = m1;
                 bd2 = m2;
-                bd3 = BigDecimal.Divide(bd1, bd2);
+                bd3 = Gigadecimal.Divide(bd1, bd2);
 
                 Console.WriteLine($"Expected = {m3:G17}");
                 Console.WriteLine($"Actual = {bd3}");
@@ -1287,7 +1287,7 @@ public class TestBigDecimal
     public void RandomReciprocalTest()
     {
         double m1, m2;
-        BigDecimal bd1, bd2;
+        Gigadecimal bd1, bd2;
         Random rng = new ();
         // double percent = 0.001;
         int n = 100;
@@ -1313,7 +1313,7 @@ public class TestBigDecimal
                 }
 
                 bd1 = m1;
-                bd2 = BigDecimal.Reciprocal(bd1);
+                bd2 = Gigadecimal.Reciprocal(bd1);
 
                 Console.WriteLine($"Expected = {m2:G17}");
                 Console.WriteLine($"Actual = {bd2}");
@@ -1329,7 +1329,7 @@ public class TestBigDecimal
     [TestMethod]
     public void DivideGoldschmidtTest1()
     {
-        BigDecimal bd1, bd2, bdResult;
+        Gigadecimal bd1, bd2, bdResult;
         for (int j = 1; j <= 10; j++)
         {
             for (int i = 1; i <= 10; i++)
@@ -1337,7 +1337,7 @@ public class TestBigDecimal
                 Console.WriteLine($"{i} / {j} = ");
                 bd1 = i;
                 bd2 = j;
-                bdResult = BigDecimal.Divide(bd1, bd2);
+                bdResult = Gigadecimal.Divide(bd1, bd2);
                 Console.WriteLine(bdResult);
                 Console.WriteLine();
             }

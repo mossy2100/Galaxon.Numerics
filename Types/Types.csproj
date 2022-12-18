@@ -22,6 +22,9 @@
         <Reference Include="AstroMultimedia.Core.Testing">
             <HintPath>..\..\Core\Testing\bin\Debug\net7.0\AstroMultimedia.Core.Testing.dll</HintPath>
         </Reference>
+        <Reference Include="AstroMultimedia.Core.Strings">
+          <HintPath>..\..\Core\Strings\bin\Debug\net7.0\AstroMultimedia.Core.Strings.dll</HintPath>
+        </Reference>
     </ItemGroup>
 
     <ItemGroup>

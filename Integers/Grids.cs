@@ -121,7 +121,7 @@ public static class Grids
 
     public static void PrintGrid(uint?[,] grid)
     {
-        int size = XInt32.Sqrt(grid.Length);
+        int size = XInt.Sqrt(grid.Length);
         for (int y = 0; y < size; y++)
         {
             Console.Write("[ ");

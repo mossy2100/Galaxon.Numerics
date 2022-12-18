@@ -1,5 +1,6 @@
 using System.Numerics;
 using System.Text;
+using AstroMultimedia.Core.Strings;
 
 namespace AstroMultimedia.Numerics.Integers;
 
@@ -178,12 +179,14 @@ public static class NumberStrings
     /// <summary>
     /// Format a number as a string of superscript characters.
     /// </summary>
-    public static string ToSuperscript<T>(this T n) where T : INumberBase<T> =>
-        string.Format(new SuperAndSubscriptFormatter(), "{0:sup}", n);
+    public static string ToSuperscript<T>(this T n, int invalidCharActionCode = 0)
+        where T : INumberBase<T> =>
+        string.Format(new SuperAndSubscriptFormatter(), $"{{0:sup{invalidCharActionCode}}}", n);
 
     /// <summary>
     /// Format a number as a string of subscript characters.
     /// </summary>
-    public static string ToSubscript<T>(this T n) where T : INumberBase<T> =>
-        string.Format(new SuperAndSubscriptFormatter(), "{0:sub}", n);
+    public static string ToSubscript<T>(this T n, int invalidCharActionCode = 0)
+        where T : INumberBase<T> =>
+        string.Format(new SuperAndSubscriptFormatter(), $"{{0:sup{invalidCharActionCode}}}", n);
 }
