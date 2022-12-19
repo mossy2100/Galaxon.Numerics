@@ -11,18 +11,14 @@ public struct BigDecimal : IFloatingPoint<BigDecimal>, ICloneable, IPowerFunctio
 {
     #region Constructors
 
-    public BigDecimal(BigInteger significand, BigInteger exponent)
+    public BigDecimal(BigInteger significand, int exponent = 0)
     {
         (significand, exponent) = MakeCanonical(significand, exponent);
         Significand = significand;
         Exponent = exponent;
     }
 
-    public BigDecimal(BigInteger significand) : this(significand, 0)
-    {
-    }
-
-    public BigDecimal() : this(0, 0)
+    public BigDecimal() : this(0)
     {
     }
 
@@ -37,30 +33,30 @@ public struct BigDecimal : IFloatingPoint<BigDecimal>, ICloneable, IPowerFunctio
     /// <see href="https://en.wikipedia.org/wiki/Significand">Wikipedia: Significand</see>
     public BigInteger Significand { get; set; }
 
-    /// <summary>The exponent on the base 10.</summary>
-    public BigInteger Exponent { get; set; }
+    /// <summary>The power of 10.</summary>
+    public int Exponent { get; set; }
 
     #endregion Instance properties
 
     #region Static properties
 
     /// <inheritdoc />
-    public static BigDecimal Zero { get; } = new (0, 0);
+    public static BigDecimal Zero { get; } = new (0);
 
     /// <inheritdoc />
-    public static BigDecimal One { get; } = new (1, 0);
+    public static BigDecimal One { get; } = new (1);
 
     /// <inheritdoc />
-    public static BigDecimal NegativeOne { get; } = new (-1, 0);
+    public static BigDecimal NegativeOne { get; } = new (-1);
 
     /// <inheritdoc />
-    public static int Radix { get; } = 10;
+    public static int Radix => 10;
 
     /// <inheritdoc />
-    public static BigDecimal AdditiveIdentity { get; } = Zero;
+    public static BigDecimal AdditiveIdentity => Zero;
 
     /// <inheritdoc />
-    public static BigDecimal MultiplicativeIdentity { get; } = One;
+    public static BigDecimal MultiplicativeIdentity => One;
 
     #endregion Static properties
 
@@ -133,6 +129,52 @@ public struct BigDecimal : IFloatingPoint<BigDecimal>, ICloneable, IPowerFunctio
 
     #endregion Constants
 
+    #region Cast operators
+
+    public static implicit operator BigDecimal(sbyte n) =>
+        new (n);
+
+    public static implicit operator BigDecimal(byte n) =>
+        new (n);
+
+    public static implicit operator BigDecimal(short n) =>
+        new (n);
+
+    public static implicit operator BigDecimal(ushort n) =>
+        new (n);
+
+    public static implicit operator BigDecimal(int n) =>
+        new (n);
+
+    public static implicit operator BigDecimal(uint n) =>
+        new (n);
+
+    public static implicit operator BigDecimal(long n) =>
+        new (n);
+
+    public static implicit operator BigDecimal(ulong n) =>
+        new (n);
+
+    public static implicit operator BigDecimal(Int128 n) =>
+        new (n);
+
+    public static implicit operator BigDecimal(UInt128 n) =>
+        new (n);
+
+    public static implicit operator BigDecimal(BigInteger n) =>
+        new (n);
+
+    public static implicit operator BigDecimal(float n) =>
+        Parse(n.ToString("G", NumberFormatInfo.InvariantInfo));
+
+    public static implicit operator BigDecimal(double n) =>
+        Parse(n.ToString("G", NumberFormatInfo.InvariantInfo));
+
+    public static implicit operator BigDecimal(decimal n) =>
+        Parse(n.ToString("G", NumberFormatInfo.InvariantInfo));
+
+    #endregion Cast operators
+
     #region Arithmetic operators
 
     /// <inheritdoc />
@@ -176,12 +218,72 @@ public struct BigDecimal : IFloatingPoint<BigDecimal>, ICloneable, IPowerFunctio
     }
 
     /// <inheritdoc />
-    public static BigDecimal operator /(BigDecimal left, BigDecimal right) =>
-        throw new NotImplementedException();
+    /// <remarks>
+    /// Computes the division using the Goldschmidt algorithm.
+    /// <see href="https://en.wikipedia.org/wiki/Division_algorithm#Goldschmidt_division" />
+    /// </remarks>
+    public static BigDecimal operator /(BigDecimal left, BigDecimal right)
+    {
+        // Guard.
+        if (right == Zero)
+        {
+            throw new DivideByZeroException("Division by 0 is undefined.");
+        }
+
+        // Optimizations.
+        if (right == One)
+        {
+            return left;
+        }
+        if (left == right)
+        {
+            return One;
+        }
+
+        // Get the operands with the exponents removed. This will enable us to calculate f using the
+        // decimal type.
+        BigDecimal a = new (left.Significand);
+        BigDecimal b = new (right.Significand);
+
+        // Find f, a good initial estimate of the multiplication factor.
+        string strRightSig = right.Significand.ToString();
+        decimal fSigInv = decimal.Parse(strRightSig.Length <= 28 ? strRightSig : strRightSig[..28]);
+        int fExp = strRightSig.Length <= 28 ? 0 : 28 - strRightSig.Length;
+        BigDecimal f = 1m / fSigInv * new BigDecimal(1, fExp);
+
+        // Get 2 as a BigDecimal to avoid doing the conversion every time.
+        BigDecimal two = 2;
+
+        while (true)
+        {
+            a *= f;
+            b *= f;
+
+            // If the right is 1, then n is the result.
+            if (b == One)
+            {
+                break;
+            }
+
+            f = two - b;
+
+            // If d is not 1, but is close to 1, then f can be 1 due to rounding after the
+            // subtraction. If it is, there's no point continuing.
+            if (f == One)
+            {
+                break;
+            }
+        }
+
+        return new BigDecimal(a.Significand, a.Exponent + left.Exponent - right.Exponent);
+    }
 
     /// <inheritdoc />
-    public static BigDecimal operator %(BigDecimal left, BigDecimal right) =>
-        throw new NotImplementedException();
+    public static BigDecimal operator %(BigDecimal left, BigDecimal right)
+    {
+        BigDecimal div = Round(left / right, 0, MidpointRounding.ToZero);
+        return left - (div * right);
+    }
 
     /// <summary>
     /// Exponentiation operator.
@@ -202,8 +304,75 @@ public struct BigDecimal : IFloatingPoint<BigDecimal>, ICloneable, IPowerFunctio
         new (BigInteger.Abs(value.Significand), value.Exponent);
 
     /// <inheritdoc />
-    public static BigDecimal Round(BigDecimal x, int digits, MidpointRounding mode) =>
-        throw new NotImplementedException();
+    public static BigDecimal Round(BigDecimal x, int digits = 0,
+        MidpointRounding mode = MidpointRounding.ToEven)
+    {
+        // If it's an integer, no rounding required.
+        if (x.Exponent >= 0)
+        {
+            return x;
+        }
+
+        // Find out how many digits to discard.
+        int nDigitsToCut = -digits - x.Exponent;
+        BigInteger newSig;
+
+        if (nDigitsToCut > 0)
+        {
+            // Separate the digits to keep from the ones to discard.
+            int sign = x.Significand.Sign;
+            BigInteger absSig = BigInteger.Abs(x.Significand);
+            string strAbsSig = absSig.ToString();
+            string strLeft = strAbsSig[..^nDigitsToCut];
+            string strRight = strAbsSig[^nDigitsToCut..];
+            BigInteger newAbsSig = strLeft == "" ? 0 : BigInteger.Parse(strLeft);
+
+            // Round off according to mode.
+            bool increment = false;
+            switch (mode)
+            {
+                case MidpointRounding.ToEven:
+                    increment = strRight[0] >= '5' && (strRight != "5" || newAbsSig % 2 == 1);
+                    break;
+
+                case MidpointRounding.AwayFromZero:
+                    increment = strRight[0] >= '5';
+                    break;
+
+                case MidpointRounding.ToZero:
+                    increment = false;
+                    break;
+
+                case MidpointRounding.ToNegativeInfinity:
+                    increment = sign < 0;
+                    break;
+
+                case MidpointRounding.ToPositiveInfinity:
+                    increment = sign > 0;
+                    break;
+            }
+
+            // Adjust the significand.
+            if (increment)
+            {
+                newAbsSig++;
+            }
+            newSig = sign * newAbsSig;
+        }
+        else
+        {
+            // No rounding necessary.
+            newSig = x.Significand;
+
+            // Add 0s if needed.
+            if (nDigitsToCut < 0)
+            {
+                newSig *= BigInteger.Pow(10, -nDigitsToCut);
+            }
+        }
+
+        return new BigDecimal(newSig, -digits);
+    }
 
     /// <inheritdoc />
     public int GetSignificandByteCount() =>
@@ -215,51 +384,27 @@ public struct BigDecimal : IFloatingPoint<BigDecimal>, ICloneable, IPowerFunctio
 
     /// <inheritdoc />
     public int GetExponentByteCount() =>
-        Exponent.GetByteCount();
+        4;
 
     /// <inheritdoc />
     public int GetExponentShortestBitLength() =>
-        GetExponentByteCount() * 8;
-
-    /// <summary>
-    /// Shared logic for
-    /// <see cref="TryWriteSignificandBigEndian" />
-    /// <see cref="TryWriteSignificandLittleEndian" />
-    /// <see cref="TryWriteExponentBigEndian" />
-    /// <see cref="TryWriteExponentLittleEndian" />
-    /// </summary>
-    public bool TryWrite(BigInteger bi, Span<byte> destination, out int bytesWritten,
-        bool isBigEndian)
-    {
-        byte[] bytes = bi.ToByteArray(false, isBigEndian);
-        try
-        {
-            bytes.CopyTo(destination);
-            bytesWritten = bytes.Length;
-            return true;
-        }
-        catch
-        {
-            bytesWritten = 0;
-            return false;
-        }
-    }
+        32;
 
     /// <inheritdoc />
     public bool TryWriteSignificandBigEndian(Span<byte> destination, out int bytesWritten) =>
-        TryWrite(Significand, destination, out bytesWritten, true);
+        TryWriteBigInteger(Significand, destination, out bytesWritten, true);
 
     /// <inheritdoc />
     public bool TryWriteSignificandLittleEndian(Span<byte> destination, out int bytesWritten) =>
-        TryWrite(Significand, destination, out bytesWritten, false);
+        TryWriteBigInteger(Significand, destination, out bytesWritten, false);
 
     /// <inheritdoc />
     public bool TryWriteExponentBigEndian(Span<byte> destination, out int bytesWritten) =>
-        TryWrite(Exponent, destination, out bytesWritten, true);
+        TryWriteInt(Exponent, destination, out bytesWritten, true);
 
     /// <inheritdoc />
     public bool TryWriteExponentLittleEndian(Span<byte> destination, out int bytesWritten) =>
-        TryWrite(Exponent, destination, out bytesWritten, false);
+        TryWriteInt(Exponent, destination, out bytesWritten, false);
 
     #endregion Miscellaneous methods
 
@@ -301,7 +446,7 @@ public struct BigDecimal : IFloatingPoint<BigDecimal>, ICloneable, IPowerFunctio
             return false;
         }
 
-        // Check if it's odd.
+        // If the exponent is 0, check if it's odd.
         return value.Significand % 2 == 1;
     }
 
@@ -319,7 +464,7 @@ public struct BigDecimal : IFloatingPoint<BigDecimal>, ICloneable, IPowerFunctio
             return true;
         }
 
-        // Check if it's even.
+        // If the exponent is 0, check if it's even.
         return value.Significand % 2 == 0;
     }
 
@@ -376,12 +521,21 @@ public struct BigDecimal : IFloatingPoint<BigDecimal>, ICloneable, IPowerFunctio
     #region Comparison methods
 
     /// <inheritdoc />
-    public int CompareTo(object? obj) =>
-        throw new NotImplementedException();
+    public int CompareTo(BigDecimal other)
+    {
+        int compareExponents = Exponent.CompareTo(other.Exponent);
+        return compareExponents == 0 ? Significand.CompareTo(other.Significand) : compareExponents;
+    }
 
     /// <inheritdoc />
-    public int CompareTo(BigDecimal other) =>
-        throw new NotImplementedException();
+    public int CompareTo(object? obj)
+    {
+        if (obj is not BigDecimal other)
+        {
+            throw new ArgumentInvalidException(nameof(obj), "Must be a BigDecimal.");
+        }
+        return CompareTo(other);
+    }
 
     /// <inheritdoc />
     public bool Equals(BigDecimal other) =>
@@ -414,11 +568,7 @@ public struct BigDecimal : IFloatingPoint<BigDecimal>, ICloneable, IPowerFunctio
         }
         BigInteger absX = BigInteger.Abs(x.Significand);
         BigInteger absY = BigInteger.Abs(y.Significand);
-        if (absX > absY)
-        {
-            return x;
-        }
-        return y;
+        return absX > absY ? x : y;
     }
 
     /// <inheritdoc />
@@ -438,11 +588,7 @@ public struct BigDecimal : IFloatingPoint<BigDecimal>, ICloneable, IPowerFunctio
         }
         BigInteger absX = BigInteger.Abs(x.Significand);
         BigInteger absY = BigInteger.Abs(y.Significand);
-        if (absX < absY)
-        {
-            return x;
-        }
-        return y;
+        return absX < absY ? x : y;
     }
 
     /// <inheritdoc />
@@ -462,20 +608,20 @@ public struct BigDecimal : IFloatingPoint<BigDecimal>, ICloneable, IPowerFunctio
         !left.Equals(right);
 
     /// <inheritdoc />
-    public static bool operator >(BigDecimal left, BigDecimal right) =>
-        throw new NotImplementedException();
-
-    /// <inheritdoc />
-    public static bool operator >=(BigDecimal left, BigDecimal right) =>
-        throw new NotImplementedException();
-
-    /// <inheritdoc />
     public static bool operator <(BigDecimal left, BigDecimal right) =>
-        throw new NotImplementedException();
+        left.CompareTo(right) < 0;
 
     /// <inheritdoc />
     public static bool operator <=(BigDecimal left, BigDecimal right) =>
-        throw new NotImplementedException();
+        left.CompareTo(right) <= 0;
+
+    /// <inheritdoc />
+    public static bool operator >(BigDecimal left, BigDecimal right) =>
+        left.CompareTo(right) > 0;
+
+    /// <inheritdoc />
+    public static bool operator >=(BigDecimal left, BigDecimal right) =>
+        left.CompareTo(right) >= 0;
 
     #endregion Comparison operators
 
@@ -509,7 +655,7 @@ public struct BigDecimal : IFloatingPoint<BigDecimal>, ICloneable, IPowerFunctio
         // Parse the format specifier.
         if (specifier != null)
         {
-            var match = Regex.Match(specifier,
+            Match match = Regex.Match(specifier,
                 @"^(?<format>[DEFGN])(?<precision>\d*)(?<unicode>U?)$", RegexOptions.IgnoreCase);
 
             if (!match.Success)
@@ -523,9 +669,6 @@ public struct BigDecimal : IFloatingPoint<BigDecimal>, ICloneable, IPowerFunctio
                 : int.Parse(match.Groups["precision"].Value);
             unicode = match.Groups["unicode"].Value.ToUpper() == "U";
         }
-
-        // Set the default format provider.
-        provider ??= NumberFormatInfo.InvariantInfo;
 
         // Check for special case, G, which will return the more compact of E and F.
         if (format == "G")
@@ -542,7 +685,7 @@ public struct BigDecimal : IFloatingPoint<BigDecimal>, ICloneable, IPowerFunctio
         string strSignificand = "";
         string strAbsSignificand;
         string strSign;
-        BigInteger exponent = Exponent;
+        int exponent = Exponent;
         switch (format)
         {
             case "D":
@@ -553,7 +696,8 @@ public struct BigDecimal : IFloatingPoint<BigDecimal>, ICloneable, IPowerFunctio
                 strAbsSignificand = BigInteger.Abs(Significand).ToString();
                 strSign = Significand < 0 ? nfi.NegativeSign : "";
                 exponent = Exponent + strAbsSignificand.Length - 1;
-                strSignificand = $"{strSign}{strAbsSignificand[..1]}{nfi.NumberDecimalSeparator}{strAbsSignificand[1..]}";
+                strSignificand =
+                    $"{strSign}{strAbsSignificand[..1]}{nfi.NumberDecimalSeparator}{strAbsSignificand[1..]}";
                 break;
 
             case "F":
@@ -571,14 +715,16 @@ public struct BigDecimal : IFloatingPoint<BigDecimal>, ICloneable, IPowerFunctio
                         strSign = Significand < 0 ? nfi.NegativeSign : "";
                         strZeros = XString.Repeat("0", -Exponent);
                         strSignificand = $"{strZeros}{strAbsSignificand}";
-                        strSignificand = $"{strSign}{strSignificand[..1]}{nfi.NumberDecimalSeparator}{strSignificand[1..]}";
+                        strSignificand =
+                            $"{strSign}{strSignificand[..1]}{nfi.NumberDecimalSeparator}{strSignificand[1..]}";
 
                         // Get the decimal part.
                         int nPrecision = precision ?? nfi.NumberDecimalDigits;
                         strDecimalPart = strSignificand[1..];
                         if (strDecimalPart.Length < nPrecision)
                         {
-                            strDecimalPart += XString.Repeat("0", nPrecision - strDecimalPart.Length);
+                            strDecimalPart +=
+                                XString.Repeat("0", nPrecision - strDecimalPart.Length);
                         }
                         else if (strDecimalPart.Length > nPrecision)
                         {
@@ -617,7 +763,9 @@ public struct BigDecimal : IFloatingPoint<BigDecimal>, ICloneable, IPowerFunctio
             strExponent = exponent.ToString(format == "N" ? "N" : "D", provider);
             strExponent = unicode
                 ? $"×10{strExponent.ToSuperscript(1)}"
-                : (exponent < 0) ? $"E{strExponent}" : $"E{nfi.PositiveSign}{strExponent}";
+                : (exponent < 0)
+                    ? $"E{strExponent}"
+                    : $"E{nfi.PositiveSign}{strExponent}";
         }
 
         return $"{strSignificand}{strExponent}";
@@ -625,17 +773,30 @@ public struct BigDecimal : IFloatingPoint<BigDecimal>, ICloneable, IPowerFunctio
 
     /// <inheritdoc />
     public bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format,
-        IFormatProvider? provider) =>
-        throw new NotImplementedException();
+        IFormatProvider? provider)
+    {
+        string formattedValue = ToString(new string(format), provider);
+        try
+        {
+            formattedValue.CopyTo(destination);
+            charsWritten = formattedValue.Length;
+            return true;
+        }
+        catch
+        {
+            charsWritten = 0;
+            return false;
+        }
+    }
 
     /// <inheritdoc />
     public static BigDecimal Parse(string s, IFormatProvider? provider)
     {
-        // Remove any whitespace or underscore characters from the string.
-        s = Regex.Replace(s, @"[\s_]", "");
-
         // Get a NumberFormatInfo object so we know what characters to look for.
         NumberFormatInfo nfi = provider as NumberFormatInfo ?? NumberFormatInfo.InvariantInfo;
+
+        // Remove any whitespace, underscore, or group separator characters from the string.
+        s = Regex.Replace(s, $@"[\s_{nfi.NumberGroupSeparator}]", "");
 
         // Check the string format and extract salient info.
         string strSign = $"[{nfi.NegativeSign}{nfi.PositiveSign}]?";
@@ -654,10 +815,16 @@ public struct BigDecimal : IFloatingPoint<BigDecimal>, ICloneable, IPowerFunctio
 
         // Construct the result object.
         BigInteger significand = BigInteger.Parse(strInteger + strFraction, provider);
-        BigInteger exponent = (strExponent == "") ? 0 : BigInteger.Parse(strExponent, provider);
+        int exponent = strExponent == "" ? 0 : int.Parse(strExponent, provider);
         exponent -= strFraction.Length;
         return new BigDecimal(significand, exponent);
     }
+
+    /// <summary>
+    /// More convenient version of Parse().
+    /// </summary>
+    public static BigDecimal Parse(string s) =>
+        Parse(s, NumberFormatInfo.InvariantInfo);
 
     /// <inheritdoc />
     /// <remarks>Ignoring style parameter for now.</remarks>
@@ -670,7 +837,8 @@ public struct BigDecimal : IFloatingPoint<BigDecimal>, ICloneable, IPowerFunctio
 
     /// <inheritdoc />
     /// <remarks>Ignoring style parameter for now.</remarks>
-    public static BigDecimal Parse(ReadOnlySpan<char> s, NumberStyles style, IFormatProvider? provider) =>
+    public static BigDecimal Parse(ReadOnlySpan<char> s, NumberStyles style,
+        IFormatProvider? provider) =>
         Parse(new string(s), provider);
 
     /// <inheritdoc />
@@ -681,17 +849,24 @@ public struct BigDecimal : IFloatingPoint<BigDecimal>, ICloneable, IPowerFunctio
             result = Zero;
             return false;
         }
+
         try
         {
             result = Parse(s, provider);
             return true;
         }
-        catch (ArgumentFormatException e)
+        catch (Exception)
         {
             result = Zero;
             return false;
         }
     }
+
+    /// <summary>
+    /// More convenient version of TryParse().
+    /// </summary>
+    public static bool TryParse(string? s, out BigDecimal result) =>
+        TryParse(s, NumberFormatInfo.InvariantInfo, out result);
 
     /// <inheritdoc />
     /// <remarks>Ignoring style parameter for now.</remarks>
@@ -700,7 +875,8 @@ public struct BigDecimal : IFloatingPoint<BigDecimal>, ICloneable, IPowerFunctio
         TryParse(s, provider, out result);
 
     /// <inheritdoc />
-    public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, out BigDecimal result) =>
+    public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider,
+        out BigDecimal result) =>
         TryParse(new string(s), provider, out result);
 
     /// <inheritdoc />
@@ -710,34 +886,6 @@ public struct BigDecimal : IFloatingPoint<BigDecimal>, ICloneable, IPowerFunctio
         TryParse(new string(s), provider, out result);
 
     #endregion Methods for parsing and formatting
-
-    #region Conversion methods
-
-    /// <inheritdoc />
-    static bool INumberBase<BigDecimal>.TryConvertFromChecked<TOther>(TOther value, out BigDecimal result) =>
-        throw new NotImplementedException();
-
-    /// <inheritdoc />
-    static bool INumberBase<BigDecimal>.TryConvertFromSaturating<TOther>(TOther value, out BigDecimal result) =>
-        throw new NotImplementedException();
-
-    /// <inheritdoc />
-    static bool INumberBase<BigDecimal>.TryConvertFromTruncating<TOther>(TOther value, out BigDecimal result) =>
-        throw new NotImplementedException();
-
-    /// <inheritdoc />
-    static bool INumberBase<BigDecimal>.TryConvertToChecked<TOther>(BigDecimal value, out TOther result) =>
-        throw new NotImplementedException();
-
-    /// <inheritdoc />
-    static bool INumberBase<BigDecimal>.TryConvertToSaturating<TOther>(BigDecimal value, out TOther result) =>
-        throw new NotImplementedException();
-
-    /// <inheritdoc />
-    static bool INumberBase<BigDecimal>.TryConvertToTruncating<TOther>(BigDecimal value, out TOther result) =>
-        throw new NotImplementedException();
-
-    #endregion Conversion methods
 
     #region Exponentiation and logarithm methods
 
@@ -779,11 +927,56 @@ public struct BigDecimal : IFloatingPoint<BigDecimal>, ICloneable, IPowerFunctio
 
     #endregion Exponentiation and logarithm methods
 
+    #region Conversion methods
+
+    /// <inheritdoc />
+    static bool INumberBase<BigDecimal>.TryConvertFromChecked<TOther>(TOther value,
+        out BigDecimal result) =>
+        throw new NotImplementedException();
+
+    /// <inheritdoc />
+    static bool INumberBase<BigDecimal>.TryConvertFromSaturating<TOther>(TOther value,
+        out BigDecimal result) =>
+        throw new NotImplementedException();
+
+    /// <inheritdoc />
+    static bool INumberBase<BigDecimal>.TryConvertFromTruncating<TOther>(TOther value,
+        out BigDecimal result) =>
+        throw new NotImplementedException();
+
+    /// <inheritdoc />
+    static bool INumberBase<BigDecimal>.TryConvertToChecked<TOther>(BigDecimal value,
+        out TOther result) =>
+        throw new NotImplementedException();
+
+    /// <inheritdoc />
+    static bool INumberBase<BigDecimal>.TryConvertToSaturating<TOther>(BigDecimal value,
+        out TOther result) =>
+        throw new NotImplementedException();
+
+    /// <inheritdoc />
+    static bool INumberBase<BigDecimal>.TryConvertToTruncating<TOther>(BigDecimal value,
+        out TOther result) =>
+        throw new NotImplementedException();
+
+    #endregion Conversion methods
+
     #region Private methods
 
     /// <summary>
+    /// Multiply the significand by 10 and decrement the exponent to maintain the same value,
+    /// <paramref name="nPlaces"/> times.
+    /// </summary>
+    /// <param name="nPlaces"></param>
+    private void Shift(int nPlaces)
+    {
+        Significand *= BigInteger.Pow(10, nPlaces);
+        Exponent -= nPlaces;
+    }
+
+    /// <summary>
     /// Adjust the parts of one of the values so both have the same exponent.
-    /// If necessary, a new object will be created rather than mutate the provided one.
+    /// Two new objects will be returned.
     /// </summary>
     private static (BigDecimal, BigDecimal) Align(BigDecimal x, BigDecimal y)
     {
@@ -794,25 +987,17 @@ public struct BigDecimal : IFloatingPoint<BigDecimal>, ICloneable, IPowerFunctio
         }
 
         // Get a and b as proxies for the operation so we don't mutate the original values.
-        BigDecimal a;
-        BigDecimal b;
-        if (x.Exponent < y.Exponent)
+        BigDecimal a = x;
+        BigDecimal b = y;
+
+        // Make sure b has the larger exponent.
+        if (a.Exponent > b.Exponent)
         {
-            a = x;
-            b = (BigDecimal)y.MemberwiseClone();
-        }
-        else
-        {
-            a = (BigDecimal)y.MemberwiseClone();
-            b = x;
+            (a, b) = (b, a);
         }
 
-        // Shift b until they're aligned.
-        while (b.Exponent > a.Exponent)
-        {
-            b.Significand *= 10;
-            b.Exponent--;
-        }
+        // Shift b so the exponents are the same.
+        b.Shift(b.Exponent - a.Exponent);
 
         return (a, b);
     }
@@ -822,8 +1007,7 @@ public struct BigDecimal : IFloatingPoint<BigDecimal>, ICloneable, IPowerFunctio
     /// Static form of the method, for use in the constructor.
     /// </summary>
     /// <returns>The two updated BigIntegers.</returns>
-    private static (BigInteger , BigInteger) MakeCanonical(BigInteger significand,
-        BigInteger exponent)
+    private static (BigInteger, int) MakeCanonical(BigInteger significand, int exponent)
     {
         // Canonical form of zero.
         if (significand == 0)
@@ -855,6 +1039,60 @@ public struct BigDecimal : IFloatingPoint<BigDecimal>, ICloneable, IPowerFunctio
     {
         (Significand, Exponent) = MakeCanonical(Significand, Exponent);
         return this;
+    }
+
+    /// <summary>
+    /// Shared logic for:
+    /// <see cref="TryWriteBigInteger" />
+    /// <see cref="TryWriteInt" />
+    /// </summary>
+    private static bool TryWrite(byte[] bytes, Span<byte> destination, out int bytesWritten)
+    {
+        try
+        {
+            bytes.CopyTo(destination);
+            bytesWritten = bytes.Length;
+            return true;
+        }
+        catch
+        {
+            bytesWritten = 0;
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Shared logic for:
+    /// <see cref="TryWriteSignificandBigEndian" />
+    /// <see cref="TryWriteSignificandLittleEndian" />
+    /// </summary>
+    private static bool TryWriteBigInteger(BigInteger bi, Span<byte> destination,
+        out int bytesWritten,
+        bool isBigEndian)
+    {
+        byte[] bytes = bi.ToByteArray(false, isBigEndian);
+        return TryWrite(bytes, destination, out bytesWritten);
+    }
+
+    /// <summary>
+    /// Shared logic for:
+    /// <see cref="TryWriteExponentBigEndian" />
+    /// <see cref="TryWriteExponentLittleEndian" />
+    /// </summary>
+    private static bool TryWriteInt(int i, Span<byte> destination, out int bytesWritten,
+        bool isBigEndian)
+    {
+        // Get the bytes.
+        byte[] bytes = BitConverter.GetBytes(i);
+
+        // Check if the requested endianness matches the architecture. If not, reverse the array.
+        if (BitConverter.IsLittleEndian && isBigEndian
+            || !BitConverter.IsLittleEndian && !isBigEndian)
+        {
+            bytes = bytes.Reverse().ToArray();
+        }
+
+        return TryWrite(bytes, destination, out bytesWritten);
     }
 
     #endregion Private methods

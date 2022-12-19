@@ -3,7 +3,7 @@ using AstroMultimedia.Numerics.Integers;
 namespace AstroMultimedia.Numerics.Tests;
 
 [TestClass]
-public class TestPolygonalNumbers
+public class TestPolygonal
 {
     [TestMethod]
     public void TestLargeNumber()
