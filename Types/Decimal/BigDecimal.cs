@@ -3,10 +3,11 @@ using System.Numerics;
 using System.Text.RegularExpressions;
 using AstroMultimedia.Core.Exceptions;
 using AstroMultimedia.Core.Strings;
+using AstroMultimedia.Core.Numbers;
 
 namespace AstroMultimedia.Numerics.Types;
 
-public struct BigDecimal : IFloatingPoint<BigDecimal>, ICloneable, IPowerFunctions<BigDecimal>,
+public partial struct BigDecimal : IFloatingPoint<BigDecimal>, ICloneable, IPowerFunctions<BigDecimal>,
     IRootFunctions<BigDecimal>, IExponentialFunctions<BigDecimal>, ILogarithmicFunctions<BigDecimal>
 {
     #region Constructors
@@ -175,204 +176,11 @@ public struct BigDecimal : IFloatingPoint<BigDecimal>, ICloneable, IPowerFunctio
 
     #endregion Cast operators
 
-    #region Arithmetic operators
-
-    /// <inheritdoc />
-    public static BigDecimal operator +(BigDecimal value) =>
-        (BigDecimal)value.MemberwiseClone();
-
-    /// <inheritdoc />
-    public static BigDecimal operator +(BigDecimal left, BigDecimal right)
-    {
-        (BigDecimal x, BigDecimal y) = Align(left, right);
-        BigDecimal result = new (x.Significand + y.Significand, x.Exponent);
-        return result.MakeCanonical();
-    }
-
-    /// <inheritdoc />
-    public static BigDecimal operator ++(BigDecimal value) =>
-        value + One;
-
-    /// <inheritdoc />
-    public static BigDecimal operator -(BigDecimal value) =>
-        new (-value.Significand, value.Exponent);
-
-    /// <inheritdoc />
-    public static BigDecimal operator -(BigDecimal left, BigDecimal right)
-    {
-        (BigDecimal x, BigDecimal y) = Align(left, right);
-        BigDecimal result = new (x.Significand - y.Significand, x.Exponent);
-        return result.MakeCanonical();
-    }
-
-    /// <inheritdoc />
-    public static BigDecimal operator --(BigDecimal value) =>
-        value - One;
-
-    /// <inheritdoc />
-    public static BigDecimal operator *(BigDecimal left, BigDecimal right)
-    {
-        BigDecimal result =
-            new (left.Significand * right.Significand, left.Exponent + right.Exponent);
-        return result.MakeCanonical();
-    }
-
-    /// <inheritdoc />
-    /// <remarks>
-    /// Computes the division using the Goldschmidt algorithm.
-    /// <see href="https://en.wikipedia.org/wiki/Division_algorithm#Goldschmidt_division" />
-    /// </remarks>
-    public static BigDecimal operator /(BigDecimal left, BigDecimal right)
-    {
-        // Guard.
-        if (right == Zero)
-        {
-            throw new DivideByZeroException("Division by 0 is undefined.");
-        }
-
-        // Optimizations.
-        if (right == One)
-        {
-            return left;
-        }
-        if (left == right)
-        {
-            return One;
-        }
-
-        // Get the operands with the exponents removed. This will enable us to calculate f using the
-        // decimal type.
-        BigDecimal a = new (left.Significand);
-        BigDecimal b = new (right.Significand);
-
-        // Find f, a good initial estimate of the multiplication factor.
-        string strRightSig = right.Significand.ToString();
-        decimal fSigInv = decimal.Parse(strRightSig.Length <= 28 ? strRightSig : strRightSig[..28]);
-        int fExp = strRightSig.Length <= 28 ? 0 : 28 - strRightSig.Length;
-        BigDecimal f = 1m / fSigInv * new BigDecimal(1, fExp);
-
-        // Get 2 as a BigDecimal to avoid doing the conversion every time.
-        BigDecimal two = 2;
-
-        while (true)
-        {
-            a *= f;
-            b *= f;
-
-            // If the right is 1, then n is the result.
-            if (b == One)
-            {
-                break;
-            }
-
-            f = two - b;
-
-            // If d is not 1, but is close to 1, then f can be 1 due to rounding after the
-            // subtraction. If it is, there's no point continuing.
-            if (f == One)
-            {
-                break;
-            }
-        }
-
-        return new BigDecimal(a.Significand, a.Exponent + left.Exponent - right.Exponent);
-    }
-
-    /// <inheritdoc />
-    public static BigDecimal operator %(BigDecimal left, BigDecimal right)
-    {
-        BigDecimal div = Round(left / right, 0, MidpointRounding.ToZero);
-        return left - (div * right);
-    }
-
-    /// <summary>
-    /// Exponentiation operator.
-    /// </summary>
-    public static BigDecimal operator ^(BigDecimal left, BigDecimal right) =>
-        Pow(left, right);
-
-    #endregion Arithmetic operators
-
     #region Miscellaneous methods
 
     /// <inheritdoc />
     public object Clone() =>
         (BigDecimal)MemberwiseClone();
-
-    /// <inheritdoc />
-    public static BigDecimal Abs(BigDecimal value) =>
-        new (BigInteger.Abs(value.Significand), value.Exponent);
-
-    /// <inheritdoc />
-    public static BigDecimal Round(BigDecimal x, int digits = 0,
-        MidpointRounding mode = MidpointRounding.ToEven)
-    {
-        // If it's an integer, no rounding required.
-        if (x.Exponent >= 0)
-        {
-            return x;
-        }
-
-        // Find out how many digits to discard.
-        int nDigitsToCut = -digits - x.Exponent;
-        BigInteger newSig;
-
-        if (nDigitsToCut > 0)
-        {
-            // Separate the digits to keep from the ones to discard.
-            int sign = x.Significand.Sign;
-            BigInteger absSig = BigInteger.Abs(x.Significand);
-            string strAbsSig = absSig.ToString();
-            string strLeft = strAbsSig[..^nDigitsToCut];
-            string strRight = strAbsSig[^nDigitsToCut..];
-            BigInteger newAbsSig = strLeft == "" ? 0 : BigInteger.Parse(strLeft);
-
-            // Round off according to mode.
-            bool increment = false;
-            switch (mode)
-            {
-                case MidpointRounding.ToEven:
-                    increment = strRight[0] >= '5' && (strRight != "5" || newAbsSig % 2 == 1);
-                    break;
-
-                case MidpointRounding.AwayFromZero:
-                    increment = strRight[0] >= '5';
-                    break;
-
-                case MidpointRounding.ToZero:
-                    increment = false;
-                    break;
-
-                case MidpointRounding.ToNegativeInfinity:
-                    increment = sign < 0;
-                    break;
-
-                case MidpointRounding.ToPositiveInfinity:
-                    increment = sign > 0;
-                    break;
-            }
-
-            // Adjust the significand.
-            if (increment)
-            {
-                newAbsSig++;
-            }
-            newSig = sign * newAbsSig;
-        }
-        else
-        {
-            // No rounding necessary.
-            newSig = x.Significand;
-
-            // Add 0s if needed.
-            if (nDigitsToCut < 0)
-            {
-                newSig *= BigInteger.Pow(10, -nDigitsToCut);
-            }
-        }
-
-        return new BigDecimal(newSig, -digits);
-    }
 
     /// <inheritdoc />
     public int GetSignificandByteCount() =>
@@ -630,25 +438,32 @@ public struct BigDecimal : IFloatingPoint<BigDecimal>, ICloneable, IPowerFunctio
     /// <summary>
     /// Format the BigDecimal as a string.
     ///
-    /// <todo>
-    /// The goal is to support the usual standard numeric format strings:
-    /// D, E, F, G, and N.
-    /// </todo>
+    /// Supported formats are the usual: D, E, F, G, N, P, and R.
+    /// <see href="https://learn.microsoft.com/en-us/dotnet/standard/base-types/standard-numeric-format-strings" />
     ///
-    /// The precision specifier is invalid for format "D".
+    /// Although "D" is normally only used by integral types, in this case both the significand and
+    /// exponent will be formatted as integers.
     ///
-    /// An additional code "U" is provided. This is essentially the same as "E" but uses "×10"
-    /// instead of "E" and shows the exponent as superscript. Also, it doesn't use a + sign for
-    /// positive exponents, or left-pad the exponent with 0s.
+    /// An secondary code "U" is provided.
+    ///   - If omitted, the exponent (if present) will be formatted with the usual E[-+]999 format.
+    ///   - If present, the exponent is formatted with "×10" instead of "E" and the exponent digits
+    ///     will be rendered as superscript. Also, a "+" sign is not used for positive exponents.
+    ///
+    /// In either case, unlike with "E" and "G" when used with float, double, and decimal, exponent
+    /// digits are not left-padded with 0s. I don't see this as necessary.
+    ///
+    /// Codes "R" and "D" will produce the same output. However, the Unicode flag is undefined with
+    /// "R", because Parse() doesn't support superscript exponents.
     /// </summary>
-    /// <param name="specifier">The format specifier.</param>
-    /// <param name="provider">The format provider.</param>
+    /// <param name="specifier">The format specifier (default "G").</param>
+    /// <param name="provider">The format provider (default null).</param>
     /// <returns>The formatted string.</returns>
     /// <exception cref="ArgumentInvalidException">If the format specifier is invalid.</exception>
-    public string ToString(string? specifier, IFormatProvider? provider)
+    public string ToString(string? specifier = "E", IFormatProvider? provider = null)
     {
-        // Set the default format parameters.
-        string format = "D";
+        // Set defaults.
+        string format = "G";
+        NumberFormatInfo nfi = provider as NumberFormatInfo ?? NumberFormatInfo.InvariantInfo;
         int? precision = null;
         bool unicode = false;
 
@@ -656,119 +471,80 @@ public struct BigDecimal : IFloatingPoint<BigDecimal>, ICloneable, IPowerFunctio
         if (specifier != null)
         {
             Match match = Regex.Match(specifier,
-                @"^(?<format>[DEFGN])(?<precision>\d*)(?<unicode>U?)$", RegexOptions.IgnoreCase);
+                @"^(?<format>[DEFGNPR])(?<precision>\d*)(?<unicode>U?)$", RegexOptions.IgnoreCase);
 
+            // Check format is valid.
             if (!match.Success)
             {
-                throw new ArgumentInvalidException(nameof(specifier), "Invalid format specifier.");
+                throw new ArgumentInvalidException(nameof(specifier),
+                    $"Invalid format specifier \"{specifier}\".");
             }
 
+            // Extract parts.
             format = match.Groups["format"].Value.ToUpper();
-            precision = (match.Groups["precision"].Value == "")
-                ? null
-                : int.Parse(match.Groups["precision"].Value);
+            string strPrecision = match.Groups["precision"].Value;
+            precision = strPrecision == "" ? null : int.Parse(strPrecision);
             unicode = match.Groups["unicode"].Value.ToUpper() == "U";
-        }
 
-        // Check for special case, G, which will return the more compact of E and F.
-        if (format == "G")
-        {
-            string strFormatE = ToString("E", provider);
-            string strFormatF = ToString("F", provider);
-            return (strFormatE.Length < strFormatF.Length) ? strFormatE : strFormatF;
+            // Check if Unicode flag is present when it shouldn't be.
+            if (unicode && format is "F" or "N" or "P" or "R")
+            {
+                throw new ArgumentInvalidException(nameof(specifier),
+                    $"The Unicode flag is invalid with format \"{format}\".");
+            }
         }
-
-        // Get the NumberFormatInfo to use for special characters.
-        NumberFormatInfo nfi = provider as NumberFormatInfo ?? NumberFormatInfo.InvariantInfo;
 
         // Format the significand.
-        string strSignificand = "";
-        string strAbsSignificand;
-        string strSign;
-        int exponent = Exponent;
+        string strSig = "";
+        int exp = Exponent;
         switch (format)
         {
-            case "D":
-                strSignificand = Significand.ToString($"{format}{precision}", provider);
+            case "D" or "R":
+                strSig = Significand.ToString($"D", provider);
                 break;
 
             case "E":
-                strAbsSignificand = BigInteger.Abs(Significand).ToString();
-                strSign = Significand < 0 ? nfi.NegativeSign : "";
-                exponent = Exponent + strAbsSignificand.Length - 1;
-                strSignificand =
-                    $"{strSign}{strAbsSignificand[..1]}{nfi.NumberDecimalSeparator}{strAbsSignificand[1..]}";
+                string strAbsSig = BigInteger.Abs(Significand).ToString();
+                BigDecimal sig = new (Significand, -strAbsSig.Length + 1);
+                strSig = sig.FormatFixedPoint(format, precision, provider);
+                exp = Exponent - sig.Exponent;
                 break;
 
-            case "F":
-                if (Exponent == 0)
-                {
-                    strSignificand = Significand.ToString("D", provider);
-                }
-                else
-                {
-                    string strZeros;
-                    string strDecimalPart;
-                    if (Exponent < 0)
-                    {
-                        strAbsSignificand = BigInteger.Abs(Significand).ToString();
-                        strSign = Significand < 0 ? nfi.NegativeSign : "";
-                        strZeros = XString.Repeat("0", -Exponent);
-                        strSignificand = $"{strZeros}{strAbsSignificand}";
-                        strSignificand =
-                            $"{strSign}{strSignificand[..1]}{nfi.NumberDecimalSeparator}{strSignificand[1..]}";
+            case "F" or "N":
+                return FormatFixedPoint(format, precision, provider);
 
-                        // Get the decimal part.
-                        int nPrecision = precision ?? nfi.NumberDecimalDigits;
-                        strDecimalPart = strSignificand[1..];
-                        if (strDecimalPart.Length < nPrecision)
-                        {
-                            strDecimalPart +=
-                                XString.Repeat("0", nPrecision - strDecimalPart.Length);
-                        }
-                        else if (strDecimalPart.Length > nPrecision)
-                        {
-                            strDecimalPart = strDecimalPart[..(nPrecision + 1)];
-                        }
+            case "G":
+            {
+                // Return the more compact of E and F.
+                string strUnicode = unicode ? "U" : "";
+                string strFormatE = ToString($"E{precision}{strUnicode}", provider);
+                string strFormatF = FormatFixedPoint("F", precision, provider);
+                return (strFormatE.Length < strFormatF.Length) ? strFormatE : strFormatF;
+            }
 
-                        exponent = 0;
-                    }
-                    else
-                    {
-                        // Exponent > 0
-                        strAbsSignificand = BigInteger.Abs(Significand).ToString();
-                        strSign = Significand < 0 ? "-" : "";
-                        strZeros = XString.Repeat("0", Exponent);
-                        int nPrecision = precision ?? nfi.NumberDecimalDigits;
-                        strDecimalPart = precision == 0
-                            ? ""
-                            : $"{nfi.NumberDecimalSeparator}{XString.Repeat("0", nPrecision)}";
-                        strSignificand = $"{strSign}{strAbsSignificand}{strZeros}{strDecimalPart}";
-                        exponent = 0;
-                    }
-                }
-                break;
-
-            case "N":
-                strSignificand = Significand.ToString("N", provider);
-                break;
+            case "P":
+                return (this * 100).FormatFixedPoint("F", precision, provider) + "%";
         }
 
         // Format the exponent.
-        // For now we just support format D (with precision unspecified), with or without the U
-        // indicating if the exponent part should be displayed using unicode characters.
-        string strExponent = "";
-        if (exponent != 0)
+        string strExp = "";
+        if (format == "E" || format is "D" or "N" or "R" && exp != 0)
         {
-            strExponent = exponent.ToString(format == "N" ? "N" : "D", provider);
-            strExponent = unicode
-                ? $"×10{strExponent.ToSuperscript(1)}"
-                : (exponent < 0)
-                    ? $"E{strExponent}"
-                    : $"E{nfi.PositiveSign}{strExponent}";
+            strExp = XUint.Abs(exp).ToString(format == "N" ? "N" : "D", provider);
+            string strSign;
+            if (unicode)
+            {
+                strSign = exp < 0 ? nfi.NegativeSign : "";
+                strExp = "×10" + $"{strSign}{strExp}".ToSuperscript(1);
+            }
+            else
+            {
+                strSign = exp < 0 ? nfi.NegativeSign : nfi.PositiveSign;
+                strExp = $"E{strSign}{strExp}";
+            }
         }
 
-        return $"{strSignificand}{strExponent}";
+        return $"{strSig}{strExp}";
     }
 
     /// <inheritdoc />
@@ -886,46 +662,6 @@ public struct BigDecimal : IFloatingPoint<BigDecimal>, ICloneable, IPowerFunctio
         TryParse(new string(s), provider, out result);
 
     #endregion Methods for parsing and formatting
-
-    #region Exponentiation and logarithm methods
-
-    public static BigDecimal Pow(BigDecimal x, BigDecimal y) =>
-        throw new NotImplementedException();
-
-    public static BigDecimal Sqrt(BigDecimal x) =>
-        throw new NotImplementedException();
-
-    public static BigDecimal Cbrt(BigDecimal x) =>
-        throw new NotImplementedException();
-
-    public static BigDecimal Hypot(BigDecimal x, BigDecimal y) =>
-        throw new NotImplementedException();
-
-    public static BigDecimal RootN(BigDecimal x, int n) =>
-        throw new NotImplementedException();
-
-    public static BigDecimal Exp(BigDecimal x) =>
-        throw new NotImplementedException();
-
-    public static BigDecimal Exp2(BigDecimal x) =>
-        throw new NotImplementedException();
-
-    public static BigDecimal Exp10(BigDecimal x) =>
-        throw new NotImplementedException();
-
-    public static BigDecimal Log(BigDecimal x) =>
-        throw new NotImplementedException();
-
-    public static BigDecimal Log(BigDecimal x, BigDecimal newBase) =>
-        throw new NotImplementedException();
-
-    public static BigDecimal Log2(BigDecimal x) =>
-        throw new NotImplementedException();
-
-    public static BigDecimal Log10(BigDecimal x) =>
-        throw new NotImplementedException();
-
-    #endregion Exponentiation and logarithm methods
 
     #region Conversion methods
 
@@ -1093,6 +829,68 @@ public struct BigDecimal : IFloatingPoint<BigDecimal>, ICloneable, IPowerFunctio
         }
 
         return TryWrite(bytes, destination, out bytesWritten);
+    }
+
+    /// <summary>
+    /// From a BigDecimal, extract two strings of digits that would appear if the number was written
+    /// in fixed-point format, i.e. without an exponent. Sign is ignored.
+    /// </summary>
+    /// <returns></returns>
+    public (string digitsBefore, string digitsAfter) GetDigitStrings()
+    {
+        string digits = BigInteger.Abs(Significand).ToString();
+
+        if (Exponent == 0)
+        {
+            return (digits, "");
+        }
+
+        if (Exponent > 0)
+        {
+            return (digits + "0".Repeat(Exponent), "");
+        }
+
+        if (-Exponent == digits.Length)
+        {
+            return ("0", digits);
+        }
+
+        if (-Exponent > digits.Length)
+        {
+            return ("0", "0".Repeat(-Exponent - digits.Length) + digits);
+        }
+
+        return (digits[..^(-Exponent)], digits[^(-Exponent)..]);
+    }
+
+    public string FormatFixedPoint(string format, int? precision, IFormatProvider? provider = null)
+    {
+        // Get a NumberFormatInfo we can use for special characters.
+        NumberFormatInfo nfi = provider as NumberFormatInfo ?? NumberFormatInfo.InvariantInfo;
+
+        // Get the parts of the string.
+        BigDecimal bd = precision.HasValue ? Round(this, precision.Value) : this;
+        string strSign = bd.Significand < 0 ? nfi.NegativeSign : "";
+        (string strBefore, string strAfter) = bd.GetDigitStrings();
+
+        // Add group separators if necessary.
+        if (format == "N")
+        {
+            strBefore = BigInteger.Parse(strBefore).ToString("N", provider);
+        }
+
+        // Format the fractional part.
+        if (strAfter != "" || precision is > 0)
+        {
+            // Add trailing 0s only if the precision was specified.
+            if (precision != null && precision.Value > strAfter.Length)
+            {
+                strAfter += "0".Repeat(precision.Value - strAfter.Length);
+            }
+            strAfter = nfi.NumberDecimalSeparator + strAfter;
+        }
+
+        return $"{strSign}{strBefore}{strAfter}";
     }
 
     #endregion Private methods
