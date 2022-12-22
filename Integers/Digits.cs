@@ -5,28 +5,6 @@ namespace AstroMultimedia.Numerics.Integers;
 
 public static class Digits
 {
-    public static int NumDigits(BigInteger n)
-    {
-        // Avoid logarithm of 0.
-        if (n == 0)
-        {
-            return 1;
-        }
-
-        // Avoid logarithm of a negative number.
-        n = BigInteger.Abs(n);
-
-        // Get the logarithm, which will be within 1 of the answer.
-        double log = BigInteger.Log10(n);
-
-        // Account for fuzziness in the double representation of the logarithm.
-        double floor = Floor(log);
-        double round = Round(log);
-        double nDigits = floor + (round > floor && log.FuzzyEquals(round) ? 2 : 1);
-
-        return (int)nDigits;
-    }
-
     public static List<byte> GetDigits(long n) =>
         Abs(n).ToString().Select(c => (byte)(c - '0')).ToList();
 
@@ -62,4 +40,29 @@ public static class Digits
 
     public static BigInteger SumFactorialDigits(BigInteger n) =>
         n.ToString().Select(c => Factorials.Factorial(c - '0')).Sum();
+
+    /// <summary>
+    /// Get the number of digits in the BigInteger.
+    /// </summary>
+    public static int NumDigits(BigInteger n)
+    {
+        // Avoid logarithm of 0.
+        if (n == 0)
+        {
+            return 1;
+        }
+
+        // Avoid logarithm of a negative number.
+        n = BigInteger.Abs(n);
+
+        // Get the logarithm, which will be within 1 of the answer.
+        double log = BigInteger.Log10(n);
+
+        // Account for fuzziness in the double representation of the logarithm.
+        double floor = Floor(log);
+        double round = Round(log);
+        double nDigits = floor + (round > floor && log.FuzzyEquals(round) ? 2 : 1);
+
+        return (int)nDigits;
+    }
 }
