@@ -1,6 +1,6 @@
-using AstroMultimedia.Numerics.Integers;
+using Galaxon.Numerics.Integers;
 
-namespace AstroMultimedia.Numerics.Tests;
+namespace Galaxon.Numerics.Tests;
 
 [TestClass]
 public class TestNumberStrings

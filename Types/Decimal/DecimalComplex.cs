@@ -1,9 +1,9 @@
 using System.Numerics;
-using AstroMultimedia.Core.Numbers;
-using AstroMultimedia.Core.Testing;
+using Galaxon.Core.Numbers;
+using Galaxon.Core.Testing;
 using DecimalMath;
 
-namespace AstroMultimedia.Numerics.Types;
+namespace Galaxon.Numerics.Types;
 
 public struct DecimalComplex
 {
@@ -235,7 +235,7 @@ public struct DecimalComplex
 
     /// <summary>
     /// Natural logarithm of a complex number.
-    /// <see cref="Log(AstroMultimedia.Numerics.Types.DecimalComplex)" />
+    /// <see cref="Log(Galaxon.Numerics.Types.DecimalComplex)" />
     /// <see cref="XDecimal.Log(decimal)" />
     /// <see cref="Math.Log(double)" />
     /// <see cref="Complex.Log(Complex)" />
@@ -266,7 +266,7 @@ public struct DecimalComplex
 
     /// <summary>
     /// Logarithm of a complex number in a specified base.
-    /// <see cref="Log(AstroMultimedia.Numerics.Types.DecimalComplex)" />
+    /// <see cref="Log(Galaxon.Numerics.Types.DecimalComplex)" />
     /// <see cref="XDecimal.Log(decimal, decimal)" />
     /// </summary>
     /// <param name="z">The complex arg.</param>

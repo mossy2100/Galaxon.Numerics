@@ -1,10 +1,10 @@
 ﻿using System.Text;
 using System.Text.RegularExpressions;
-using AstroMultimedia.Core.Exceptions;
-using AstroMultimedia.Core.Numbers;
+using Galaxon.Core.Exceptions;
+using Galaxon.Core.Numbers;
 using DecimalMath;
 
-namespace AstroMultimedia.Numerics.Types;
+namespace Galaxon.Numerics.Types;
 
 /// <summary>
 /// Software implementation of large decimal floating point value.

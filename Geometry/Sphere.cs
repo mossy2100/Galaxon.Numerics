@@ -1,4 +1,4 @@
-﻿namespace AstroMultimedia.Numerics.Geometry;
+﻿namespace Galaxon.Numerics.Geometry;
 
 public class Sphere : Ellipsoid
 {

@@ -1,8 +1,8 @@
 using System.Numerics;
-using AstroMultimedia.Numerics.Types;
+using Galaxon.Numerics.Types;
 using DecimalMath;
 
-namespace AstroMultimedia.Numerics.Tests;
+namespace Galaxon.Numerics.Tests;
 
 [TestClass]
 public class TestDecimalComplexExp

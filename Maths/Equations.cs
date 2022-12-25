@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
-using AstroMultimedia.Core.Exceptions;
+using Galaxon.Core.Exceptions;
 
-namespace AstroMultimedia.Numerics.Maths;
+namespace Galaxon.Numerics.Maths;
 
 public class Equations
 {

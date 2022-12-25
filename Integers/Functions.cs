@@ -1,4 +1,4 @@
-﻿namespace AstroMultimedia.Numerics.Integers;
+﻿namespace Galaxon.Numerics.Integers;
 
 public static class Functions
 {

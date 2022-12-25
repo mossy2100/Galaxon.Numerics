@@ -1,9 +1,9 @@
 ﻿using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
-using AstroMultimedia.Core.Exceptions;
+using Galaxon.Core.Exceptions;
 
-namespace AstroMultimedia.Numerics.Types;
+namespace Galaxon.Numerics.Types;
 
 public enum Flag
 {

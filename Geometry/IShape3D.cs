@@ -1,4 +1,4 @@
-﻿namespace AstroMultimedia.Numerics.Geometry;
+﻿namespace Galaxon.Numerics.Geometry;
 
 public interface IShape3D
 {

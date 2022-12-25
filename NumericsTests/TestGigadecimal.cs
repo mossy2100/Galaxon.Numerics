@@ -1,7 +1,7 @@
-using AstroMultimedia.Core.Numbers;
-using AstroMultimedia.Numerics.Types;
+using Galaxon.Core.Numbers;
+using Galaxon.Numerics.Types;
 
-namespace AstroMultimedia.Numerics.Tests;
+namespace Galaxon.Numerics.Tests;
 
 [TestClass]
 public class TestGigadecimal

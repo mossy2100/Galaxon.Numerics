@@ -4,8 +4,8 @@
         <TargetFramework>net7.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <AssemblyName>AstroMultimedia.Numerics.Types</AssemblyName>
-        <RootNamespace>AstroMultimedia.Numerics.Types</RootNamespace>
+        <AssemblyName>Galaxon.Numerics.Types</AssemblyName>
+        <RootNamespace>Galaxon.Numerics.Types</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -13,17 +13,17 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Reference Include="AstroMultimedia.Core.Exceptions">
-            <HintPath>..\..\Core\Exceptions\bin\Debug\net7.0\AstroMultimedia.Core.Exceptions.dll</HintPath>
+        <Reference Include="Galaxon.Core.Exceptions">
+            <HintPath>..\..\Core\Exceptions\bin\Debug\net7.0\Galaxon.Core.Exceptions.dll</HintPath>
         </Reference>
-        <Reference Include="AstroMultimedia.Core.Numbers">
-            <HintPath>..\..\Core\Numbers\bin\Debug\net7.0\AstroMultimedia.Core.Numbers.dll</HintPath>
+        <Reference Include="Galaxon.Core.Numbers">
+            <HintPath>..\..\Core\Numbers\bin\Debug\net7.0\Galaxon.Core.Numbers.dll</HintPath>
         </Reference>
-        <Reference Include="AstroMultimedia.Core.Testing">
-            <HintPath>..\..\Core\Testing\bin\Debug\net7.0\AstroMultimedia.Core.Testing.dll</HintPath>
+        <Reference Include="Galaxon.Core.Testing">
+            <HintPath>..\..\Core\Testing\bin\Debug\net7.0\Galaxon.Core.Testing.dll</HintPath>
         </Reference>
-        <Reference Include="AstroMultimedia.Core.Strings">
-          <HintPath>..\..\Core\Strings\bin\Debug\net7.0\AstroMultimedia.Core.Strings.dll</HintPath>
+        <Reference Include="Galaxon.Core.Strings">
+          <HintPath>..\..\Core\Strings\bin\Debug\net7.0\Galaxon.Core.Strings.dll</HintPath>
         </Reference>
     </ItemGroup>
 

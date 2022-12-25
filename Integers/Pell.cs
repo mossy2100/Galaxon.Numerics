@@ -1,10 +1,10 @@
 using System.Numerics;
 using System.Runtime.InteropServices;
-using AstroMultimedia.Core.Exceptions;
-using AstroMultimedia.Core.Numbers;
+using Galaxon.Core.Exceptions;
+using Galaxon.Core.Numbers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace AstroMultimedia.Numerics.Integers;
+namespace Galaxon.Numerics.Integers;
 
 /// <summary>
 /// Solution for Pell's Equation.

@@ -1,7 +1,7 @@
 ﻿using System.Text;
-using AstroMultimedia.Numerics.Types;
+using Galaxon.Numerics.Types;
 
-namespace AstroMultimedia.Numerics.Tests;
+namespace Galaxon.Numerics.Tests;
 
 [TestClass]
 public class TestRadixNum

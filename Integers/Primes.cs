@@ -1,7 +1,7 @@
 using System.Numerics;
-using AstroMultimedia.Core.Numbers;
+using Galaxon.Core.Numbers;
 
-namespace AstroMultimedia.Numerics.Integers;
+namespace Galaxon.Numerics.Integers;
 
 public static class Primes
 {

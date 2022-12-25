@@ -1,7 +1,7 @@
 ﻿using System.Text;
-using AstroMultimedia.Core.Exceptions;
+using Galaxon.Core.Exceptions;
 
-namespace AstroMultimedia.Numerics.Types;
+namespace Galaxon.Numerics.Types;
 
 /// <summary>
 /// This class supports numbers with a specified radix, which can be in the range 2..36.

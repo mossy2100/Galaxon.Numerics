@@ -4,8 +4,8 @@
         <TargetFramework>net7.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <AssemblyName>AstroMultimedia.Numerics.Geometry</AssemblyName>
-        <RootNamespace>AstroMultimedia.Numerics.Geometry</RootNamespace>
+        <AssemblyName>Galaxon.Numerics.Geometry</AssemblyName>
+        <RootNamespace>Galaxon.Numerics.Geometry</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -13,8 +13,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Reference Include="AstroMultimedia.Core.Numbers">
-            <HintPath>..\..\Core\Numbers\bin\Debug\net7.0\AstroMultimedia.Core.Numbers.dll</HintPath>
+        <Reference Include="Galaxon.Core.Numbers">
+            <HintPath>..\..\Core\Numbers\bin\Debug\net7.0\Galaxon.Core.Numbers.dll</HintPath>
         </Reference>
     </ItemGroup>
 

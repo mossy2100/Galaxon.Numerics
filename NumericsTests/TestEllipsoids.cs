@@ -1,6 +1,6 @@
-﻿using AstroMultimedia.Numerics.Geometry;
+﻿using Galaxon.Numerics.Geometry;
 
-namespace AstroMultimedia.Numerics.Tests;
+namespace Galaxon.Numerics.Tests;
 
 [TestClass]
 public class TestEllipsoids

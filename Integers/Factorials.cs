@@ -1,7 +1,7 @@
 using System.Numerics;
-using static AstroMultimedia.Numerics.Integers.Functions;
+using static Galaxon.Numerics.Integers.Functions;
 
-namespace AstroMultimedia.Numerics.Integers;
+namespace Galaxon.Numerics.Integers;
 
 /// <summary>
 /// Factorials, permutations, and combinations.

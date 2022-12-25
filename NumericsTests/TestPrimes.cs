@@ -1,8 +1,8 @@
 using System.Diagnostics;
-using AstroMultimedia.Core.Numbers;
-using AstroMultimedia.Numerics.Integers;
+using Galaxon.Core.Numbers;
+using Galaxon.Numerics.Integers;
 
-namespace AstroMultimedia.Numerics.Tests;
+namespace Galaxon.Numerics.Tests;
 
 [TestClass]
 public class TestPrimes

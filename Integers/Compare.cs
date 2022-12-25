@@ -1,6 +1,6 @@
-using AstroMultimedia.Core.Exceptions;
+using Galaxon.Core.Exceptions;
 
-namespace AstroMultimedia.Numerics.Integers;
+namespace Galaxon.Numerics.Integers;
 
 public static class Compare
 {

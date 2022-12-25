@@ -1,4 +1,4 @@
-using AstroMultimedia.Numerics.Integers;
+using Galaxon.Numerics.Integers;
 
 namespace AstroMtimedia.Numerics.Tests;
 

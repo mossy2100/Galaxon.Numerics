@@ -1,8 +1,8 @@
 using System.Numerics;
 using System.Text;
-using AstroMultimedia.Core.Strings;
+using Galaxon.Core.Strings;
 
-namespace AstroMultimedia.Numerics.Integers;
+namespace Galaxon.Numerics.Integers;
 
 public static class NumberStrings
 {

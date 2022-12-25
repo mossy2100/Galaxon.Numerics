@@ -1,7 +1,7 @@
-using AstroMultimedia.Core.Exceptions;
-using AstroMultimedia.Core.Numbers;
+using Galaxon.Core.Exceptions;
+using Galaxon.Core.Numbers;
 
-namespace AstroMultimedia.Numerics.Integers;
+namespace Galaxon.Numerics.Integers;
 
 public static class Grids
 {

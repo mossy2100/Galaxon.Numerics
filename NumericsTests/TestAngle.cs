@@ -1,6 +1,6 @@
-﻿using static AstroMultimedia.Numerics.Geometry.Angle;
+﻿using static Galaxon.Numerics.Geometry.Angle;
 
-namespace AstroMultimedia.Numerics.Tests;
+namespace Galaxon.Numerics.Tests;
 
 [TestClass]
 public class TestAngle

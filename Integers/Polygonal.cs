@@ -1,4 +1,4 @@
-namespace AstroMultimedia.Numerics.Integers;
+namespace Galaxon.Numerics.Integers;
 
 /// <summary>
 ///     <see href="https://en.wikipedia.org/wiki/Polygonal_number" />

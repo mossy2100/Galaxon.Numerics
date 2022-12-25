@@ -4,13 +4,13 @@
         <TargetFramework>net7.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <AssemblyName>AstroMultimedia.Numerics.Maths</AssemblyName>
-        <RootNamespace>AstroMultimedia.Numerics.Maths</RootNamespace>
+        <AssemblyName>Galaxon.Numerics.Maths</AssemblyName>
+        <RootNamespace>Galaxon.Numerics.Maths</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-        <Reference Include="AstroMultimedia.Core.Exceptions">
-            <HintPath>..\..\Core\Exceptions\bin\Debug\net7.0\AstroMultimedia.Core.Exceptions.dll</HintPath>
+        <Reference Include="Galaxon.Core.Exceptions">
+            <HintPath>..\..\Core\Exceptions\bin\Debug\net7.0\Galaxon.Core.Exceptions.dll</HintPath>
         </Reference>
     </ItemGroup>
 

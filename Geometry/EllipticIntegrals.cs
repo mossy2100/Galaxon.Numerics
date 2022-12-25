@@ -1,6 +1,6 @@
-﻿using AstroMultimedia.Numerics.Integers;
+﻿using Galaxon.Numerics.Integers;
 
-namespace AstroMultimedia.Numerics.Geometry;
+namespace Galaxon.Numerics.Geometry;
 
 public static class EllipticIntegrals
 {

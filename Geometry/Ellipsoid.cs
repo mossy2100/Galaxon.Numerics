@@ -1,6 +1,6 @@
-﻿using AstroMultimedia.Core.Numbers;
+﻿using Galaxon.Core.Numbers;
 
-namespace AstroMultimedia.Numerics.Geometry;
+namespace Galaxon.Numerics.Geometry;
 
 public class Ellipsoid : IShape3D
 {
