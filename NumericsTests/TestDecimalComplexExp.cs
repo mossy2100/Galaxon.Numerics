@@ -92,7 +92,7 @@ public class TestDecimalComplexExp
     [TestMethod]
     [ExpectedException(typeof(ArgumentOutOfRangeException))]
     public void LnThrowsExceptionIfArgZero() =>
-        DecimalComplex.Ln(DecimalComplex.Zero);
+        DecimalComplex.Log(DecimalComplex.Zero);
 
     [TestMethod]
     public void DecimalComplexLnMatchesComplexLog()
@@ -103,12 +103,12 @@ public class TestDecimalComplexExp
         // 1
         dc = DecimalComplex.One;
         c = Complex.One;
-        DecimalComplex.AssertAreEqual(Complex.Log(c), DecimalComplex.Ln(dc));
+        DecimalComplex.AssertAreEqual(Complex.Log(c), DecimalComplex.Log(dc));
 
         // i
         dc = DecimalComplex.ImaginaryOne;
         c = Complex.ImaginaryOne;
-        DecimalComplex.AssertAreEqual(Complex.Log(c), DecimalComplex.Ln(dc));
+        DecimalComplex.AssertAreEqual(Complex.Log(c), DecimalComplex.Log(dc));
 
         // -1
         dc = -DecimalComplex.One;
@@ -118,43 +118,43 @@ public class TestDecimalComplexExp
         // return -π instead of π for the phase, thus causing Log() to return
         // the wrong result.
         c = new Complex(-1, 0);
-        DecimalComplex.AssertAreEqual(Complex.Log(c), DecimalComplex.Ln(dc));
+        DecimalComplex.AssertAreEqual(Complex.Log(c), DecimalComplex.Log(dc));
 
         // -i
         dc = -DecimalComplex.ImaginaryOne;
         // Cannot use -Complex.ImaginaryOne; See above note.
         c = new Complex(0, -1);
-        DecimalComplex.AssertAreEqual(Complex.Log(c), DecimalComplex.Ln(dc));
+        DecimalComplex.AssertAreEqual(Complex.Log(c), DecimalComplex.Log(dc));
 
         // 1+i
         dc = new DecimalComplex(1, 1);
         c = new Complex(1, 1);
-        DecimalComplex.AssertAreEqual(Complex.Log(c), DecimalComplex.Ln(dc));
+        DecimalComplex.AssertAreEqual(Complex.Log(c), DecimalComplex.Log(dc));
 
         // 1-i
         dc = new DecimalComplex(1, -1);
         c = new Complex(1, -1);
-        DecimalComplex.AssertAreEqual(Complex.Log(c), DecimalComplex.Ln(dc));
+        DecimalComplex.AssertAreEqual(Complex.Log(c), DecimalComplex.Log(dc));
 
         // 3.14+2.81i
         dc = new DecimalComplex(3.14m, 2.81m);
         c = new Complex(3.14, 2.81);
-        DecimalComplex.AssertAreEqual(Complex.Log(c), DecimalComplex.Ln(dc));
+        DecimalComplex.AssertAreEqual(Complex.Log(c), DecimalComplex.Log(dc));
 
         // 3.14-2.81i
         dc = new DecimalComplex(3.14m, -2.81m);
         c = new Complex(3.14, -2.81);
-        DecimalComplex.AssertAreEqual(Complex.Log(c), DecimalComplex.Ln(dc));
+        DecimalComplex.AssertAreEqual(Complex.Log(c), DecimalComplex.Log(dc));
 
         // -3.14+2.81i
         dc = new DecimalComplex(-3.14m, 2.81m);
         c = new Complex(-3.14, 2.81);
-        DecimalComplex.AssertAreEqual(Complex.Log(c), DecimalComplex.Ln(dc));
+        DecimalComplex.AssertAreEqual(Complex.Log(c), DecimalComplex.Log(dc));
 
         // -3.14-2.81i
         dc = new DecimalComplex(-3.14m, -2.81m);
         c = new Complex(-3.14, -2.81);
-        DecimalComplex.AssertAreEqual(Complex.Log(c), DecimalComplex.Ln(dc));
+        DecimalComplex.AssertAreEqual(Complex.Log(c), DecimalComplex.Log(dc));
     }
 
     [TestMethod]

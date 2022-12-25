@@ -235,16 +235,15 @@ public struct DecimalComplex
 
     /// <summary>
     /// Natural logarithm of a complex number.
-    /// I prefer this method name, but Log() is also provided as an alias.
-    /// <see cref="DecimalComplex.Ln(DecimalComplex)" />
-    /// <see cref="XDecimal.Ln(decimal)" />
+    /// <see cref="Log(AstroMultimedia.Numerics.Types.DecimalComplex)" />
+    /// <see cref="XDecimal.Log(decimal)" />
     /// <see cref="Math.Log(double)" />
     /// <see cref="Complex.Log(Complex)" />
     /// </summary>
     /// <param name="z">A complex number.</param>
     /// <returns>The natural logarithm of the given value.</returns>
     /// <exception cref="ArgumentOutOfRangeException">If z == 0.</exception>
-    public static DecimalComplex Ln(DecimalComplex z)
+    public static DecimalComplex Log(DecimalComplex z)
     {
         if (z.Imaginary == 0)
         {
@@ -255,15 +254,53 @@ public struct DecimalComplex
                     "Logarithm of 0 is undefined."),
 
                 // ln(x) = ln(|x|) + πi, for x < 0
-                < 0 => new DecimalComplex(XDecimal.Ln(-z.Real), DecimalEx.Pi),
+                < 0 => new DecimalComplex(XDecimal.Log(-z.Real), DecimalEx.Pi),
 
                 // For positive real values, pass to the decimal method.
-                _ => XDecimal.Ln(z.Real)
+                _ => XDecimal.Log(z.Real)
             };
         }
 
-        return new DecimalComplex(XDecimal.Ln(z.Magnitude), z.Phase);
+        return new DecimalComplex(XDecimal.Log(z.Magnitude), z.Phase);
     }
+
+    /// <summary>
+    /// Logarithm of a complex number in a specified base.
+    /// <see cref="Log(AstroMultimedia.Numerics.Types.DecimalComplex)" />
+    /// <see cref="XDecimal.Log(decimal, decimal)" />
+    /// </summary>
+    /// <param name="z">The complex arg.</param>
+    /// <param name="b">The base.</param>
+    /// <returns>The logarithm of z in base b.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">If the complex value is 0.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// If the base is less than or equal to 0, or equal to 1.
+    /// </exception>
+    public static DecimalComplex Log(DecimalComplex z, decimal b) =>
+        b switch
+        {
+            1 => throw new ArgumentOutOfRangeException(nameof(b),
+                "Logarithms are undefined for a base of 1."),
+            _ => Log(z) / XDecimal.Log(b)
+        };
+
+    /// <summary>
+    /// Logarithm of a complex number in base 2.
+    /// <see cref="XDecimal.Log2" />
+    /// </summary>
+    /// <param name="z">The complex arg.</param>
+    /// <returns>The logarithm of z in base 2.</returns>
+    public static DecimalComplex Log2(DecimalComplex z) =>
+        Log(z, 2);
+
+    /// <summary>
+    /// Logarithm of a complex number in base 10.
+    /// <see cref="XDecimal.Log10" />
+    /// </summary>
+    /// <param name="z">The complex arg.</param>
+    /// <returns>The logarithm of z in base 10.</returns>
+    public static DecimalComplex Log10(DecimalComplex z) =>
+        Log(z, 10);
 
     public static DecimalComplex Exp(DecimalComplex z)
     {
@@ -306,24 +343,22 @@ public struct DecimalComplex
     }
 
     /// <summary>
-    /// Logarithm of a complex number in a specified base.
-    /// <see cref="DecimalComplex.Ln(DecimalComplex)" />
-    /// <see cref="XDecimal.Log(decimal, decimal)" />
+    /// Calculate 2 raised to a complex power.
+    /// <see cref="XDecimal.Exp2" />
     /// </summary>
-    /// <param name="z">The complex arg.</param>
-    /// <param name="b">The base.</param>
-    /// <returns>The logarithm of z in base b.</returns>
-    /// <exception cref="ArgumentOutOfRangeException">If the complex value is 0.</exception>
-    /// <exception cref="ArgumentOutOfRangeException">
-    /// If the base is less than or equal to 0, or equal to 1.
-    /// </exception>
-    public static DecimalComplex Log(DecimalComplex z, decimal b) =>
-        b switch
-        {
-            1 => throw new ArgumentOutOfRangeException(nameof(b),
-                "Logarithms are undefined for a base of 1."),
-            _ => Ln(z) / XDecimal.Ln(b)
-        };
+    /// <param name="z">A complex value.</param>
+    /// <returns>2^z</returns>
+    public static DecimalComplex Exp2(DecimalComplex z) =>
+        2 ^ z;
+
+    /// <summary>
+    /// Calculate 10 raised to a complex power.
+    /// <see cref="XDecimal.Exp10" />
+    /// </summary>
+    /// <param name="z">A complex value.</param>
+    /// <returns>10^z</returns>
+    public static DecimalComplex Exp10(DecimalComplex z) =>
+        10 ^ z;
 
     /// <summary>
     /// Complex exponentiation.
@@ -393,7 +428,7 @@ public struct DecimalComplex
         }
 
         // Use formula for principal value.
-        return Exp(w * Ln(z));
+        return Exp(w * Log(z));
     }
 
     /// <summary>
@@ -408,42 +443,6 @@ public struct DecimalComplex
     /// </exception>
     public static DecimalComplex operator ^(DecimalComplex z, DecimalComplex w) =>
         Pow(z, w);
-
-    /// <summary>
-    /// Logarithm of a complex number in base 10.
-    /// <see cref="XDecimal.Log10" />
-    /// </summary>
-    /// <param name="z">The complex arg.</param>
-    /// <returns>The logarithm of z in base 10.</returns>
-    public static DecimalComplex Log10(DecimalComplex z) =>
-        Log(z, 10);
-
-    /// <summary>
-    /// Calculate 10 raised to a complex power.
-    /// <see cref="XDecimal.Pow10" />
-    /// </summary>
-    /// <param name="z">A complex value.</param>
-    /// <returns>10^z</returns>
-    public static DecimalComplex Pow10(DecimalComplex z) =>
-        10 ^ z;
-
-    /// <summary>
-    /// Logarithm of a complex number in base 2.
-    /// <see cref="XDecimal.Log2" />
-    /// </summary>
-    /// <param name="z">The complex arg.</param>
-    /// <returns>The logarithm of z in base 2.</returns>
-    public static DecimalComplex Log2(DecimalComplex z) =>
-        Log(z, 2);
-
-    /// <summary>
-    /// Calculate 2 raised to a complex power.
-    /// <see cref="XDecimal.Pow2" />
-    /// </summary>
-    /// <param name="z">A complex value.</param>
-    /// <returns>2^z</returns>
-    public static DecimalComplex Pow2(DecimalComplex z) =>
-        2 ^ z;
 
     #endregion Exponentiation methods
 
@@ -482,7 +481,7 @@ public struct DecimalComplex
     /// <param name="z"></param>
     /// <returns></returns>
     public static DecimalComplex Asin(DecimalComplex z) =>
-        I * Ln(Sqrt(1 - z * z) - I * z);
+        I * Log(Sqrt(1 - z * z) - I * z);
 
     /// <summary>
     ///     <see href="https://en.wikipedia.org/wiki/Inverse_trigonometric_functions#Logarithmic_forms" />
@@ -490,7 +489,7 @@ public struct DecimalComplex
     /// <param name="z"></param>
     /// <returns></returns>
     public static DecimalComplex Acos(DecimalComplex z) =>
-        -I * Ln(z + I * Sqrt(1 - z * z));
+        -I * Log(z + I * Sqrt(1 - z * z));
 
     /// <summary>
     ///     <see href="https://en.wikipedia.org/wiki/Inverse_trigonometric_functions#Logarithmic_forms" />
@@ -498,7 +497,7 @@ public struct DecimalComplex
     /// <param name="z"></param>
     /// <returns></returns>
     public static DecimalComplex Atan(DecimalComplex z) =>
-        -I / 2 * Ln((I - z) / (I + z));
+        -I / 2 * Log((I - z) / (I + z));
 
     public static DecimalComplex Sinh(DecimalComplex z)
     {

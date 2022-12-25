@@ -175,18 +175,4 @@ public static class NumberStrings
             current++;
         }
     }
-
-    /// <summary>
-    /// Format a number as a string of superscript characters.
-    /// </summary>
-    public static string ToSuperscript<T>(this T n, int invalidCharActionCode = 0)
-        where T : INumberBase<T> =>
-        string.Format(new SuperAndSubscriptFormatter(), $"{{0:sup{invalidCharActionCode}}}", n);
-
-    /// <summary>
-    /// Format a number as a string of subscript characters.
-    /// </summary>
-    public static string ToSubscript<T>(this T n, int invalidCharActionCode = 0)
-        where T : INumberBase<T> =>
-        string.Format(new SuperAndSubscriptFormatter(), $"{{0:sup{invalidCharActionCode}}}", n);
 }

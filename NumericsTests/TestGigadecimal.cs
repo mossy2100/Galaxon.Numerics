@@ -701,7 +701,7 @@ public class TestGigadecimal
                 gdSum = gd1 + gd2;
                 // decimal diff = Abs(mSum - (decimal)gdSum);
                 // Check if they agree up to the second-least significant digit.
-                Assert.AreEqual(mSum, (decimal)gdSum, XDecimal.Pow10(scale - 26));
+                Assert.AreEqual(mSum, (decimal)gdSum, XDecimal.Exp10(scale - 26));
                 // Console.WriteLine($"Difference = {diff}");
             }
             catch (OverflowException)

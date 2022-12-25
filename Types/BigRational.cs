@@ -3,6 +3,7 @@ using System.Numerics;
 using System.Text.RegularExpressions;
 using AstroMultimedia.Core.Exceptions;
 using AstroMultimedia.Core.Numbers;
+using AstroMultimedia.Core.Strings;
 using AstroMultimedia.Numerics.Integers;
 
 namespace AstroMultimedia.Numerics.Types;
@@ -36,21 +37,20 @@ public struct BigRational : IEquatable<BigRational>, IFormattable, IParsable<Big
     /// <exception cref="ArgumentOutOfRangeException"></exception>
     public BigRational(BigInteger num, BigInteger den, bool reduce = false)
     {
-        // A rational with a 0 den is undefined.
+        // A rational with a 0 denominator is undefined.
         if (den == 0)
         {
-            throw new ArgumentOutOfRangeException(nameof(den),
-                "The den cannot be 0.");
+            throw new ArgumentOutOfRangeException(nameof(den), "A rational with a denominator of 0 is undefined.");
         }
 
-        // If the num is 0, set the den to 1 so it matches Zero.
+        // If the numerator is 0, set the denominator to 1 so it matches Zero.
         if (num == 0)
         {
             den = 1;
         }
         else if (den < 0)
         {
-            // Ensure the den is positive.
+            // Ensure the denominator is positive.
             num = -num;
             den = -den;
         }
@@ -136,7 +136,7 @@ public struct BigRational : IEquatable<BigRational>, IFormattable, IParsable<Big
             format = "U";
         }
 
-        // If the den is 1 then just return the num as a string.
+        // If the denominator is 1 then just return the numerator as a string.
         if (Denominator == 1)
         {
             return Numerator.ToString();
@@ -273,7 +273,7 @@ public struct BigRational : IEquatable<BigRational>, IFormattable, IParsable<Big
         (BigRational)MemberwiseClone();
 
     /// <summary>
-    /// Find a num and den that fits the given real value within a given tolerance.
+    /// Find a numerator and denominator that fits the given real value within a given tolerance.
     /// Warning: this can be slow.
     /// </summary>
     public static BigRational Find(double x, double tolerance = XDouble.Delta)
@@ -294,12 +294,12 @@ public struct BigRational : IEquatable<BigRational>, IFormattable, IParsable<Big
         // Make the value positive.
         x = Abs(x);
 
-        // Start with a den of 1 and increment until we find a good match.
+        // Start with a denominator of 1 and increment until we find a good match.
         BigInteger den = 1;
         double nRounded;
         while (true)
         {
-            // Calculate the num for this den, and see if it's an integer (or very
+            // Calculate the numerator for this denominator, and see if it's an integer (or very
             // close to).
             double num = x * (double)den;
             nRounded = Round(num);
@@ -316,7 +316,7 @@ public struct BigRational : IEquatable<BigRational>, IFormattable, IParsable<Big
     }
 
     /// <summary>
-    /// Reduce a rational given as a num and den.
+    /// Reduce a rational given as a numerator and denominator.
     /// I've made this version, which doesn't receive or return a BigRational object, so it can be
     /// called from the constructor.
     /// </summary>
@@ -326,7 +326,7 @@ public struct BigRational : IEquatable<BigRational>, IFormattable, IParsable<Big
         if (den == 0)
         {
             throw new ArgumentOutOfRangeException(nameof(den),
-                "The den cannot be 0.");
+                "The denominator cannot be 0.");
         }
 
         // Optimizations.
@@ -396,7 +396,7 @@ public struct BigRational : IEquatable<BigRational>, IFormattable, IParsable<Big
                 return Reciprocal(br);
         }
 
-        // Raise the num and den to the power of Abs(i).
+        // Raise the numerator and denominator to the power of Abs(i).
         int sign = Sign(exp);
         exp = Abs(exp);
         BigInteger num = BigInteger.Pow(br.Numerator, exp);
