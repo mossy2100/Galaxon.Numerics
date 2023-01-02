@@ -331,7 +331,7 @@ public class RadixNumber : IComparable<RadixNumber>, IEquatable<RadixNumber>, IC
             return value.ToString();
         }
 
-        // Use the internal method for other common radixes; should be faster.
+        // Use the internal method for other common radixes, as this should be faster.
         if (CommonRadixes.Contains(radix))
         {
             return Convert.ToString((long)value, radix).ToUpper();
