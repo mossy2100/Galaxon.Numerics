@@ -439,7 +439,7 @@ public static class Primes
     #region Coprime methods
 
     public static bool AreCoprime(ulong n1, ulong n2) =>
-        Divisors.GreatestCommonDivisor(n1, n2) == 1;
+        XBigInteger.GreatestCommonDivisor(n1, n2) == 1;
 
     /// <summary>
     /// Count how many numbers are coprime to, and less than, a given number.
