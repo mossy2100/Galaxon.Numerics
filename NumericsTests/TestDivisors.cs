@@ -1,6 +1,6 @@
 using Galaxon.Numerics.Integers;
 
-namespace AstroMtimedia.Numerics.Tests;
+namespace Galaxon.Numerics.Tests;
 
 [TestClass]
 public class TestDivisors

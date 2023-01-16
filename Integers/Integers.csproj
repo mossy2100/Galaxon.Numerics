@@ -27,10 +27,25 @@
         <Reference Include="Galaxon.Core.Strings">
           <HintPath>..\..\Core\Strings\bin\Debug\net7.0\Galaxon.Core.Strings.dll</HintPath>
         </Reference>
+        <Reference Include="Galaxon.Numerics.BigDecimal">
+          <HintPath>..\..\BigDecimal\BigDecimal\bin\Debug\net7.0\Galaxon.Numerics.BigDecimal.dll</HintPath>
+        </Reference>
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Maths\Maths.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="old\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="old\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="old\**" />
     </ItemGroup>
 
 </Project>

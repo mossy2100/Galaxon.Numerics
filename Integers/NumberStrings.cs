@@ -1,6 +1,4 @@
-using System.Numerics;
 using System.Text;
-using Galaxon.Core.Strings;
 
 namespace Galaxon.Numerics.Integers;
 
@@ -147,10 +145,9 @@ public static class NumberStrings
 
             // Check for a repeat of this quotient. If we've seen it before, the pattern of digits
             // will repeat, indicating a reptend.
-            if (seen.ContainsKey((n, d)))
+            if (seen.TryGetValue((n, d), out int reptendStart))
             {
                 // Found a repeat.
-                int reptendStart = seen[(n, d)];
                 int reptendLen = current - reptendStart;
                 string decimalString = decimals.ToString();
                 reptend = decimalString[^reptendLen..];

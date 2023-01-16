@@ -5,8 +5,16 @@ namespace Galaxon.Numerics.Types;
 
 /// <summary>
 /// This class supports numbers with a specified radix, which can be in the range 2..36.
-/// In addition to the common bases of 2, 8, and 16, support is also provided for base 4
-/// (quaternary) and base 32, which uses triacontakaidecimal encoding, also known as base32hex.
+///
+/// Additional support is provided in the form of "To" and "From" methods for:
+///   - binary (base 2)
+///   - quaternary (base 4)
+///   - octal (base 8)
+///   - decimal (base 10)
+///   - duodecimal (base 12)
+///   - hexadecimal (base 16)
+///   - vigesimal (base 20)
+///   - triacontakaidecimal (base 32)
 /// </summary>
 public class RadixNumber : IComparable<RadixNumber>, IEquatable<RadixNumber>, ICloneable
 {
@@ -25,6 +33,8 @@ public class RadixNumber : IComparable<RadixNumber>, IEquatable<RadixNumber>, IC
     /// <summary>
     /// Valid digits as a string, supporting up to radix 36. These are the same digits used by Java
     /// and JavaScript.
+    /// Lower-case letters are also valid, but that's taken care of by changing the case of input
+    /// and output strings as needed.
     /// </summary>
     public const string Digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
@@ -89,9 +99,7 @@ public class RadixNumber : IComparable<RadixNumber>, IEquatable<RadixNumber>, IC
 
     #endregion Constructors
 
-    #region Methods
-
-    #region InstanceMethods
+    #region Instance methods
 
     /// <summary>Convert a RadixNumber to a string.</summary>
     public override string ToString() =>
@@ -154,6 +162,24 @@ public class RadixNumber : IComparable<RadixNumber>, IEquatable<RadixNumber>, IC
         return result;
     }
 
+    /// <summary>Converts to duodecimal string representation.</summary>
+    /// <param name="includePrefix">If to include the "0z" prefix.</param>
+    /// <param name="upperCase">If the letter digits should be uppercase.</param>
+    /// <returns>The value as a string of duodecimal digits.</returns>
+    public string ToDuoString(bool includePrefix = false, bool upperCase = true)
+    {
+        string result = ToRadix(12).ToString();
+        if (!upperCase)
+        {
+            result = result.ToLower();
+        }
+        if (includePrefix)
+        {
+            result = "0z" + result;
+        }
+        return result;
+    }
+
     /// <summary>Converts to hexadecimal string representation.</summary>
     /// <param name="includePrefix">If to include the "0x" prefix.</param>
     /// <param name="upperCase">If the letter digits should be uppercase.</param>
@@ -168,6 +194,24 @@ public class RadixNumber : IComparable<RadixNumber>, IEquatable<RadixNumber>, IC
         if (includePrefix)
         {
             result = "0x" + result;
+        }
+        return result;
+    }
+
+    /// <summary>Converts to vigesimal string representation.</summary>
+    /// <param name="includePrefix">If to include the "0v" prefix.</param>
+    /// <param name="upperCase">If the letter digits should be uppercase.</param>
+    /// <returns>The value as a string of vigesimal digits.</returns>
+    public string ToVigString(bool includePrefix = false, bool upperCase = true)
+    {
+        string result = ToRadix(20).ToString();
+        if (!upperCase)
+        {
+            result = result.ToLower();
+        }
+        if (includePrefix)
+        {
+            result = "0v" + result;
         }
         return result;
     }
@@ -229,9 +273,9 @@ public class RadixNumber : IComparable<RadixNumber>, IEquatable<RadixNumber>, IC
     public object Clone() =>
         MemberwiseClone();
 
-    #endregion InstanceMethods
+    #endregion Instance methods
 
-    #region StaticMethods
+    #region Static methods
 
     /// <summary>
     /// Checks if the provided radix is valid for use by this class.
@@ -318,7 +362,7 @@ public class RadixNumber : IComparable<RadixNumber>, IEquatable<RadixNumber>, IC
         return value;
     }
 
-    /// <summary>Convert a n unsigned long to a string of digits in the specified radix.</summary>
+    /// <summary>Convert an unsigned long to a string of digits in the specified radix.</summary>
     /// <exception cref="ArgumentOutOfRangeException">If the radix is invalid.</exception>
     public static string ValueToDigits(ulong value, sbyte radix = 10)
     {
@@ -376,21 +420,25 @@ public class RadixNumber : IComparable<RadixNumber>, IEquatable<RadixNumber>, IC
     public static RadixNumber FromDecString(string digits) =>
         new (digits);
 
+    /// <summary>Convert a string of duodecimal digits into a RadixNum.</summary>
+    public static RadixNumber FromDuoString(string digits) =>
+        new (digits, 12);
+
     /// <summary>Convert a string of hexadecimal digits into a RadixNum.</summary>
     public static RadixNumber FromHexString(string digits) =>
         new (digits, 16);
+
+    /// <summary>Convert a string of vigesimal digits into a RadixNum.</summary>
+    public static RadixNumber FromVigString(string digits) =>
+        new (digits, 20);
 
     /// <summary>Convert a string of triacontakaidecimal digits into a RadixNum.</summary>
     public static RadixNumber FromTriaString(string digits) =>
         new (digits, 32);
 
-    #endregion StaticMethods
+    #endregion Static methods
 
-    #endregion Methods
-
-    #region Operators
-
-    #region ComparisonOperators
+    #region Comparison operators
 
     /// <summary>Overload == operator.</summary>
     public static bool operator ==(RadixNumber radixNum, RadixNumber radixNum2) =>
@@ -416,9 +464,9 @@ public class RadixNumber : IComparable<RadixNumber>, IEquatable<RadixNumber>, IC
     public static bool operator >=(RadixNumber radixNum, RadixNumber radixNum2) =>
         radixNum.Value >= radixNum2.Value;
 
-    #endregion ComparisonOperators
+    #endregion Comparison operators
 
-    #region ArithmeticOperators
+    #region Arithmetic operators
 
     /// <summary>Overload + operator.</summary>
     /// <exception cref="InvalidOperationException">
@@ -452,9 +500,9 @@ public class RadixNumber : IComparable<RadixNumber>, IEquatable<RadixNumber>, IC
         return new RadixNumber(checked(radixNum.Value - radixNum2.Value), radixNum.Radix);
     }
 
-    #endregion ArithmeticOperators
+    #endregion Arithmetic operators
 
-    #region BitwiseOperators
+    #region Bitwise operators
 
     /// <summary>Overload bitwise NOT (~) operator.</summary>
     public static RadixNumber operator ~(RadixNumber radixNum) =>
@@ -482,15 +530,13 @@ public class RadixNumber : IComparable<RadixNumber>, IEquatable<RadixNumber>, IC
         return new RadixNumber(radixNum.Value | radixNum2.Value, radixNum.Radix);
     }
 
-    #endregion BitwiseOperators
+    #endregion Bitwise operators
 
-    #region ConversionOperators
+    #region Conversion operators
 
     /// <summary>Implicit conversion to ulong.</summary>
     public static implicit operator ulong(RadixNumber radixNum) =>
         radixNum.Value;
 
-    #endregion ConversionOperators
-
-    #endregion Operators
+    #endregion Conversion operators
 }

@@ -53,7 +53,7 @@ public class TestPrimes
         Trace.WriteLine($"Time taken: {t} ticks.");
     }
 
-    public void CompareIsPrimeMethods(ulong n)
+    public static void CompareIsPrimeMethods(ulong n)
     {
         // Trace.WriteLine("");
 

@@ -28,7 +28,19 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Integers\Integers.csproj" />
+      <ProjectReference Include="..\Integers\Integers.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="old\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="old\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="old\**" />
     </ItemGroup>
 
 </Project>

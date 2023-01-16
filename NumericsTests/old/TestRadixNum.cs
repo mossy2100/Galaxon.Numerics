@@ -110,10 +110,20 @@ public class TestRadixNum
             RadixNumber qDec = RadixNumber.FromDecString(dec);
             Assert.AreEqual(q, qDec);
 
+            string duo = q.ToDuoString();
+            TestContext.WriteLine(duo);
+            RadixNumber qDuo = RadixNumber.FromDuoString(duo);
+            Assert.AreEqual(q, qDuo);
+
             string hex = q.ToHexString();
             TestContext.WriteLine(hex);
             RadixNumber qHex = RadixNumber.FromHexString(hex);
             Assert.AreEqual(q, qHex);
+
+            string vig = q.ToVigString();
+            TestContext.WriteLine(vig);
+            RadixNumber qVig = RadixNumber.FromVigString(vig);
+            Assert.AreEqual(q, qVig);
 
             string tria = q.ToTriaString();
             TestContext.WriteLine(tria);

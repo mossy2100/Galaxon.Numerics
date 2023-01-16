@@ -19,8 +19,12 @@ public static class Divisors
 
         List<BigInteger> divisors = new ();
 
+        // Get the square root of the argument, then cast to BigInteger to truncate the result.
+        BigDecimal.MaxSigFigs = Min(n.NumDigits() + 1, 30);
+        BigInteger sqrt = (BigInteger)BigDecimal.Sqrt(n);
+
         // Look for divisors up to the square root.
-        for (BigInteger i = 1; i <= XBigInteger.Sqrt(n); i++)
+        for (BigInteger i = 1; i <= sqrt; i++)
         {
             if (n % i != 0)
             {
@@ -53,70 +57,12 @@ public static class Divisors
         GetDivisors(n).Sum();
 
     /// <summary>
-    /// Cache for GreatestCommonDivisor().
-    /// </summary>
-    private static readonly Dictionary<string, BigInteger> s_gcdCache = new ();
-
-    /// <summary>
-    /// Determine the greatest common divisor of two integers.
-    /// Synonyms: greatest common factor, highest common factor.
-    /// </summary>
-    public static BigInteger GreatestCommonDivisor(BigInteger a, BigInteger b)
-    {
-        // Make a and b non-negative, since the result will be the same for negative values.
-        a = BigInteger.Abs(a);
-        b = BigInteger.Abs(b);
-
-        // Make a < b, to reduce the cache size by half and simplify terminating conditions.
-        if (a > b)
-        {
-            (a, b) = (b, a);
-        }
-
-        // Optimization/terminating conditions.
-        if (a == b || a == 0)
-        {
-            return b;
-        }
-        if (a == 1)
-        {
-            return 1;
-        }
-
-        // Check the cache.
-        string key = $"{a}/{b}";
-        if (s_gcdCache.ContainsKey(key))
-        {
-            return s_gcdCache[key];
-        }
-
-        // Get the result by recursion.
-        BigInteger gcd = GreatestCommonDivisor(a, b % a);
-
-        // Store the result in the cache.
-        s_gcdCache[key] = gcd;
-
-        return gcd;
-    }
-
-    public static BigInteger LeastCommonMultiple(BigInteger a, BigInteger b)
-    {
-        // Special case.
-        if (a == 0 || b == 0)
-        {
-            return 0;
-        }
-
-        return a * (b / GreatestCommonDivisor(a, b));
-    }
-
-    /// <summary>
     /// Check if a number is perfect, deficient, or abundant.
     /// <see href="https://en.wikipedia.org/wiki/Perfect_number" />
     /// </summary>
     public static sbyte PerfectNumber(long n)
     {
-        BigInteger spd = Divisors.GetProperDivisors(n).Sum();
+        BigInteger spd = GetProperDivisors(n).Sum();
 
         // Check if the number is perfect.
         if (spd == n)

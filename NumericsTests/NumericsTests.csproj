@@ -23,7 +23,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Geometry\Geometry.csproj" />
-        <ProjectReference Include="..\Integers\Integers.csproj" />
         <ProjectReference Include="..\Types\Types.csproj" />
     </ItemGroup>
 
@@ -46,6 +45,18 @@
         <Reference Include="Galaxon.Core.Time">
             <HintPath>..\..\Core\Time\bin\Debug\net7.0\Galaxon.Core.Time.dll</HintPath>
         </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="old\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="old\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="old\**" />
     </ItemGroup>
 
 </Project>

@@ -429,7 +429,7 @@ public static class Primes
         Functions.Memoize<ulong, List<ulong>>(_DistinctPrimeFactors);
 
     private static int _NumDistinctPrimeFactors(ulong n) =>
-        DistinctPrimeFactors(n).Count();
+        DistinctPrimeFactors(n).Count;
 
     public static readonly Func<ulong, int> NumDistinctPrimeFactors =
         Functions.Memoize<ulong, int>(_NumDistinctPrimeFactors);
@@ -444,8 +444,6 @@ public static class Primes
     /// <summary>
     /// Count how many numbers are coprime to, and less than, a given number.
     /// </summary>
-    /// <param name="n"></param>
-    /// <returns></returns>
     public static ulong Totient(ulong n)
     {
         List<ulong> factors = DistinctPrimeFactors(n);

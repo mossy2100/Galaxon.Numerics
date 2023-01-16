@@ -1,5 +1,6 @@
-# Numerics
+# Galaxon.Numerics
 
-Miscellaneous classes for working with numbers and maths, including geometry, primes, polynomials, decimals, and more.
+Miscellaneous classes for working with numbers and maths, including geometry, primes, polynomials, 
+decimals, and more.
 
-Depends on Core.
+Depends on Galaxon.Core.
