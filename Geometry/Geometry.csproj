@@ -9,13 +9,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Reference Include="Galaxon.Core.Numbers">
-            <HintPath>..\..\Core\Numbers\bin\Debug\net7.0\Galaxon.Core.Numbers.dll</HintPath>
-        </Reference>
+      <ProjectReference Include="..\Integers\Integers.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Integers\Integers.csproj" />
+      <Reference Include="Galaxon.Core">
+        <HintPath>..\..\Core\Core\bin\Debug\net7.0\Galaxon.Core.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>
