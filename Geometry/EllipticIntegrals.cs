@@ -52,7 +52,7 @@ public static class EllipticIntegrals
     /// <returns>A tuple containing the two results.</returns>
     public static (double F, double E) FE(double phi, double k)
     {
-        (var F, var E) = HelperIncomplete(phi, k);
+        var (F, E) = HelperIncomplete(phi, k);
         return (F, E!.Value);
     }
 
@@ -65,7 +65,7 @@ public static class EllipticIntegrals
     /// <returns>The result.</returns>
     public static double F(double phi, double k)
     {
-        (var F, var E) = HelperIncomplete(phi, k, false);
+        var (F, E) = HelperIncomplete(phi, k, false);
         return F;
     }
 
@@ -78,7 +78,7 @@ public static class EllipticIntegrals
     /// <returns>The result.</returns>
     public static double E(double phi, double k)
     {
-        (var F, var E) = HelperIncomplete(phi, k);
+        var (F, E) = HelperIncomplete(phi, k);
         return E!.Value;
     }
 

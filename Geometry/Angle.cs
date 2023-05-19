@@ -188,6 +188,7 @@ public static class Angle
 
     public const long DegreesPerCircle = 360;
     public const long DegreesPerSemicircle = 180;
+    public const long DegreesPerQuadrant = 90;
 
     public const long ArcminutesPerDegree = 60;
     public const long ArcminutesPerCircle = ArcminutesPerDegree * DegreesPerCircle;
@@ -198,6 +199,7 @@ public static class Angle
 
     public const double RadiansPerCircle = Tau;
     public const double RadiansPerSemicircle = PI;
+    public const double RadiansPerQuadrant = PI / 2;
 
     public const double RadiansPerDegree = 1.745329251994329576923691e-2;
     public const double DegreesPerRadian = 57.29577951308232087679815;

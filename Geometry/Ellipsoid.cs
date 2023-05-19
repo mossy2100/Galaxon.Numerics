@@ -82,13 +82,13 @@ public class Ellipsoid : IShape3D
 
     public bool IsOblate()
     {
-        (var a, var b, var c) = SortedRadii();
+        var (a, b, c) = SortedRadii();
         return a.FuzzyEquals(b) && b > c;
     }
 
     public bool IsProlate()
     {
-        (var a, var b, var c) = SortedRadii();
+        var (a, b, c) = SortedRadii();
         return a > b && b.FuzzyEquals(c);
     }
 
@@ -96,7 +96,7 @@ public class Ellipsoid : IShape3D
 
     public bool IsScalene()
     {
-        (var a, var b, var c) = SortedRadii();
+        var (a, b, c) = SortedRadii();
         return a > b && b > c;
     }
 
@@ -116,7 +116,7 @@ public class Ellipsoid : IShape3D
         {
             // Check for simple cases to get a quicker answer.
             // Calculate intermediate variables as needed.
-            (var a, var b, var c) = SortedRadii();
+            var (a, b, c) = SortedRadii();
             var a2 = a * a;
 
             if (IsSphere())
@@ -160,7 +160,7 @@ public class Ellipsoid : IShape3D
     /// <summary>
     /// The volumetric mean radius in metres.
     /// </summary>
-    public double VolumetricMeanRadius => Pow(RadiusA * RadiusB * RadiusC, 1.0 / 3);
+    public double VolumetricMeanRadius => double.RootN(RadiusA * RadiusB * RadiusC, 3);
 
     #endregion Calculated properties
 }

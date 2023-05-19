@@ -23,7 +23,7 @@ public static class Grids
         var x = size / 2;
         var y = x;
         var direction =
-            clockwise ? Direction.GoAntiClockwise(start) : Direction.GoClockwise(start);
+            clockwise ? Direction.TurnAntiClockwise(start) : Direction.TurnClockwise(start);
 
         // Loop until the spiral is built.
         for (uint n = 1; n <= size * size; n++)

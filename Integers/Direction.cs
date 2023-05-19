@@ -10,9 +10,9 @@ public enum EDirection
 
 public static class Direction
 {
-    public static EDirection GoClockwise(EDirection currentDirection) =>
+    public static EDirection TurnClockwise(EDirection currentDirection) =>
         currentDirection == EDirection.Left ? EDirection.Up : currentDirection + 1;
 
-    public static EDirection GoAntiClockwise(EDirection currentDirection) =>
+    public static EDirection TurnAntiClockwise(EDirection currentDirection) =>
         currentDirection == EDirection.Up ? EDirection.Left : currentDirection - 1;
 }
