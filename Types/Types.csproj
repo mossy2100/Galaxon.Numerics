@@ -9,29 +9,29 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="DecimalMath.DecimalEx" Version="1.0.2" />
+        <PackageReference Include="DecimalMath.DecimalEx" Version="1.0.2"/>
     </ItemGroup>
 
     <ItemGroup>
         <Reference Include="Galaxon.Core">
-          <HintPath>..\..\Core\Core\bin\Debug\net7.0\Galaxon.Core.dll</HintPath>
+            <HintPath>..\..\Core\Core\bin\Debug\net7.0\Galaxon.Core.dll</HintPath>
         </Reference>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Integers\Integers.csproj" />
+        <ProjectReference Include="..\Integers\Integers.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Remove="old\**" />
+        <Compile Remove="old\**"/>
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Remove="old\**" />
+        <EmbeddedResource Remove="old\**"/>
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="old\**" />
+        <None Remove="old\**"/>
     </ItemGroup>
 
 </Project>

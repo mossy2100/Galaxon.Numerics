@@ -28,10 +28,10 @@ public class TestAngle
             0, PI / 2, -PI, -PI / 2,
             0
         };
-        for (int i = 0; i < inputs.Length; i++)
+        for (var i = 0; i < inputs.Length; i++)
         {
-            double actual = NormalizeRadians(inputs[i]);
-            double expected = outputs[i];
+            var actual = NormalizeRadians(inputs[i]);
+            var expected = outputs[i];
             XAssert.IsInRange(actual, -PI, PI);
             Assert.AreEqual(expected, actual, _Delta);
         }
@@ -57,10 +57,10 @@ public class TestAngle
             0, PI / 2, PI, 1.5 * PI,
             0
         };
-        for (int i = 0; i < inputs.Length; i++)
+        for (var i = 0; i < inputs.Length; i++)
         {
-            double actual = NormalizeRadians(inputs[i], false);
-            double expected = outputs[i];
+            var actual = NormalizeRadians(inputs[i], false);
+            var expected = outputs[i];
             XAssert.IsInRange(actual, 0, Tau);
             Assert.AreEqual(expected, actual, _Delta);
         }
@@ -86,10 +86,10 @@ public class TestAngle
             0, 90, -180, -90,
             0
         };
-        for (int i = 0; i < inputs.Length; i++)
+        for (var i = 0; i < inputs.Length; i++)
         {
-            double actual = NormalizeDegrees(inputs[i]);
-            double expected = outputs[i];
+            var actual = NormalizeDegrees(inputs[i]);
+            var expected = outputs[i];
             XAssert.IsInRange(actual, -180, 180);
             Assert.AreEqual(expected, actual, _Delta);
         }
@@ -115,10 +115,10 @@ public class TestAngle
             0, 90, 180, 270,
             0
         };
-        for (int i = 0; i < inputs.Length; i++)
+        for (var i = 0; i < inputs.Length; i++)
         {
-            double actual = NormalizeDegrees(inputs[i], false);
-            double expected = outputs[i];
+            var actual = NormalizeDegrees(inputs[i], false);
+            var expected = outputs[i];
             XAssert.IsInRange(actual, 0, 360);
             Assert.AreEqual(expected, actual, _Delta);
         }
@@ -149,39 +149,40 @@ public class TestAngle
     {
         // Test 0.
         double deg = 0;
-        XAssert.AreEqual((0, 0, 0), DegToDms(deg), _Delta);
+        (double, double, double) deltaAngle = (0, 0, _Delta);
+        XAssert.AreEqual((0, 0, 0), DegToDms(deg), deltaAngle);
 
         // Test whole number of degrees.
         deg = 12;
-        XAssert.AreEqual((12, 0, 0), DegToDms(deg), _Delta);
+        XAssert.AreEqual((12, 0, 0), DegToDms(deg), deltaAngle);
 
         // Test degrees and minutes.
         deg = 12.5666666666667;
-        XAssert.AreEqual((12, 34, 0), DegToDms(deg), _Delta);
+        XAssert.AreEqual((12, 34, 0), DegToDms(deg), deltaAngle);
 
         // Test degrees, minutes, and seconds.
         deg = 12.5822222222222;
-        XAssert.AreEqual((12, 34, 56), DegToDms(deg), _Delta);
+        XAssert.AreEqual((12, 34, 56), DegToDms(deg), deltaAngle);
 
         // Test degrees, minutes, seconds, and milliseconds.
         deg = 12.5824413888889;
-        XAssert.AreEqual((12, 34, 56.789), DegToDms(deg), _Delta);
+        XAssert.AreEqual((12, 34, 56.789), DegToDms(deg), deltaAngle);
 
         // Test whole negative degrees.
         deg = -12;
-        XAssert.AreEqual((-12, 0, 0), DegToDms(deg), _Delta);
+        XAssert.AreEqual((-12, 0, 0), DegToDms(deg), deltaAngle);
 
         // Test negative degrees and minutes.
         deg = -12.5666666666667;
-        XAssert.AreEqual((-12, -34, 0), DegToDms(deg), _Delta);
+        XAssert.AreEqual((-12, -34, 0), DegToDms(deg), deltaAngle);
 
         // Test negative degrees, minutes, and seconds.
         deg = -12.5822222222222;
-        XAssert.AreEqual((-12, -34, -56), DegToDms(deg), _Delta);
+        XAssert.AreEqual((-12, -34, -56), DegToDms(deg), deltaAngle);
 
         // Test negative degrees, minutes, seconds, and milliseconds.
         deg = -12.5824413888889;
-        XAssert.AreEqual((-12, -34, -56.789), DegToDms(deg), _Delta);
+        XAssert.AreEqual((-12, -34, -56.789), DegToDms(deg), deltaAngle);
     }
 
     [TestMethod]

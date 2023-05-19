@@ -1,7 +1,7 @@
 using System.Numerics;
-using Galaxon.Numerics.Types;
 using DecimalMath;
 using Galaxon.Core.Testing;
+using Galaxon.Numerics.Types;
 
 namespace Galaxon.Numerics.Tests;
 

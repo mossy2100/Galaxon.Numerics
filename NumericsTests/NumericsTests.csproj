@@ -11,10 +11,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="DecimalMath.DecimalEx" Version="1.0.2" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.0" />
-        <PackageReference Include="MSTest.TestAdapter" Version="2.2.10" />
-        <PackageReference Include="MSTest.TestFramework" Version="2.2.10" />
+        <PackageReference Include="DecimalMath.DecimalEx" Version="1.0.2"/>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.0"/>
+        <PackageReference Include="MSTest.TestAdapter" Version="2.2.10"/>
+        <PackageReference Include="MSTest.TestFramework" Version="2.2.10"/>
         <PackageReference Include="coverlet.collector" Version="3.2.0">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -22,26 +22,26 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Geometry\Geometry.csproj" />
-        <ProjectReference Include="..\Types\Types.csproj" />
+        <ProjectReference Include="..\Geometry\Geometry.csproj"/>
+        <ProjectReference Include="..\Types\Types.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
         <Reference Include="Galaxon.Core">
-          <HintPath>..\..\Core\Core\bin\Debug\net7.0\Galaxon.Core.dll</HintPath>
+            <HintPath>..\..\Core\Core\bin\Debug\net7.0\Galaxon.Core.dll</HintPath>
         </Reference>
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Remove="old\**" />
+        <Compile Remove="old\**"/>
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Remove="old\**" />
+        <EmbeddedResource Remove="old\**"/>
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="old\**" />
+        <None Remove="old\**"/>
     </ItemGroup>
 
 </Project>

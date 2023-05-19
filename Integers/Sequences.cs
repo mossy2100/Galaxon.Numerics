@@ -2,6 +2,9 @@ namespace Galaxon.Numerics.Integers;
 
 public static class Sequences
 {
+    public static readonly Func<long, List<long>> Collatz =
+        Functions.Memoize<long, List<long>>(_Collatz);
+
     /// <summary>
     /// Returns series of numbers in a Collatz series, starting at n and ending in 1.
     /// <see href="https://en.wikipedia.org/wiki/Collatz_conjecture" />
@@ -22,7 +25,7 @@ public static class Sequences
         if (n > 1)
         {
             // Get the next number.
-            long m = n % 2 == 0 ? n / 2 : 3 * n + 1;
+            var m = n % 2 == 0 ? n / 2 : 3 * n + 1;
 
             // Append additional items in the chain.
             result.AddRange(Collatz(m));
@@ -30,7 +33,4 @@ public static class Sequences
 
         return result;
     }
-
-    public static readonly Func<long, List<long>> Collatz =
-        Functions.Memoize<long, List<long>>(_Collatz);
 }

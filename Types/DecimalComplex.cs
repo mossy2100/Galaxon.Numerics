@@ -1,6 +1,6 @@
 using System.Numerics;
-using Galaxon.Core.Numbers;
 using DecimalMath;
+using Galaxon.Core.Numbers;
 using Galaxon.Core.Testing;
 
 namespace Galaxon.Numerics.Types;
@@ -55,8 +55,7 @@ public struct DecimalComplex
         return Real == z.Real && Imaginary == z.Imaginary;
     }
 
-    public override int GetHashCode() =>
-        HashCode.Combine(Real, Imaginary);
+    public override int GetHashCode() => HashCode.Combine(Real, Imaginary);
 
     /// <summary>
     /// Express the complex number as a string in the usual algebraic format.
@@ -65,9 +64,9 @@ public struct DecimalComplex
     /// <returns>The complex number as a string.</returns>
     public override string ToString()
     {
-        string realPart = Real == 0 && Imaginary != 0 ? "" : $"{Real}";
+        var realPart = Real == 0 && Imaginary != 0 ? "" : $"{Real}";
 
-        string sign = "";
+        var sign = "";
         if (Real == 0)
         {
             if (Imaginary < 0)
@@ -87,8 +86,8 @@ public struct DecimalComplex
             }
         }
 
-        decimal absImag = Math.Abs(Imaginary);
-        string imagPart = absImag switch
+        var absImag = Math.Abs(Imaginary);
+        var imagPart = absImag switch
         {
             0 => "",
             1 => "i",
@@ -113,8 +112,8 @@ public struct DecimalComplex
     /// <returns>The magnitude of the argument.</returns>
     public static decimal Abs(DecimalComplex z)
     {
-        decimal a = Math.Abs(z.Real);
-        decimal b = Math.Abs(z.Imaginary);
+        var a = Math.Abs(z.Real);
+        var b = Math.Abs(z.Imaginary);
 
         decimal small, large;
         if (a < b)
@@ -133,7 +132,7 @@ public struct DecimalComplex
             return large;
         }
 
-        decimal ratio = small / large;
+        var ratio = small / large;
         return large * DecimalEx.Sqrt(1.0m + ratio * ratio);
     }
 
@@ -218,8 +217,8 @@ public struct DecimalComplex
             return I;
         }
 
-        decimal a = z.Real;
-        decimal b = z.Imaginary;
+        var a = z.Real;
+        var b = z.Imaginary;
         if (b == 0)
         {
             return a > 0
@@ -227,9 +226,9 @@ public struct DecimalComplex
                 : new DecimalComplex(0, DecimalEx.Sqrt(-a));
         }
 
-        decimal m = Abs(z);
-        decimal x = DecimalEx.Sqrt((m + a) / 2);
-        decimal y = b / Math.Abs(b) * DecimalEx.Sqrt((m - a) / 2);
+        var m = Abs(z);
+        var x = DecimalEx.Sqrt((m + a) / 2);
+        var y = b / Math.Abs(b) * DecimalEx.Sqrt((m - a) / 2);
         return new DecimalComplex(x, y);
     }
 
@@ -290,8 +289,7 @@ public struct DecimalComplex
     /// </summary>
     /// <param name="z">The complex arg.</param>
     /// <returns>The logarithm of z in base 2.</returns>
-    public static DecimalComplex Log2(DecimalComplex z) =>
-        Log(z, 2);
+    public static DecimalComplex Log2(DecimalComplex z) => Log(z, 2);
 
     /// <summary>
     /// Logarithm of a complex number in base 10.
@@ -299,8 +297,7 @@ public struct DecimalComplex
     /// </summary>
     /// <param name="z">The complex arg.</param>
     /// <returns>The logarithm of z in base 10.</returns>
-    public static DecimalComplex Log10(DecimalComplex z) =>
-        Log(z, 10);
+    public static DecimalComplex Log10(DecimalComplex z) => Log(z, 10);
 
     public static DecimalComplex Exp(DecimalComplex z)
     {
@@ -348,8 +345,7 @@ public struct DecimalComplex
     /// </summary>
     /// <param name="z">A complex value.</param>
     /// <returns>2^z</returns>
-    public static DecimalComplex Exp2(DecimalComplex z) =>
-        2 ^ z;
+    public static DecimalComplex Exp2(DecimalComplex z) => 2 ^ z;
 
     /// <summary>
     /// Calculate 10 raised to a complex power.
@@ -357,8 +353,7 @@ public struct DecimalComplex
     /// </summary>
     /// <param name="z">A complex value.</param>
     /// <returns>10^z</returns>
-    public static DecimalComplex Exp10(DecimalComplex z) =>
-        10 ^ z;
+    public static DecimalComplex Exp10(DecimalComplex z) => 10 ^ z;
 
     /// <summary>
     /// Complex exponentiation.
@@ -441,8 +436,7 @@ public struct DecimalComplex
     /// If the base is 0 and the exponent
     /// is negative or imaginary.
     /// </exception>
-    public static DecimalComplex operator ^(DecimalComplex z, DecimalComplex w) =>
-        Pow(z, w);
+    public static DecimalComplex operator ^(DecimalComplex z, DecimalComplex w) => Pow(z, w);
 
     #endregion Exponentiation methods
 
@@ -450,28 +444,28 @@ public struct DecimalComplex
 
     public static DecimalComplex Sin(DecimalComplex z)
     {
-        decimal x = z.Real;
-        decimal y = z.Imaginary;
-        decimal a = DecimalEx.Sin(x) * XDecimal.Cosh(y);
-        decimal b = DecimalEx.Cos(x) * XDecimal.Sinh(y);
+        var x = z.Real;
+        var y = z.Imaginary;
+        var a = DecimalEx.Sin(x) * XDecimal.Cosh(y);
+        var b = DecimalEx.Cos(x) * XDecimal.Sinh(y);
         return new DecimalComplex(a, b);
     }
 
     public static DecimalComplex Cos(DecimalComplex z)
     {
-        decimal x = z.Real;
-        decimal y = z.Imaginary;
-        decimal a = DecimalEx.Cos(x) * XDecimal.Cosh(y);
-        decimal b = DecimalEx.Sin(x) * XDecimal.Sinh(y);
+        var x = z.Real;
+        var y = z.Imaginary;
+        var a = DecimalEx.Cos(x) * XDecimal.Cosh(y);
+        var b = DecimalEx.Sin(x) * XDecimal.Sinh(y);
         return new DecimalComplex(a, -b);
     }
 
     public static DecimalComplex Tan(DecimalComplex z)
     {
-        decimal x = z.Real;
-        decimal y = z.Imaginary;
+        var x = z.Real;
+        var y = z.Imaginary;
         DecimalComplex a = new (DecimalEx.Sin(2 * x), XDecimal.Sinh(2 * y));
-        decimal b = DecimalEx.Cos(2 * x) + XDecimal.Cosh(2 * y);
+        var b = DecimalEx.Cos(2 * x) + XDecimal.Cosh(2 * y);
         return a / b;
     }
 
@@ -480,49 +474,46 @@ public struct DecimalComplex
     /// </summary>
     /// <param name="z"></param>
     /// <returns></returns>
-    public static DecimalComplex Asin(DecimalComplex z) =>
-        I * Log(Sqrt(1 - z * z) - I * z);
+    public static DecimalComplex Asin(DecimalComplex z) => I * Log(Sqrt(1 - z * z) - I * z);
 
     /// <summary>
     ///     <see href="https://en.wikipedia.org/wiki/Inverse_trigonometric_functions#Logarithmic_forms" />
     /// </summary>
     /// <param name="z"></param>
     /// <returns></returns>
-    public static DecimalComplex Acos(DecimalComplex z) =>
-        -I * Log(z + I * Sqrt(1 - z * z));
+    public static DecimalComplex Acos(DecimalComplex z) => -I * Log(z + I * Sqrt(1 - z * z));
 
     /// <summary>
     ///     <see href="https://en.wikipedia.org/wiki/Inverse_trigonometric_functions#Logarithmic_forms" />
     /// </summary>
     /// <param name="z"></param>
     /// <returns></returns>
-    public static DecimalComplex Atan(DecimalComplex z) =>
-        -I / 2 * Log((I - z) / (I + z));
+    public static DecimalComplex Atan(DecimalComplex z) => -I / 2 * Log((I - z) / (I + z));
 
     public static DecimalComplex Sinh(DecimalComplex z)
     {
-        decimal x = z.Real;
-        decimal y = z.Imaginary;
-        decimal a = XDecimal.Sinh(x) * DecimalEx.Cos(y);
-        decimal b = XDecimal.Cosh(x) * DecimalEx.Sin(y);
+        var x = z.Real;
+        var y = z.Imaginary;
+        var a = XDecimal.Sinh(x) * DecimalEx.Cos(y);
+        var b = XDecimal.Cosh(x) * DecimalEx.Sin(y);
         return new DecimalComplex(a, b);
     }
 
     public static DecimalComplex Cosh(DecimalComplex z)
     {
-        decimal x = z.Real;
-        decimal y = z.Imaginary;
-        decimal a = XDecimal.Cosh(x) * DecimalEx.Cos(y);
-        decimal b = XDecimal.Sinh(x) * DecimalEx.Sin(y);
+        var x = z.Real;
+        var y = z.Imaginary;
+        var a = XDecimal.Cosh(x) * DecimalEx.Cos(y);
+        var b = XDecimal.Sinh(x) * DecimalEx.Sin(y);
         return new DecimalComplex(a, b);
     }
 
     public static DecimalComplex Tanh(DecimalComplex z)
     {
-        decimal x = z.Real;
-        decimal y = z.Imaginary;
-        decimal a = XDecimal.Tanh(x);
-        decimal b = DecimalEx.Tan(y);
+        var x = z.Real;
+        var y = z.Imaginary;
+        var a = XDecimal.Tanh(x);
+        var b = DecimalEx.Tan(y);
         return (a + I * b) / (1 + I * a * b);
     }
 
@@ -535,16 +526,14 @@ public struct DecimalComplex
     /// </summary>
     /// <param name="m">A decimal.</param>
     /// <returns>The equivalent DecimalComplex number.</returns>
-    public static implicit operator DecimalComplex(decimal m) =>
-        new (m, 0);
+    public static implicit operator DecimalComplex(decimal m) => new (m, 0);
 
     /// <summary>
     /// Implicit cast of integer to a DecimalComplex.
     /// </summary>
     /// <param name="j">An integer.</param>
     /// <returns>The equivalent DecimalComplex number.</returns>
-    public static implicit operator DecimalComplex(int j) =>
-        new (j, 0);
+    public static implicit operator DecimalComplex(int j) => new (j, 0);
 
     /// <summary>
     /// Explicit cast of Complex to a DecimalComplex.
@@ -573,8 +562,7 @@ public struct DecimalComplex
     /// <param name="z2">The right-hand DecimalComplex number.</param>
     /// <returns>If they are equal.</returns>
     /// TODO Test.
-    public static bool operator ==(DecimalComplex z1, DecimalComplex z2) =>
-        z1.Equals(z2);
+    public static bool operator ==(DecimalComplex z1, DecimalComplex z2) => z1.Equals(z2);
 
     /// <summary>
     /// Inequality comparison operator.
@@ -582,8 +570,7 @@ public struct DecimalComplex
     /// <param name="z1">The left-hand DecimalComplex number.</param>
     /// <param name="z2">The right-hand DecimalComplex number.</param>
     /// <returns>If they are not equal.</returns>
-    public static bool operator !=(DecimalComplex z1, DecimalComplex z2) =>
-        !(z1 == z2);
+    public static bool operator !=(DecimalComplex z1, DecimalComplex z2) => !(z1 == z2);
 
     #endregion Comparison operators
 
@@ -594,23 +581,20 @@ public struct DecimalComplex
     /// <see cref="decimal.Negate" />
     /// </summary>
     /// <returns>The negation of the argument.</returns>
-    public static DecimalComplex Negate(DecimalComplex z) =>
-        new (-z.Real, -z.Imaginary);
+    public static DecimalComplex Negate(DecimalComplex z) => new (-z.Real, -z.Imaginary);
 
     /// <summary>
     /// Unary negation operator.
     /// </summary>
     /// <param name="z">A DecimalComplex number.</param>
     /// <returns>The negation of the operand.</returns>
-    public static DecimalComplex operator -(DecimalComplex z) =>
-        Negate(z);
+    public static DecimalComplex operator -(DecimalComplex z) => Negate(z);
 
     /// <summary>
     /// Complex conjugate method.
     /// </summary>
     /// <returns>The complex conjugate of the argument.</returns>
-    public static DecimalComplex Conjugate(DecimalComplex z) =>
-        new (z.Real, -z.Imaginary);
+    public static DecimalComplex Conjugate(DecimalComplex z) => new (z.Real, -z.Imaginary);
 
     /// <summary>
     /// Complex conjugate operator.
@@ -618,15 +602,13 @@ public struct DecimalComplex
     /// a good fit and it could be useful.
     /// </summary>
     /// <returns>The complex conjugate of the operand.</returns>
-    public static DecimalComplex operator ~(DecimalComplex z) =>
-        Conjugate(z);
+    public static DecimalComplex operator ~(DecimalComplex z) => Conjugate(z);
 
     /// <summary>
     /// Calculate reciprocal.
     /// </summary>
     /// <returns>The reciprocal of the argument.</returns>
-    public static DecimalComplex Reciprocal(DecimalComplex z) =>
-        1 / z;
+    public static DecimalComplex Reciprocal(DecimalComplex z) => 1 / z;
 
     /// <summary>
     /// Addition method.
@@ -644,8 +626,7 @@ public struct DecimalComplex
     /// <param name="z1">The left-hand DecimalComplex number.</param>
     /// <param name="z2">The right-hand DecimalComplex number.</param>
     /// <returns>The addition of the operands.</returns>
-    public static DecimalComplex operator +(DecimalComplex z1, DecimalComplex z2) =>
-        Add(z1, z2);
+    public static DecimalComplex operator +(DecimalComplex z1, DecimalComplex z2) => Add(z1, z2);
 
     /// <summary>
     /// Subtraction method.
@@ -675,10 +656,10 @@ public struct DecimalComplex
     /// <returns>The multiplication of the arguments.</returns>
     public static DecimalComplex Multiply(DecimalComplex z1, DecimalComplex z2)
     {
-        decimal a = z1.Real;
-        decimal b = z1.Imaginary;
-        decimal c = z2.Real;
-        decimal d = z2.Imaginary;
+        var a = z1.Real;
+        var b = z1.Imaginary;
+        var c = z2.Real;
+        var d = z2.Imaginary;
         return new DecimalComplex(a * c - b * d, a * d + b * c);
     }
 
@@ -697,8 +678,7 @@ public struct DecimalComplex
     /// <param name="m">The decimal number.</param>
     /// <param name="z">The DecimalComplex number.</param>
     /// <returns>The multiplication of the arguments.</returns>
-    public static DecimalComplex Multiply(decimal m, DecimalComplex z) =>
-        Multiply(z, m);
+    public static DecimalComplex Multiply(decimal m, DecimalComplex z) => Multiply(z, m);
 
     /// <summary>
     /// Multiplication operator.
@@ -715,8 +695,7 @@ public struct DecimalComplex
     /// <param name="z">The DecimalComplex number.</param>
     /// <param name="m">The decimal number.</param>
     /// <returns>The multiplication of the operands.</returns>
-    public static DecimalComplex operator *(DecimalComplex z, decimal m) =>
-        Multiply(z, m);
+    public static DecimalComplex operator *(DecimalComplex z, decimal m) => Multiply(z, m);
 
     /// <summary>
     /// Multiply a decimal by a DecimalComplex.
@@ -724,8 +703,7 @@ public struct DecimalComplex
     /// <param name="m">The decimal number.</param>
     /// <param name="z">The DecimalComplex number.</param>
     /// <returns>The multiplication of the operands.</returns>
-    public static DecimalComplex operator *(decimal m, DecimalComplex z) =>
-        Multiply(m, z);
+    public static DecimalComplex operator *(decimal m, DecimalComplex z) => Multiply(m, z);
 
     /// <summary>
     /// Divide a DecimalComplex by a DecimalComplex.
@@ -737,10 +715,10 @@ public struct DecimalComplex
     /// <exception cref="System.DivideByZeroException">If z2 == 0</exception>
     public static DecimalComplex Divide(DecimalComplex z1, DecimalComplex z2)
     {
-        decimal a = z1.Real;
-        decimal b = z1.Imaginary;
-        decimal c = z2.Real;
-        decimal d = z2.Imaginary;
+        var a = z1.Real;
+        var b = z1.Imaginary;
+        var c = z2.Real;
+        var d = z2.Imaginary;
         if (d == 0)
         {
             return z1 / c;
@@ -769,8 +747,8 @@ public struct DecimalComplex
     /// <exception cref="System.DivideByZeroException">If z == 0.</exception>
     public static DecimalComplex Divide(decimal m, DecimalComplex z)
     {
-        decimal a = z.Real;
-        decimal b = z.Imaginary;
+        var a = z.Real;
+        var b = z.Imaginary;
         return new DecimalComplex(m * a, -m * b) / (a * a + b * b);
     }
 
@@ -780,8 +758,7 @@ public struct DecimalComplex
     /// <param name="z1">The left-hand DecimalComplex number.</param>
     /// <param name="z2">The right-hand DecimalComplex number.</param>
     /// <returns>The division of the operands.</returns>
-    public static DecimalComplex operator /(DecimalComplex z1, DecimalComplex z2) =>
-        Divide(z1, z2);
+    public static DecimalComplex operator /(DecimalComplex z1, DecimalComplex z2) => Divide(z1, z2);
 
     /// <summary>
     /// Divide a DecimalComplex by a decimal.
@@ -791,8 +768,7 @@ public struct DecimalComplex
     /// <param name="m">The decimal value.</param>
     /// <returns>The division of the operands.</returns>
     /// <exception cref="System.DivideByZeroException">If d == 0.</exception>
-    public static DecimalComplex operator /(DecimalComplex z, decimal m) =>
-        Divide(z, m);
+    public static DecimalComplex operator /(DecimalComplex z, decimal m) => Divide(z, m);
 
     /// <summary>
     /// Divide a decimal by a DecimalComplex.
@@ -802,8 +778,7 @@ public struct DecimalComplex
     /// <param name="z">The DecimalComplex value.</param>
     /// <returns>The division of the operands.</returns>
     /// <exception cref="System.DivideByZeroException">If z == 0.</exception>
-    public static DecimalComplex operator /(decimal m, DecimalComplex z) =>
-        Divide(m, z);
+    public static DecimalComplex operator /(decimal m, DecimalComplex z) => Divide(m, z);
 
     #endregion Arithmetic operators and methods
 

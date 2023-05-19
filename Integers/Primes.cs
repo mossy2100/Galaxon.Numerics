@@ -68,7 +68,7 @@ public static class Primes
     public static bool IsPrimeSlow(ulong n)
     {
         // Run through some simple checks first.
-        bool? isPrimeSimple = IsPrimeSimple(n);
+        var isPrimeSimple = IsPrimeSimple(n);
         if (isPrimeSimple.HasValue)
         {
             return isPrimeSimple.Value;
@@ -76,7 +76,7 @@ public static class Primes
 
         // Update the cache to ensure we know all the primes less than or equal to the square root,
         // which are the divisors we'll check for.
-        ulong sqrt = (ulong)Floor(double.Sqrt(n));
+        var sqrt = (ulong)Floor(double.Sqrt(n));
 
         // If n == ulong.MaxValue then sqrt will be uint.MaxValue + 1, which is too large for the
         // Eratosthenes function. So, we'll subtract one, which will give the same result, because
@@ -102,14 +102,12 @@ public static class Primes
     /// </summary>
     /// <param name="n"></param>
     /// <returns></returns>
-    public static bool IsPrime(ulong n) =>
-        IsPrimeSimple(n) ?? MillerRabin(n);
+    public static bool IsPrime(ulong n) => IsPrimeSimple(n) ?? MillerRabin(n);
 
     /// <summary>
     /// Check if a number is composite.
     /// </summary>
-    public static bool IsComposite(ulong n) =>
-        n > 1 && !IsPrime(n);
+    public static bool IsComposite(ulong n) => n > 1 && !IsPrime(n);
 
     /// <summary>
     /// Use the Miller-Rabin test to see if a number is composite or probably prime.
@@ -133,7 +131,7 @@ public static class Primes
 
         // Get s, d such that n - 1 = 2^s * d and d is odd.
         ulong s = 0;
-        ulong d = n - 1;
+        var d = n - 1;
         while (d % 2 == 0)
         {
             d /= 2;
@@ -141,9 +139,9 @@ public static class Primes
         }
 
         // Run the test with each base.
-        foreach (ulong a in bases)
+        foreach (var a in bases)
         {
-            ulong x = (ulong)BigInteger.ModPow(a, d, n);
+            var x = (ulong)BigInteger.ModPow(a, d, n);
             ulong y = 0;
             for (ulong i = 0; i < s; i++)
             {
@@ -169,7 +167,6 @@ public static class Primes
     /// Use the Sieve of Eratosthenes to update the cache for all prime numbers less than or equal
     /// to a given maximum.
     /// <see href="https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes" />
-    ///
     /// I've limited the value of max to uint.MaxValue (4,294,967,295) as I think this will be
     /// adequate for practical purposes, and it means the isComposite cache will not need to be
     /// larger than Array.MaxSize. Nor will we need to use batches or multiple arrays for
@@ -194,7 +191,7 @@ public static class Primes
         }
 
         // Get the minimum value to test.
-        uint min = (uint)MaxValueChecked + 1;
+        var min = (uint)MaxValueChecked + 1;
 
         // Ensure min and max are odd.
         if (min % 2 == 0)
@@ -207,16 +204,16 @@ public static class Primes
         }
 
         // Calculate the array size.
-        int arraySize = (int)((max - min) / 2 + 1);
+        var arraySize = (int)((max - min) / 2 + 1);
 
         // Create an array of booleans indicating if a value is composite.
         // This is the reverse of the usual setup, but it saves the time of initializing every value
         // in the array to true. All values in the array will default to false.
-        bool[] isComposite = new bool[arraySize];
+        var isComposite = new bool[arraySize];
 
         // Remove all multiples of primes, 3 or greater, less than or equal to the square root
         // of max.
-        uint sqrt = (uint)Floor(Sqrt(max));
+        var sqrt = (uint)Floor(Sqrt(max));
         for (uint p = 3; p <= sqrt; p += 2)
         {
             // If p is not prime, skip it.
@@ -227,10 +224,10 @@ public static class Primes
 
             // Start at the greater of p^2 or the next odd multiple of p equal to or greater
             // than min.
-            uint start = p * p;
+            var start = p * p;
             if (min > start)
             {
-                uint m = (uint)Ceiling((double)min / p);
+                var m = (uint)Ceiling((double)min / p);
                 if (m % 2 == 0)
                 {
                     m++;
@@ -239,14 +236,14 @@ public static class Primes
             }
 
             // Remove all odd multiples of p up to max.
-            for (uint i = (start - min) / 2; i < (uint)arraySize; i += p)
+            for (var i = (start - min) / 2; i < (uint)arraySize; i += p)
             {
                 isComposite[i] = true;
             }
         }
 
         // Update the cache.
-        for (int i = 0; i < arraySize; i++)
+        for (var i = 0; i < arraySize; i++)
         {
             if (!isComposite[i])
             {
@@ -290,7 +287,7 @@ public static class Primes
 
         // Get the rest of the values using fast IsPrime(), which will add new primes to the cache
         // as it goes.
-        for (ulong i = (ulong)uint.MaxValue + 1; i <= max; i++)
+        for (var i = (ulong)uint.MaxValue + 1; i <= max; i++)
         {
             _ = IsPrime(i);
         }
@@ -312,7 +309,7 @@ public static class Primes
         }
 
         // Initialize p to closest odd number less than or equal to n.
-        ulong p = n;
+        var p = n;
         if (p % 2 == 0)
         {
             p--;
@@ -355,7 +352,7 @@ public static class Primes
         }
 
         // Initialize p to closest odd number greater than or equal to n.
-        ulong p = n;
+        var p = n;
         if (p % 2 == 0)
         {
             p++;
@@ -428,8 +425,7 @@ public static class Primes
     public static readonly Func<ulong, List<ulong>> DistinctPrimeFactors =
         Functions.Memoize<ulong, List<ulong>>(_DistinctPrimeFactors);
 
-    private static int _NumDistinctPrimeFactors(ulong n) =>
-        DistinctPrimeFactors(n).Count;
+    private static int _NumDistinctPrimeFactors(ulong n) => DistinctPrimeFactors(n).Count;
 
     public static readonly Func<ulong, int> NumDistinctPrimeFactors =
         Functions.Memoize<ulong, int>(_NumDistinctPrimeFactors);
@@ -446,8 +442,8 @@ public static class Primes
     /// </summary>
     public static ulong Totient(ulong n)
     {
-        List<ulong> factors = DistinctPrimeFactors(n);
-        double product = factors
+        var factors = DistinctPrimeFactors(n);
+        var product = factors
             .Select(factor => (double)factor)
             .Product(factor => 1.0 - 1.0 / factor);
         return (ulong)Round(product * n);

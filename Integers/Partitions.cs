@@ -5,6 +5,12 @@ namespace Galaxon.Numerics.Integers;
 public static class Partitions
 {
     /// <summary>
+    /// Memoized version of P().
+    /// </summary>
+    public static readonly Func<ushort, BigInteger> P =
+        Functions.Memoize<ushort, BigInteger>(_P);
+
+    /// <summary>
     /// P() function using a recurrence relation.
     /// The number of unique ways an integer can be partitioned into smaller integers.
     /// The argument is limited to ushort to avoid out-of-memory errors.
@@ -24,12 +30,12 @@ public static class Partitions
         // This will avoid a stack overflow.
         // The results of P() are cached due to memoization of the method.
         List<(int sign, ushort arg)> terms = new ();
-        int k = 1;
-        int sign = 1;
+        var k = 1;
+        var sign = 1;
         while (true)
         {
             // Positive k term.
-            int arg = n - k * (3 * k - 1) / 2;
+            var arg = n - k * (3 * k - 1) / 2;
             if (arg < 0)
             {
                 break;
@@ -51,16 +57,10 @@ public static class Partitions
 
         // Sum the terms from smallest to largest.
         BigInteger sum = 0;
-        for (int i = terms.Count - 1; i >= 0; i--)
+        for (var i = terms.Count - 1; i >= 0; i--)
         {
             sum += terms[i].sign * P(terms[i].arg);
         }
         return sum;
     }
-
-    /// <summary>
-    /// Memoized version of P().
-    /// </summary>
-    public static readonly Func<ushort, BigInteger> P =
-        Functions.Memoize<ushort, BigInteger>(_P);
 }

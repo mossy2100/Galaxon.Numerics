@@ -10,33 +10,33 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="DecimalMath.DecimalEx" Version="1.0.2" />
-        <PackageReference Include="MSTest.TestFramework" Version="2.2.10" />
+        <PackageReference Include="DecimalMath.DecimalEx" Version="1.0.2"/>
+        <PackageReference Include="MSTest.TestFramework" Version="2.2.10"/>
     </ItemGroup>
 
     <ItemGroup>
         <Reference Include="Galaxon.Core">
-          <HintPath>..\..\Core\Core\bin\Debug\net7.0\Galaxon.Core.dll</HintPath>
+            <HintPath>..\..\Core\Core\bin\Debug\net7.0\Galaxon.Core.dll</HintPath>
         </Reference>
         <Reference Include="Galaxon.Numerics.BigDecimal">
-          <HintPath>..\..\BigDecimal\BigDecimal\bin\Debug\net7.0\Galaxon.Numerics.BigDecimal.dll</HintPath>
+            <HintPath>..\..\BigDecimal\BigDecimal\bin\Debug\net7.0\Galaxon.Numerics.BigDecimal.dll</HintPath>
         </Reference>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Maths\Maths.csproj" />
+        <ProjectReference Include="..\Maths\Maths.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Remove="old\**" />
+        <Compile Remove="old\**"/>
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Remove="old\**" />
+        <EmbeddedResource Remove="old\**"/>
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="old\**" />
+        <None Remove="old\**"/>
     </ItemGroup>
 
 </Project>

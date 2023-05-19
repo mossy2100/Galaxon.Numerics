@@ -32,10 +32,10 @@ public class TestCombinationsAndPermutations
     public void TestGetPermutationsSimple()
     {
         List<int> bag = new () { 2, 3, 5, 7 };
-        List<List<int>> perms = Factorials.GetPermutations(bag, 2);
+        var perms = Factorials.GetPermutations(bag, 2);
         Assert.AreEqual(12, perms.Count);
 
-        int[] permsAsStrings = perms.Select(list => list[0] * 10 + list[1]).ToArray();
+        var permsAsStrings = perms.Select(list => list[0] * 10 + list[1]).ToArray();
         Assert.AreEqual(23, permsAsStrings[0]);
         Assert.AreEqual(25, permsAsStrings[1]);
         Assert.AreEqual(27, permsAsStrings[2]);

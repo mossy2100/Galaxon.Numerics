@@ -26,8 +26,8 @@ public class Equations
             return 0;
         }
 
-        double result = coeffs[^1];
-        for (int i = coeffs.Length - 2; i >= 0; i--)
+        var result = coeffs[^1];
+        for (var i = coeffs.Length - 2; i >= 0; i--)
         {
             result = coeffs[i] + result * x;
         }
@@ -59,7 +59,7 @@ public class Equations
         }
 
         // Calculate the discriminant.
-        double d = b * b - 4 * a * c;
+        var d = b * b - 4 * a * c;
 
         // Check for no solutions.
         if (d < 0)
@@ -68,7 +68,7 @@ public class Equations
         }
 
         // Prep useful value to reduce number of multiplications.
-        double twoA = 2 * a;
+        var twoA = 2 * a;
 
         // Check for one solution.
         if (d == 0)
@@ -78,7 +78,7 @@ public class Equations
         }
 
         // There are 2 solutions.
-        Complex sqrtD = Complex.Sqrt(d);
+        var sqrtD = Complex.Sqrt(d);
         result.Add((-b + sqrtD) / twoA);
         result.Add((-b - sqrtD) / twoA);
         return result;

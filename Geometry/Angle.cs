@@ -2,6 +2,30 @@
 
 public static class Angle
 {
+    #region String methods
+
+    /// <summary>
+    /// Formats the angle as degrees, arcminutes, and arcseconds.
+    /// e.g. The angle 4.0 radians is equal to 229.183118052329° which is converted to the string
+    /// 229° 10′ 59.225″
+    /// NB: No sign is shown for the arcminutes and arcseconds values.
+    /// However, if the degrees value is negative, then the arcminutes and arcseconds values will
+    /// also be negative (or zero).
+    /// </summary>
+    /// <param name="degrees">The angle in degrees.</param>
+    /// <param name="scale">
+    /// The number of decimal places to display for the arcseconds value.
+    /// </param>
+    /// <returns>A string with the formatted angle.</returns>
+    public static string FormatDms(double degrees, byte scale = 0)
+    {
+        (var wholeDegrees, var arcminutes, var arcseconds) = DegToDms(degrees);
+        var arcsecondsString = Abs(arcseconds).ToString($"F{scale}");
+        return $"{wholeDegrees}° {Abs(arcminutes)}′ {arcsecondsString}″";
+    }
+
+    #endregion String methods
+
     #region Normalize methods
 
     /// <summary>
@@ -47,16 +71,14 @@ public static class Angle
     /// </summary>
     /// <param name="degrees">An angle size in degrees.</param>
     /// <returns>The angle size in radians.</returns>
-    public static double DegToRad(double degrees) =>
-        degrees * RadiansPerDegree;
+    public static double DegToRad(double degrees) => degrees * RadiansPerDegree;
 
     /// <summary>
     /// Convert radians to degrees.
     /// </summary>
     /// <param name="radians">An angle size in radians.</param>
     /// <returns>The angle size in degrees.</returns>
-    public static double RadToDeg(double radians) =>
-        radians * DegreesPerRadian;
+    public static double RadToDeg(double radians) => radians * DegreesPerRadian;
 
     /// <summary>
     /// Creates a new angle from degrees, arcminutes, and (optionally) arcseconds.
@@ -97,12 +119,12 @@ public static class Angle
     /// </returns>
     public static (double degrees, double arcminutes, double arcseconds) DegToDms(double degrees)
     {
-        double wholeDegrees = Truncate(degrees);
-        double fracDegrees = degrees - wholeDegrees;
-        double arcminutes = fracDegrees * ArcminutesPerDegree;
-        double wholeArcminutes = Truncate(arcminutes);
-        double fracArcminutes = arcminutes - wholeArcminutes;
-        double arcseconds = fracArcminutes * ArcsecondsPerArcminute;
+        var wholeDegrees = Truncate(degrees);
+        var fracDegrees = degrees - wholeDegrees;
+        var arcminutes = fracDegrees * ArcminutesPerDegree;
+        var wholeArcminutes = Truncate(arcminutes);
+        var fracArcminutes = arcminutes - wholeArcminutes;
+        var arcseconds = fracArcminutes * ArcsecondsPerArcminute;
         return (degrees: wholeDegrees, arcminutes: wholeArcminutes, arcseconds);
     }
 
@@ -122,30 +144,6 @@ public static class Angle
 
     #endregion Conversion methods
 
-    #region String methods
-
-    /// <summary>
-    /// Formats the angle as degrees, arcminutes, and arcseconds.
-    /// e.g. The angle 4.0 radians is equal to 229.183118052329° which is converted to the string
-    /// 229° 10′ 59.225″
-    /// NB: No sign is shown for the arcminutes and arcseconds values.
-    /// However, if the degrees value is negative, then the arcminutes and arcseconds values will
-    /// also be negative (or zero).
-    /// </summary>
-    /// <param name="degrees">The angle in degrees.</param>
-    /// <param name="scale">
-    /// The number of decimal places to display for the arcseconds value.
-    /// </param>
-    /// <returns>A string with the formatted angle.</returns>
-    public static string FormatDms(double degrees, byte scale = 0)
-    {
-        (double wholeDegrees, double arcminutes, double arcseconds) = DegToDms(degrees);
-        string arcsecondsString = Abs(arcseconds).ToString($"F{scale}");
-        return $"{wholeDegrees}° {Abs(arcminutes)}′ {arcsecondsString}″";
-    }
-
-    #endregion String methods
-
     #region Trigonometric methods
 
     /// <summary>
@@ -153,42 +151,36 @@ public static class Angle
     /// </summary>
     /// <param name="radians">The size of an angle in radians.</param>
     /// <returns></returns>
-    public static double Sin2(double radians) =>
-        Pow(Sin(radians), 2);
+    public static double Sin2(double radians) => Pow(Sin(radians), 2);
 
     /// <summary>
     /// The square of the sine of an angle in radians.
     /// </summary>
     /// <param name="radians">The size of an angle in radians.</param>
     /// <returns></returns>
-    public static double Cos2(double radians) =>
-        Pow(Cos(radians), 2);
+    public static double Cos2(double radians) => Pow(Cos(radians), 2);
 
     /// <summary>
     /// The square of the tangent of an angle in radians.
     /// </summary>
     /// <param name="radians">The size of an angle in radians.</param>
     /// <returns></returns>
-    public static double Tan2(double radians) =>
-        Pow(Tan(radians), 2);
+    public static double Tan2(double radians) => Pow(Tan(radians), 2);
 
     /// <summary>
     /// The sine of an angle in degrees.
     /// </summary>
-    public static double SinDeg(double degrees) =>
-        Sin(DegToRad(degrees));
+    public static double SinDeg(double degrees) => Sin(DegToRad(degrees));
 
     /// <summary>
     /// The cosine of an angle in degrees.
     /// </summary>
-    public static double CosDeg(double degrees) =>
-        Cos(DegToRad(degrees));
+    public static double CosDeg(double degrees) => Cos(DegToRad(degrees));
 
     /// <summary>
     /// The tangent of an angle in degrees.
     /// </summary>
-    public static double TanDeg(double degrees) =>
-        Tan(DegToRad(degrees));
+    public static double TanDeg(double degrees) => Tan(DegToRad(degrees));
 
     #endregion Trigonometric methods
 

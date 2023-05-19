@@ -92,7 +92,7 @@ public static class NumberStrings
                     { 1_000_000_000_000_000, "quadrillion" },
                     { 1_000_000_000_000_000_000, "quintillion" }
                 };
-                long multiplier = 1_000_000_000_000_000_000;
+                var multiplier = 1_000_000_000_000_000_000;
                 while (n < multiplier)
                 {
                     multiplier /= 1000;
@@ -110,8 +110,7 @@ public static class NumberStrings
     /// </summary>
     /// <param name="s"></param>
     /// <returns></returns>
-    public static int LetterCount(string s) =>
-        s.Count(char.IsLetter);
+    public static int LetterCount(string s) => s.Count(char.IsLetter);
 
     public static int GetAlphabeticalValue(string name) =>
         name.Sum(c => c - (char.IsLower(c) ? 'a' : 'A') + 1);
@@ -133,23 +132,23 @@ public static class NumberStrings
 
         StringBuilder decimals = new ();
         long n = 1;
-        long d = x;
-        int current = 0;
+        var d = x;
+        var current = 0;
         Dictionary<(long n, long d), int> seen = new ();
         reptend = null;
 
         while (true)
         {
             // Get the quotient.
-            long q = n / d;
+            var q = n / d;
 
             // Check for a repeat of this quotient. If we've seen it before, the pattern of digits
             // will repeat, indicating a reptend.
-            if (seen.TryGetValue((n, d), out int reptendStart))
+            if (seen.TryGetValue((n, d), out var reptendStart))
             {
                 // Found a repeat.
-                int reptendLen = current - reptendStart;
-                string decimalString = decimals.ToString();
+                var reptendLen = current - reptendStart;
+                var decimalString = decimals.ToString();
                 reptend = decimalString[^reptendLen..];
                 return $"0.{decimalString[1..reptendStart]}({reptend})";
             }
@@ -159,7 +158,7 @@ public static class NumberStrings
             seen[(n, d)] = current;
 
             // Get the remainder. If it's 0, we're done.
-            long r = n % d;
+            var r = n % d;
             if (r == 0)
             {
                 return $"0.{decimals.ToString()[1..]}";

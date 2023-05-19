@@ -14,7 +14,7 @@ public static class Functions
         Dictionary<T, TResult> cache = new ();
         return x =>
         {
-            if (cache.TryGetValue(x, out TResult? result))
+            if (cache.TryGetValue(x, out var result))
             {
                 return result;
             }
@@ -37,7 +37,7 @@ public static class Functions
         Dictionary<(T1, T2), TResult> cache = new ();
         return (x, y) =>
         {
-            if (cache.TryGetValue((x, y), out TResult? result))
+            if (cache.TryGetValue((x, y), out var result))
             {
                 return result;
             }

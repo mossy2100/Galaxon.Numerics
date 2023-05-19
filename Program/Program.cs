@@ -1,6 +1,6 @@
 ﻿Console.WriteLine("Test");
 
-for (int i = 33; i <= 126; i++)
+for (var i = 33; i <= 126; i++)
 {
     Console.Write((char)i);
 }

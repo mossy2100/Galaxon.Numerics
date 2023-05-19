@@ -78,27 +78,25 @@ public class Ellipsoid : IShape3D
 
     #region Ellipsoid Types
 
-    public bool IsSphere() =>
-        RadiusA.FuzzyEquals(RadiusB) && RadiusB.FuzzyEquals(RadiusC);
+    public bool IsSphere() => RadiusA.FuzzyEquals(RadiusB) && RadiusB.FuzzyEquals(RadiusC);
 
     public bool IsOblate()
     {
-        (double a, double b, double c) = SortedRadii();
+        (var a, var b, var c) = SortedRadii();
         return a.FuzzyEquals(b) && b > c;
     }
 
     public bool IsProlate()
     {
-        (double a, double b, double c) = SortedRadii();
+        (var a, var b, var c) = SortedRadii();
         return a > b && b.FuzzyEquals(c);
     }
 
-    public bool IsSpheroid() =>
-        IsOblate() || IsProlate();
+    public bool IsSpheroid() => IsOblate() || IsProlate();
 
     public bool IsScalene()
     {
-        (double a, double b, double c) = SortedRadii();
+        (var a, var b, var c) = SortedRadii();
         return a > b && b > c;
     }
 
@@ -118,8 +116,8 @@ public class Ellipsoid : IShape3D
         {
             // Check for simple cases to get a quicker answer.
             // Calculate intermediate variables as needed.
-            (double a, double b, double c) = SortedRadii();
-            double a2 = a * a;
+            (var a, var b, var c) = SortedRadii();
+            var a2 = a * a;
 
             if (IsSphere())
             {
@@ -127,9 +125,9 @@ public class Ellipsoid : IShape3D
                 return 4 * PI * a2;
             }
 
-            double c2 = c * c;
-            double e2 = 1 - c2 / a2;
-            double e = Sqrt(e2);
+            var c2 = c * c;
+            var e2 = 1 - c2 / a2;
+            var e = Sqrt(e2);
 
             if (IsOblate())
             {
@@ -137,7 +135,7 @@ public class Ellipsoid : IShape3D
                 return Tau * a2 * (1 + (1 - e2) / e * Atanh(e));
             }
 
-            double phi = Asin(e);
+            var phi = Asin(e);
 
             if (IsProlate())
             {
@@ -148,8 +146,8 @@ public class Ellipsoid : IShape3D
             // The ellipsoid is scalene.
             // Formula: https://keisan.casio.com/exec/system/1223392149
             // (This is more efficient than the formula in Wikipedia).
-            double k = Sqrt(1 - c2 / (b * b)) / e;
-            (double F, double E) = EllipticIntegrals.FE(phi, k);
+            var k = Sqrt(1 - c2 / (b * b)) / e;
+            var (F, E) = EllipticIntegrals.FE(phi, k);
             return Tau * (c2 + a * b * e * E + b * c2 / (a * e) * F);
         }
     }

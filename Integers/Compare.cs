@@ -25,8 +25,8 @@ public static class Compare
                 return values[0];
 
             default:
-                T max = values[0];
-                for (int i = 1; i < values.Length; i++)
+                var max = values[0];
+                for (var i = 1; i < values.Length; i++)
                 {
                     if (values[i].CompareTo(max) == 1)
                     {
@@ -57,8 +57,8 @@ public static class Compare
                 return values[0];
 
             default:
-                T min = values[0];
-                for (int i = 1; i < values.Length; i++)
+                var min = values[0];
+                for (var i = 1; i < values.Length; i++)
                 {
                     if (values[i].CompareTo(min) == -1)
                     {

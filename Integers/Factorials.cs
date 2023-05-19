@@ -74,7 +74,7 @@ public static class Factorials
             return result;
         }
 
-        for (int i = 0; i < bag.Count; i++)
+        for (var i = 0; i < bag.Count; i++)
         {
             // If we only want 1 item, shortcut.
             if (n == 1)
@@ -85,22 +85,22 @@ public static class Factorials
             }
 
             // How many items left?
-            int nRemainingItems = bag.Count - i;
+            var nRemainingItems = bag.Count - i;
 
             // If there are n items remaining, shortcut.
             if (nRemainingItems == n)
             {
-                List<T> newCombo = bag.GetRange(i, n);
+                var newCombo = bag.GetRange(i, n);
                 result.Add(newCombo);
                 continue;
             }
 
             // Get the bag with all items following the ith item.
-            List<T> remainder = bag.GetRange(i + 1, nRemainingItems - 1);
+            var remainder = bag.GetRange(i + 1, nRemainingItems - 1);
 
             // Find all the ways of selecting n-1 items from the remainder.
-            List<List<T>> remCombos = GetCombinations(remainder, n - 1);
-            foreach (List<T> remCombo in remCombos)
+            var remCombos = GetCombinations(remainder, n - 1);
+            foreach (var remCombo in remCombos)
             {
                 List<T> newCombo = new () { bag[i] };
                 newCombo.AddRange(remCombo);
@@ -124,8 +124,7 @@ public static class Factorials
     /// <param name="n">Number of items to select from.</param>
     /// <param name="r">Number of items to select.</param>
     /// <returns></returns>
-    public static BigInteger NumPermutations(long n, long r) =>
-        Factorial(n) / Factorial(n - r);
+    public static BigInteger NumPermutations(long n, long r) => Factorial(n) / Factorial(n - r);
 
     /// <summary>
     /// Get all the different ways to select n items from a bag of items, considering order.
@@ -156,19 +155,19 @@ public static class Factorials
         }
 
         // Get all the ways of selecting n items from the bag.
-        for (int i = 0; i < bag.Count; i++)
+        for (var i = 0; i < bag.Count; i++)
         {
             // Select an item from the bag.
-            T item = bag[i];
+            var item = bag[i];
 
             // Get the remainder of the bag.
-            List<T> remainder = bag.GetRange(0, i);
-            List<T> remainder2 = bag.GetRange(i + 1, bag.Count - i - 1);
+            var remainder = bag.GetRange(0, i);
+            var remainder2 = bag.GetRange(i + 1, bag.Count - i - 1);
             remainder.AddRange(remainder2);
 
             // Get all permutations of the remainder.
-            List<List<T>> remPerms = GetPermutations(remainder, n - 1);
-            foreach (List<T> remPerm in remPerms)
+            var remPerms = GetPermutations(remainder, n - 1);
+            foreach (var remPerm in remPerms)
             {
                 List<T> perm = new () { item };
                 perm.AddRange(remPerm);
@@ -196,12 +195,12 @@ public static class Factorials
         }
 
         HashSet<string> result = new ();
-        for (int i = 0; i < chars.Length; i++)
+        for (var i = 0; i < chars.Length; i++)
         {
-            char ch = chars[i];
-            string rem = chars[..i] + chars[(i + 1)..];
-            List<string> permutations = CharPermutations(rem);
-            foreach (string perm in permutations)
+            var ch = chars[i];
+            var rem = chars[..i] + chars[(i + 1)..];
+            var permutations = CharPermutations(rem);
+            foreach (var perm in permutations)
             {
                 result.Add($"{ch}{perm}");
             }
@@ -221,7 +220,7 @@ public static class Factorials
     /// </summary>
     public static string SortDigits(ulong n)
     {
-        char[] digits = n.ToString().ToCharArray();
+        var digits = n.ToString().ToCharArray();
         Array.Sort(digits);
         return new string(digits);
     }
@@ -229,8 +228,7 @@ public static class Factorials
     /// <summary>
     /// Checks to see if one number is a permutation of another.
     /// </summary>
-    public static bool IsPermutationOf(ulong n, ulong m) =>
-        SortDigits(n) == SortDigits(m);
+    public static bool IsPermutationOf(ulong n, ulong m) => SortDigits(n) == SortDigits(m);
 
     #endregion Permutations
 }

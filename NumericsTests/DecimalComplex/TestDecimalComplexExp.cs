@@ -1,6 +1,6 @@
 using System.Numerics;
-using Galaxon.Numerics.Types;
 using DecimalMath;
+using Galaxon.Numerics.Types;
 
 namespace Galaxon.Numerics.Tests;
 
@@ -91,8 +91,7 @@ public class TestDecimalComplexExp
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentOutOfRangeException))]
-    public void LnThrowsExceptionIfArgZero() =>
-        DecimalComplex.Log(DecimalComplex.Zero);
+    public void LnThrowsExceptionIfArgZero() => DecimalComplex.Log(DecimalComplex.Zero);
 
     [TestMethod]
     public void DecimalComplexLnMatchesComplexLog()
@@ -213,13 +212,11 @@ public class TestDecimalComplexExp
 
     [TestMethod]
     [ExpectedException(typeof(ArithmeticException))]
-    public void PowThrowsWhenZeroRaisedToImagNum() =>
-        DecimalComplex.Pow(0, DecimalComplex.I);
+    public void PowThrowsWhenZeroRaisedToImagNum() => DecimalComplex.Pow(0, DecimalComplex.I);
 
     [TestMethod]
     [ExpectedException(typeof(ArithmeticException))]
-    public void PowThrowsWhenZeroRaisedToNegNum() =>
-        DecimalComplex.Pow(0, -1);
+    public void PowThrowsWhenZeroRaisedToNegNum() => DecimalComplex.Pow(0, -1);
 
     [TestMethod]
     public void PowTest()
