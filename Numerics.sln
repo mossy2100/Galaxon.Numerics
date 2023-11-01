@@ -4,7 +4,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumericsTests", "NumericsTe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Geometry", "Geometry\Geometry.csproj", "{7F8749C3-D7D3-473C-8A41-373E4235E049}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maths", "Maths\Maths.csproj", "{568A71DB-CBA2-4F9B-B3C0-3024B22E2AF4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Algebra", "Algebra\Algebra.csproj", "{568A71DB-CBA2-4F9B-B3C0-3024B22E2AF4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Program", "Program\Program.csproj", "{EEB319E8-07B4-44AF-BB83-C01DFDA1C65B}"
 EndProject

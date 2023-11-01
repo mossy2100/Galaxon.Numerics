@@ -21,10 +21,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Maths\Maths.csproj"/>
-    </ItemGroup>
-
-    <ItemGroup>
         <Compile Remove="old\**"/>
     </ItemGroup>
 

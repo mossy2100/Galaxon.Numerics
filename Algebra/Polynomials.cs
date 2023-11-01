@@ -1,9 +1,9 @@
 ﻿using System.Numerics;
 using Galaxon.Core.Exceptions;
 
-namespace Galaxon.Numerics.Maths;
+namespace Galaxon.Numerics.Algebra;
 
-public class Equations
+public class Polynomials
 {
     /// <summary>
     /// Calculate the result of a polynomial expression using Horner's algorithm.
