@@ -5,6 +5,45 @@ namespace Galaxon.Numerics.Tests;
 [TestClass]
 public class CombinatorialTests
 {
+    /// <summary>
+    /// Test small, valid values.
+    /// </summary>
+    [TestMethod]
+    public void BinomialCoefficient_NonNegativeParameters_ReturnsCorrectResults()
+    {
+        Assert.AreEqual(1, Combinatorial.BinomialCoefficient(0, 0));
+
+        Assert.AreEqual(1, Combinatorial.BinomialCoefficient(1, 0));
+        Assert.AreEqual(1, Combinatorial.BinomialCoefficient(1, 1));
+
+        Assert.AreEqual(1, Combinatorial.BinomialCoefficient(2, 0));
+        Assert.AreEqual(2, Combinatorial.BinomialCoefficient(2, 1));
+        Assert.AreEqual(1, Combinatorial.BinomialCoefficient(2, 2));
+
+        Assert.AreEqual(1, Combinatorial.BinomialCoefficient(3, 0));
+        Assert.AreEqual(3, Combinatorial.BinomialCoefficient(3, 1));
+        Assert.AreEqual(3, Combinatorial.BinomialCoefficient(3, 2));
+        Assert.AreEqual(1, Combinatorial.BinomialCoefficient(3, 3));
+
+        Assert.AreEqual(1, Combinatorial.BinomialCoefficient(4, 0));
+        Assert.AreEqual(4, Combinatorial.BinomialCoefficient(4, 1));
+        Assert.AreEqual(6, Combinatorial.BinomialCoefficient(4, 2));
+        Assert.AreEqual(4, Combinatorial.BinomialCoefficient(4, 3));
+        Assert.AreEqual(1, Combinatorial.BinomialCoefficient(4, 4));
+
+        Assert.AreEqual(1, Combinatorial.BinomialCoefficient(10, 0));
+        Assert.AreEqual(10, Combinatorial.BinomialCoefficient(10, 1));
+        Assert.AreEqual(45, Combinatorial.BinomialCoefficient(10, 2));
+        Assert.AreEqual(120, Combinatorial.BinomialCoefficient(10, 3));
+        Assert.AreEqual(210, Combinatorial.BinomialCoefficient(10, 4));
+        Assert.AreEqual(252, Combinatorial.BinomialCoefficient(10, 5));
+        Assert.AreEqual(210, Combinatorial.BinomialCoefficient(10, 6));
+        Assert.AreEqual(120, Combinatorial.BinomialCoefficient(10, 7));
+        Assert.AreEqual(45, Combinatorial.BinomialCoefficient(10, 8));
+        Assert.AreEqual(10, Combinatorial.BinomialCoefficient(10, 9));
+        Assert.AreEqual(1, Combinatorial.BinomialCoefficient(10, 10));
+    }
+
     [TestMethod]
     public void TestGetPermutationsGuards()
     {

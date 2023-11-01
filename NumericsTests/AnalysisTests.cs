@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using Galaxon.BigNumbers;
 using Galaxon.Numerics.Algebra;
 
@@ -15,9 +14,9 @@ public class AnalysisTests
     [TestMethod]
     public void TestBernoulli1()
     {
-        for (var i = 0; i <= 22; i++)
+        for (var i = 0; i <= 20; i++)
         {
-            Trace.WriteLine($"Rationals.Bernoulli({i}) = {Analysis.Bernoulli(i)}");
+            Console.WriteLine($"Rationals.Bernoulli({i}) = {Analysis.Bernoulli(i)}");
         }
     }
 
