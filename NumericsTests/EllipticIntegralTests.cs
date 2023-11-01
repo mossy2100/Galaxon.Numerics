@@ -3,7 +3,7 @@
 namespace Galaxon.Numerics.Tests;
 
 [TestClass]
-public class TestEllipticIntegrals
+public class EllipticIntegralTests
 {
     /// <summary>
     /// I had to use a smaller delta for testing RF() and RD() because as yet I haven't found

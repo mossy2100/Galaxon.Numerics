@@ -4,7 +4,7 @@ using Galaxon.Numerics.Integers;
 
 namespace Galaxon.Numerics.Algebra;
 
-public static class Rationals
+public static class Analysis
 {
     #region Bernoulli numbers
 
@@ -27,7 +27,7 @@ public static class Rationals
         BigRational b = 1;
         for (var k = 0; k < n; k++)
         {
-            b -= Combinatorial.BinomialCoeff(n, k) * Bernoulli(k) / (n - k + 1);
+            b -= Combinatorial.BinomialCoefficient(n, k) * Bernoulli(k) / (n - k + 1);
         }
         return b;
     }

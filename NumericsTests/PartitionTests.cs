@@ -4,7 +4,7 @@ using Galaxon.Numerics.Integers;
 namespace Galaxon.Numerics.Tests;
 
 [TestClass]
-public class TestPartitions
+public class PartitionTests
 {
     [TestMethod]
     public void TestPDigits()

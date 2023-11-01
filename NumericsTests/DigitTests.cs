@@ -3,7 +3,7 @@ using Galaxon.Numerics.Integers;
 namespace Galaxon.Numerics.Tests;
 
 [TestClass]
-public class TestDigits
+public class DigitTests
 {
     [TestMethod]
     public void TestNumDigits1()

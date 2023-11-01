@@ -3,7 +3,7 @@
 namespace Galaxon.Numerics.Tests;
 
 [TestClass]
-public class TestMinMax
+public class MinMaxTests
 {
     [TestMethod]
     public void TestMax()

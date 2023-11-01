@@ -3,7 +3,7 @@ using Galaxon.Numerics.Integers;
 namespace Galaxon.Numerics.Tests;
 
 [TestClass]
-public class TestNumberStrings
+public class NumberStringTests
 {
     [TestMethod]
     public void TestNumbersToWords()

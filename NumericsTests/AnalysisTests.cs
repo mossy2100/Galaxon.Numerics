@@ -5,7 +5,7 @@ using Galaxon.Numerics.Algebra;
 namespace Galaxon.Numerics.Tests;
 
 [TestClass]
-public class TestRationals
+public class AnalysisTests
 {
     /// <summary>
     /// This method just spits out the first 21 Bernoulli numbers, which can be compared with the
@@ -17,7 +17,7 @@ public class TestRationals
     {
         for (var i = 0; i <= 22; i++)
         {
-            Trace.WriteLine($"Rationals.Bernoulli({i}) = {Rationals.Bernoulli(i)}");
+            Trace.WriteLine($"Rationals.Bernoulli({i}) = {Analysis.Bernoulli(i)}");
         }
     }
 
@@ -30,46 +30,46 @@ public class TestRationals
 
         n = 0;
         expected = 1;
-        Assert.AreEqual(expected, Rationals.Bernoulli(n));
+        Assert.AreEqual(expected, Analysis.Bernoulli(n));
 
         n = 1;
         expected = new BigRational(1, 2);
-        Assert.AreEqual(expected, Rationals.Bernoulli(n));
+        Assert.AreEqual(expected, Analysis.Bernoulli(n));
 
         n = 2;
         expected = new BigRational(1, 6);
-        Assert.AreEqual(expected, Rationals.Bernoulli(n));
+        Assert.AreEqual(expected, Analysis.Bernoulli(n));
 
         n = 3;
         expected = 0;
-        Assert.AreEqual(expected, Rationals.Bernoulli(n));
+        Assert.AreEqual(expected, Analysis.Bernoulli(n));
 
         n = 4;
         expected = new BigRational(-1, 30);
-        Assert.AreEqual(expected, Rationals.Bernoulli(n));
+        Assert.AreEqual(expected, Analysis.Bernoulli(n));
 
         n = 5;
         expected = 0;
-        Assert.AreEqual(expected, Rationals.Bernoulli(n));
+        Assert.AreEqual(expected, Analysis.Bernoulli(n));
 
         n = 6;
         expected = new BigRational(1, 42);
-        Assert.AreEqual(expected, Rationals.Bernoulli(n));
+        Assert.AreEqual(expected, Analysis.Bernoulli(n));
 
         n = 7;
         expected = 0;
-        Assert.AreEqual(expected, Rationals.Bernoulli(n));
+        Assert.AreEqual(expected, Analysis.Bernoulli(n));
 
         n = 8;
         expected = new BigRational(-1, 30);
-        Assert.AreEqual(expected, Rationals.Bernoulli(n));
+        Assert.AreEqual(expected, Analysis.Bernoulli(n));
 
         n = 9;
         expected = 0;
-        Assert.AreEqual(expected, Rationals.Bernoulli(n));
+        Assert.AreEqual(expected, Analysis.Bernoulli(n));
 
         n = 10;
         expected = new BigRational(5, 66);
-        Assert.AreEqual(expected, Rationals.Bernoulli(n));
+        Assert.AreEqual(expected, Analysis.Bernoulli(n));
     }
 }

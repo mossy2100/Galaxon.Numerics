@@ -15,7 +15,7 @@ public static class Combinatorial
     /// <param name="n">Set size/upper index.</param>
     /// <param name="k">Subset size/lower index.</param>
     /// <returns>The binomial coefficient.</returns>
-    public static BigInteger BinomialCoeff(int n, int k)
+    public static BigInteger BinomialCoefficient(int n, int k)
     {
         // Optimizations.
         if (k < 0 || k > n) return 0;

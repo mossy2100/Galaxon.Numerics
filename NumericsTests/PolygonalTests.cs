@@ -3,7 +3,7 @@ using Galaxon.Numerics.Integers;
 namespace Galaxon.Numerics.Tests;
 
 [TestClass]
-public class TestPolygonal
+public class PolygonalTests
 {
     [TestMethod]
     public void TestLargeNumber()

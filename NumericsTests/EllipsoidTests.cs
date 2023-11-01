@@ -3,7 +3,7 @@
 namespace Galaxon.Numerics.Tests;
 
 [TestClass]
-public class TestEllipsoids
+public class EllipsoidTests
 {
     private const double _Delta = 1e-9;
 

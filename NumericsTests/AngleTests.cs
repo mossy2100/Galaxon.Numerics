@@ -4,7 +4,7 @@ using static Galaxon.Numerics.Geometry.Angle;
 namespace Galaxon.Numerics.Tests;
 
 [TestClass]
-public class TestAngle
+public class AngleTests
 {
     private const double _Delta = 1e-9;
 

@@ -6,7 +6,7 @@ namespace Galaxon.Numerics.Tests;
 
 [TestClass]
 [Ignore]
-public class TestPrimes
+public class PrimeTests
 {
     [TestMethod]
     public void TestIsPrimeSlow()
