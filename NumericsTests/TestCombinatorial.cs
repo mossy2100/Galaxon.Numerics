@@ -3,7 +3,7 @@ using Galaxon.Numerics.Integers;
 namespace Galaxon.Numerics.Tests;
 
 [TestClass]
-public class TestCombinationsAndPermutations
+public class TestCombinatorial
 {
     [TestMethod]
     public void TestGetPermutationsGuards()

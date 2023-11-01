@@ -23,7 +23,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Geometry\Geometry.csproj"/>
-        <ProjectReference Include="..\Types\Types.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
