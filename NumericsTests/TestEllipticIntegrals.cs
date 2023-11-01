@@ -9,11 +9,11 @@ public class TestEllipticIntegrals
     /// I had to use a smaller delta for testing RF() and RD() because as yet I haven't found
     /// another online calculator with higher precision to compare results with.
     /// You can test the functions here:
-    /// <see href="https://rdrr.io/cran/Carlson/src/R/RF.R" />
+    /// <see href="https://rdrr.io/cran/Carlson/src/R/RF.R"/>
     /// In the textarea where it says "Try the Carlson package in your browser"
     /// e.g. gsl::ellint_RF(3789, 12, 777)
     /// There's also this one, but it's less precise:
-    /// <see href="https://calcresource.com/eval-elliptic-carlson.html" />
+    /// <see href="https://calcresource.com/eval-elliptic-carlson.html"/>
     /// </summary>
     private const double _Delta = 1e-7;
 

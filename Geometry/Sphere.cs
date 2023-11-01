@@ -2,9 +2,7 @@
 
 public class Sphere : Ellipsoid
 {
-    public Sphere(double radius) : base(radius, radius, radius)
-    {
-    }
+    public Sphere(double radius) : base(radius, radius, radius) { }
 
     public double Radius
     {

@@ -1,13 +1,15 @@
+using Galaxon.Core.Functional;
+
 namespace Galaxon.Numerics.Integers;
 
 public static class Sequences
 {
     public static readonly Func<long, List<long>> Collatz =
-        Functions.Memoize<long, List<long>>(_Collatz);
+        Memoization.Memoize<long, List<long>>(_Collatz);
 
     /// <summary>
     /// Returns series of numbers in a Collatz series, starting at n and ending in 1.
-    /// <see href="https://en.wikipedia.org/wiki/Collatz_conjecture" />
+    /// <see href="https://en.wikipedia.org/wiki/Collatz_conjecture"/>
     /// </summary>
     /// <param name="n">Starting number.</param>
     /// <returns>The series of numbers.</returns>

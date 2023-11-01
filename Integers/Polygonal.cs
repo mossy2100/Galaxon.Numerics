@@ -1,7 +1,7 @@
 namespace Galaxon.Numerics.Integers;
 
 /// <summary>
-///     <see href="https://en.wikipedia.org/wiki/Polygonal_number" />
+///     <see href="https://en.wikipedia.org/wiki/Polygonal_number"/>
 /// </summary>
 public static class Polygonal
 {

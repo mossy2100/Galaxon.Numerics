@@ -11,11 +11,11 @@ public class TestCombinationsAndPermutations
         List<int> bag = new () { 2, 3, 5, 7 };
         List<List<int>> perms;
 
-        perms = Factorials.GetPermutations(bag, 0);
+        perms = Combinatorial.GetPermutations(bag, 0);
         Assert.AreEqual(1, perms.Count);
         Assert.AreEqual(0, perms[0].Count);
 
-        perms = Factorials.GetPermutations(bag, 1);
+        perms = Combinatorial.GetPermutations(bag, 1);
         Assert.AreEqual(bag.Count, perms.Count);
         Assert.AreEqual(1, perms[0].Count);
         Assert.AreEqual(2, perms[0][0]);
@@ -24,7 +24,7 @@ public class TestCombinationsAndPermutations
         Assert.AreEqual(1, perms[2].Count);
         Assert.AreEqual(5, perms[2][0]);
 
-        perms = Factorials.GetPermutations(bag, 5);
+        perms = Combinatorial.GetPermutations(bag, 5);
         Assert.AreEqual(0, perms.Count);
     }
 
@@ -32,7 +32,7 @@ public class TestCombinationsAndPermutations
     public void TestGetPermutationsSimple()
     {
         List<int> bag = new () { 2, 3, 5, 7 };
-        var perms = Factorials.GetPermutations(bag, 2);
+        var perms = Combinatorial.GetPermutations(bag, 2);
         Assert.AreEqual(12, perms.Count);
 
         var permsAsStrings = perms.Select(list => list[0] * 10 + list[1]).ToArray();

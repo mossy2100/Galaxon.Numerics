@@ -1,5 +1,7 @@
 Fractions
 =========
+Remove this. Replaced by BigComplex.
+
 * Add support for mixed numbers to the Fraction class e.g. 2 3/4. Format can be "M".
 So:
   "U" would be unicode, proper or improper. n/d

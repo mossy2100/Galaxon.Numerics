@@ -1,4 +1,5 @@
 using System.Numerics;
+using Galaxon.Core.Functional;
 
 namespace Galaxon.Numerics.Integers;
 
@@ -8,14 +9,14 @@ public static class Partitions
     /// Memoized version of P().
     /// </summary>
     public static readonly Func<ushort, BigInteger> P =
-        Functions.Memoize<ushort, BigInteger>(_P);
+        Memoization.Memoize<ushort, BigInteger>(_P);
 
     /// <summary>
     /// P() function using a recurrence relation.
     /// The number of unique ways an integer can be partitioned into smaller integers.
     /// The argument is limited to ushort to avoid out-of-memory errors.
     /// </summary>
-    /// <see href="https://en.wikipedia.org/wiki/Partition_function_(number_theory)#Recurrence_relations" />
+    /// <see href="https://en.wikipedia.org/wiki/Partition_function_(number_theory)#Recurrence_relations"/>
     /// <param name="n">The number to partition.</param>
     /// <returns>The number of partitions.</returns>
     public static BigInteger _P(ushort n)

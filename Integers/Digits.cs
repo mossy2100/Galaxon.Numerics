@@ -37,7 +37,7 @@ public static class Digits
     }
 
     public static BigInteger SumFactorialDigits(BigInteger n) =>
-        n.ToString().Select(c => Factorials.Factorial(c - '0')).Sum();
+        n.ToString().Select(c => XBigInteger.Factorial(c - '0')).Sum();
 
     /// <summary>
     /// Get the number of digits in the BigInteger.

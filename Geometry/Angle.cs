@@ -19,7 +19,7 @@ public static class Angle
     /// <returns>A string with the formatted angle.</returns>
     public static string FormatDms(double degrees, byte scale = 0)
     {
-        (var wholeDegrees, var arcminutes, var arcseconds) = DegToDms(degrees);
+        var (wholeDegrees, arcminutes, arcseconds) = DegToDms(degrees);
         var arcsecondsString = Abs(arcseconds).ToString($"F{scale}");
         return $"{wholeDegrees}° {Abs(arcminutes)}′ {arcsecondsString}″";
     }
@@ -187,24 +187,33 @@ public static class Angle
     #region Constants
 
     public const long DegreesPerCircle = 360;
+
     public const long DegreesPerSemicircle = 180;
+
     public const long DegreesPerQuadrant = 90;
 
     public const long ArcminutesPerDegree = 60;
+
     public const long ArcminutesPerCircle = ArcminutesPerDegree * DegreesPerCircle;
 
     public const long ArcsecondsPerArcminute = 60;
+
     public const long ArcsecondsPerDegree = ArcsecondsPerArcminute * ArcminutesPerDegree;
+
     public const long ArcsecondsPerCircle = ArcsecondsPerDegree * DegreesPerCircle;
 
     public const double RadiansPerCircle = Tau;
+
     public const double RadiansPerSemicircle = PI;
+
     public const double RadiansPerQuadrant = PI / 2;
 
     public const double RadiansPerDegree = 1.745329251994329576923691e-2;
+
     public const double DegreesPerRadian = 57.29577951308232087679815;
 
     public const double RadiansPerArcsecond = 4.848136811095359935899141e-6;
+
     public const double ArcsecondsPerRadian = 206264.8062470963551564734;
 
     #endregion Constants

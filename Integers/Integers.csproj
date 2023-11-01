@@ -18,9 +18,6 @@
         <Reference Include="Galaxon.Core">
             <HintPath>..\..\Core\Core\bin\Debug\net7.0\Galaxon.Core.dll</HintPath>
         </Reference>
-        <Reference Include="Galaxon.Numerics.BigDecimal">
-            <HintPath>..\..\BigDecimal\BigDecimal\bin\Debug\net7.0\Galaxon.Numerics.BigDecimal.dll</HintPath>
-        </Reference>
     </ItemGroup>
 
     <ItemGroup>

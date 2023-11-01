@@ -15,7 +15,7 @@
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=_002FUsers_002Fshaun_002FDocuments_002FWeb_0020_0026_0020software_0020development_002FC_0023_002FProjects_002FGalaxon_002FExtensions_002FXTesting_002Fbin_002FDebug_002Fnet7_002E0_002FGalaxon_002EExtensions_002ETesting_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=_002FUsers_002Fshaun_002FDocuments_002FWeb_0020_0026_0020software_0020development_002FC_0023_002FProjects_002FGalaxon_002FExtensions_002FXTesting_002Fobj_002FDebug_002Fnet7_002E0_002FGalaxon_002EExtensions_002ETesting_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=_002FUsers_002Fshaun_002FDocuments_002FWeb_0020_0026_0020software_0020development_002FC_0023_002FProjects_002FGalaxon_002FExtensions_002FXTime_002Fbin_002FDebug_002Fnet7_002E0_002FGalaxon_002EExtensions_002ETime_002Edll/@EntryIndexedValue">True</s:Boolean>
-	<s:String x:Key="/Default/Environment/Highlighting/HighlightingSourceSnapshotLocation/@EntryValue">/Users/shaun/Library/Caches/JetBrains/Rider2023.1/resharper-host/temp/Rider/vAny/CoverageData/_Numerics.2104822310/Snapshot/snapshot.utdcvr</s:String>
+	
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=97b61156_002D6374_002D42f3_002Dbba9_002Da2cf641e8692/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="TestBigDecimal" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;Project Location="/Users/shaun/Documents/Web &amp;amp; software development/C#/Projects/Galaxon/Numerics/NumericsTests" Presentation="&amp;lt;NumericsTests&amp;gt;" /&gt;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

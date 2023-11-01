@@ -138,7 +138,7 @@ public struct DecimalComplex
 
     /// <summary>
     /// Construct a complex number from the magnitude and phase.
-    /// <see cref="System.Numerics.Complex.FromPolarCoordinates" />
+    /// <see cref="System.Numerics.Complex.FromPolarCoordinates"/>
     /// </summary>
     /// <param name="magnitude">
     /// The magnitude (or absolute value) of the complex
@@ -196,9 +196,9 @@ public struct DecimalComplex
     /// e.g. DecimalComplex z = DecimalComplex.Sqrt(-5);
     /// (There will be an implicit cast of the -5 to a DecimalComplex.)
     /// TODO Test.
-    /// <see cref="System.Math.Sqrt" />
-    /// <see cref="System.Numerics.Complex.Sqrt" />
-    /// <see cref="DecimalEx.Sqrt" />
+    /// <see cref="System.Math.Sqrt"/>
+    /// <see cref="System.Numerics.Complex.Sqrt"/>
+    /// <see cref="DecimalEx.Sqrt"/>
     /// </summary>
     /// <param name="z">A DecimalComplex number.</param>
     /// <returns>The positive square root as a DecimalComplex number.</returns>
@@ -234,10 +234,10 @@ public struct DecimalComplex
 
     /// <summary>
     /// Natural logarithm of a complex number.
-    /// <see cref="Log(Galaxon.Numerics.Types.DecimalComplex)" />
-    /// <see cref="XDecimal.Log(decimal)" />
-    /// <see cref="Math.Log(double)" />
-    /// <see cref="Complex.Log(Complex)" />
+    /// <see cref="Log(Galaxon.Numerics.Types.DecimalComplex)"/>
+    /// <see cref="XDecimal.Log(decimal)"/>
+    /// <see cref="Math.Log(double)"/>
+    /// <see cref="Complex.Log(Complex)"/>
     /// </summary>
     /// <param name="z">A complex number.</param>
     /// <returns>The natural logarithm of the given value.</returns>
@@ -265,8 +265,8 @@ public struct DecimalComplex
 
     /// <summary>
     /// Logarithm of a complex number in a specified base.
-    /// <see cref="Log(Galaxon.Numerics.Types.DecimalComplex)" />
-    /// <see cref="XDecimal.Log(decimal, decimal)" />
+    /// <see cref="Log(Galaxon.Numerics.Types.DecimalComplex)"/>
+    /// <see cref="XDecimal.Log(decimal, decimal)"/>
     /// </summary>
     /// <param name="z">The complex arg.</param>
     /// <param name="b">The base.</param>
@@ -285,7 +285,7 @@ public struct DecimalComplex
 
     /// <summary>
     /// Logarithm of a complex number in base 2.
-    /// <see cref="XDecimal.Log2" />
+    /// <see cref="XDecimal.Log2"/>
     /// </summary>
     /// <param name="z">The complex arg.</param>
     /// <returns>The logarithm of z in base 2.</returns>
@@ -293,7 +293,7 @@ public struct DecimalComplex
 
     /// <summary>
     /// Logarithm of a complex number in base 10.
-    /// <see cref="XDecimal.Log10" />
+    /// <see cref="XDecimal.Log10"/>
     /// </summary>
     /// <param name="z">The complex arg.</param>
     /// <returns>The logarithm of z in base 10.</returns>
@@ -341,7 +341,7 @@ public struct DecimalComplex
 
     /// <summary>
     /// Calculate 2 raised to a complex power.
-    /// <see cref="XDecimal.Exp2" />
+    /// <see cref="XDecimal.Exp2"/>
     /// </summary>
     /// <param name="z">A complex value.</param>
     /// <returns>2^z</returns>
@@ -349,7 +349,7 @@ public struct DecimalComplex
 
     /// <summary>
     /// Calculate 10 raised to a complex power.
-    /// <see cref="XDecimal.Exp10" />
+    /// <see cref="XDecimal.Exp10"/>
     /// </summary>
     /// <param name="z">A complex value.</param>
     /// <returns>10^z</returns>
@@ -358,7 +358,7 @@ public struct DecimalComplex
     /// <summary>
     /// Complex exponentiation.
     /// Only the principal value is returned.
-    /// <see href="https://en.wikipedia.org/wiki/Exponentiation#Complex_exponentiation" />
+    /// <see href="https://en.wikipedia.org/wiki/Exponentiation#Complex_exponentiation"/>
     /// </summary>
     /// <param name="z">The base.</param>
     /// <param name="w">The exponent.</param>
@@ -470,21 +470,21 @@ public struct DecimalComplex
     }
 
     /// <summary>
-    ///     <see href="https://en.wikipedia.org/wiki/Inverse_trigonometric_functions#Logarithmic_forms" />
+    ///     <see href="https://en.wikipedia.org/wiki/Inverse_trigonometric_functions#Logarithmic_forms"/>
     /// </summary>
     /// <param name="z"></param>
     /// <returns></returns>
     public static DecimalComplex Asin(DecimalComplex z) => I * Log(Sqrt(1 - z * z) - I * z);
 
     /// <summary>
-    ///     <see href="https://en.wikipedia.org/wiki/Inverse_trigonometric_functions#Logarithmic_forms" />
+    ///     <see href="https://en.wikipedia.org/wiki/Inverse_trigonometric_functions#Logarithmic_forms"/>
     /// </summary>
     /// <param name="z"></param>
     /// <returns></returns>
     public static DecimalComplex Acos(DecimalComplex z) => -I * Log(z + I * Sqrt(1 - z * z));
 
     /// <summary>
-    ///     <see href="https://en.wikipedia.org/wiki/Inverse_trigonometric_functions#Logarithmic_forms" />
+    ///     <see href="https://en.wikipedia.org/wiki/Inverse_trigonometric_functions#Logarithmic_forms"/>
     /// </summary>
     /// <param name="z"></param>
     /// <returns></returns>
@@ -578,7 +578,7 @@ public struct DecimalComplex
 
     /// <summary>
     /// Negate method.
-    /// <see cref="decimal.Negate" />
+    /// <see cref="decimal.Negate"/>
     /// </summary>
     /// <returns>The negation of the argument.</returns>
     public static DecimalComplex Negate(DecimalComplex z) => new (-z.Real, -z.Imaginary);
@@ -612,7 +612,7 @@ public struct DecimalComplex
 
     /// <summary>
     /// Addition method.
-    /// <see cref="decimal.Add" />
+    /// <see cref="decimal.Add"/>
     /// </summary>
     /// <param name="z1">The left-hand DecimalComplex number.</param>
     /// <param name="z2">The right-hand DecimalComplex number.</param>
@@ -630,7 +630,7 @@ public struct DecimalComplex
 
     /// <summary>
     /// Subtraction method.
-    /// <see cref="decimal.Subtract" />
+    /// <see cref="decimal.Subtract"/>
     /// </summary>
     /// <param name="z1">The left-hand DecimalComplex number.</param>
     /// <param name="z2">The right-hand DecimalComplex number.</param>
@@ -649,7 +649,7 @@ public struct DecimalComplex
 
     /// <summary>
     /// Multiply two DecimalComplex values.
-    /// <see cref="decimal.Multiply" />
+    /// <see cref="decimal.Multiply"/>
     /// </summary>
     /// <param name="z1">The left-hand DecimalComplex number.</param>
     /// <param name="z2">The right-hand DecimalComplex number.</param>
@@ -707,7 +707,7 @@ public struct DecimalComplex
 
     /// <summary>
     /// Divide a DecimalComplex by a DecimalComplex.
-    /// <see cref="decimal.Divide" />
+    /// <see cref="decimal.Divide"/>
     /// </summary>
     /// <param name="z1">The left-hand DecimalComplex number.</param>
     /// <param name="z2">The right-hand DecimalComplex number.</param>
@@ -728,7 +728,7 @@ public struct DecimalComplex
 
     /// <summary>
     /// Divide a DecimalComplex by a decimal.
-    /// <see cref="decimal.Divide" />
+    /// <see cref="decimal.Divide"/>
     /// </summary>
     /// <param name="z">The DecimalComplex value.</param>
     /// <param name="m">The decimal value.</param>
@@ -739,7 +739,7 @@ public struct DecimalComplex
 
     /// <summary>
     /// Divide a decimal by a DecimalComplex.
-    /// <see cref="decimal.Divide" />
+    /// <see cref="decimal.Divide"/>
     /// </summary>
     /// <param name="m">The decimal value.</param>
     /// <param name="z">The DecimalComplex value.</param>
@@ -762,7 +762,7 @@ public struct DecimalComplex
 
     /// <summary>
     /// Divide a DecimalComplex by a decimal.
-    /// <see cref="decimal.Divide" />
+    /// <see cref="decimal.Divide"/>
     /// </summary>
     /// <param name="z">The DecimalComplex value.</param>
     /// <param name="m">The decimal value.</param>
@@ -772,7 +772,7 @@ public struct DecimalComplex
 
     /// <summary>
     /// Divide a decimal by a DecimalComplex.
-    /// <see cref="decimal.Divide" />
+    /// <see cref="decimal.Divide"/>
     /// </summary>
     /// <param name="m">The decimal value.</param>
     /// <param name="z">The DecimalComplex value.</param>

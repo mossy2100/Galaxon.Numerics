@@ -3,8 +3,11 @@ namespace Galaxon.Numerics.Integers;
 public enum EDirection
 {
     Up,
+
     Right,
+
     Down,
+
     Left
 }
 

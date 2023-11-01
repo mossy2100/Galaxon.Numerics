@@ -107,8 +107,8 @@ public class Ellipsoid : IShape3D
     /// <summary>
     /// Get the surface area in square metres.
     /// </summary>
-    /// <see href="https://en.wikipedia.org/wiki/Ellipsoid#Surface_area" />
-    /// <see href="https://www.web-formulas.com/Math_Formulas/Geometry_Surface_of_Ellipsoid.aspx" />
+    /// <see href="https://en.wikipedia.org/wiki/Ellipsoid#Surface_area"/>
+    /// <see href="https://www.web-formulas.com/Math_Formulas/Geometry_Surface_of_Ellipsoid.aspx"/>
     /// <returns>The surface area.</returns>
     public virtual double SurfaceArea
     {

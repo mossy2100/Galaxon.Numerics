@@ -15,8 +15,8 @@ public static class EllipticIntegrals
     /// as the calculation for E().
     /// This function is just for internal use.
     /// </summary>
-    /// <see href="https://en.wikipedia.org/wiki/Carlson_symmetric_form#Relation_to_the_Legendre_forms" />
-    /// <see cref="Ellipsoid.SurfaceArea" />
+    /// <see href="https://en.wikipedia.org/wiki/Carlson_symmetric_form#Relation_to_the_Legendre_forms"/>
+    /// <see cref="Ellipsoid.SurfaceArea"/>
     /// <param name="phi">The amplitude in radians.</param>
     /// <param name="k">The elliptic modulus (eccentricity)</param>
     /// <param name="getSecondKind">
@@ -45,8 +45,8 @@ public static class EllipticIntegrals
     /// <summary>
     /// Calculate incomplete elliptic integrals of the first and second kinds.
     /// </summary>
-    /// <see href="https://en.wikipedia.org/wiki/Carlson_symmetric_form#Relation_to_the_Legendre_forms" />
-    /// <see cref="Ellipsoid.SurfaceArea" />
+    /// <see href="https://en.wikipedia.org/wiki/Carlson_symmetric_form#Relation_to_the_Legendre_forms"/>
+    /// <see cref="Ellipsoid.SurfaceArea"/>
     /// <param name="phi">The amplitude in radians.</param>
     /// <param name="k">The elliptic modulus (eccentricity)</param>
     /// <returns>A tuple containing the two results.</returns>
@@ -59,7 +59,7 @@ public static class EllipticIntegrals
     /// <summary>
     /// Calculate incomplete elliptic integral of the first kind.
     /// </summary>
-    /// <see href="https://en.wikipedia.org/wiki/Carlson_symmetric_form#Relation_to_the_Legendre_forms" />
+    /// <see href="https://en.wikipedia.org/wiki/Carlson_symmetric_form#Relation_to_the_Legendre_forms"/>
     /// <param name="phi">The amplitude in radians.</param>
     /// <param name="k">The elliptic modulus (eccentricity)</param>
     /// <returns>The result.</returns>
@@ -72,7 +72,7 @@ public static class EllipticIntegrals
     /// <summary>
     /// Calculate incomplete elliptic integral of the second kind.
     /// </summary>
-    /// <see href="https://en.wikipedia.org/wiki/Carlson_symmetric_form#Relation_to_the_Legendre_forms" />
+    /// <see href="https://en.wikipedia.org/wiki/Carlson_symmetric_form#Relation_to_the_Legendre_forms"/>
     /// <param name="phi">The amplitude in radians.</param>
     /// <param name="k">The elliptic modulus (eccentricity)</param>
     /// <returns>The result.</returns>
@@ -86,10 +86,10 @@ public static class EllipticIntegrals
     /// Computes RF() from the Carlson symmetric forms of elliptic integrals.
     /// The code for this function came from The Code Project (see link below).
     /// </summary>
-    /// <see href="https://en.wikipedia.org/wiki/Carlson_symmetric_form" />
-    /// <see href="https://www.codeproject.com/Articles/566614/Elliptic-integrals" />
-    /// <see href="http://dlmf.nist.gov/19.36#E1" />
-    /// <see href="https://rdrr.io/cran/Carlson/src/R/RF.R" />
+    /// <see href="https://en.wikipedia.org/wiki/Carlson_symmetric_form"/>
+    /// <see href="https://www.codeproject.com/Articles/566614/Elliptic-integrals"/>
+    /// <see href="http://dlmf.nist.gov/19.36#E1"/>
+    /// <see href="https://rdrr.io/cran/Carlson/src/R/RF.R"/>
     /// <param name="x"></param>
     /// <param name="y"></param>
     /// <param name="z"></param>
@@ -127,10 +127,10 @@ public static class EllipticIntegrals
     /// Computes RD() from the Carlson symmetric forms of elliptic integrals.
     /// The code for this function came from The Code Project (see link below).
     /// </summary>
-    /// <see href="https://en.wikipedia.org/wiki/Carlson_symmetric_form" />
-    /// <see href="https://www.codeproject.com/Articles/566614/Elliptic-integrals" />
-    /// <see href="http://dlmf.nist.gov/19.36#E2" />
-    /// <see href="https://rdrr.io/cran/Carlson/src/R/RD.R" />
+    /// <see href="https://en.wikipedia.org/wiki/Carlson_symmetric_form"/>
+    /// <see href="https://www.codeproject.com/Articles/566614/Elliptic-integrals"/>
+    /// <see href="http://dlmf.nist.gov/19.36#E2"/>
+    /// <see href="https://rdrr.io/cran/Carlson/src/R/RD.R"/>
     /// <param name="x"></param>
     /// <param name="y"></param>
     /// <param name="z"></param>

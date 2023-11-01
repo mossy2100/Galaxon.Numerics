@@ -1,4 +1,5 @@
 using System.Numerics;
+using Galaxon.Core.Functional;
 using Galaxon.Core.Numbers;
 
 namespace Galaxon.Numerics.Integers;
@@ -6,7 +7,7 @@ namespace Galaxon.Numerics.Integers;
 public static class Divisors
 {
     public static readonly Func<BigInteger, List<BigInteger>> GetProperDivisors =
-        Functions.Memoize<BigInteger, List<BigInteger>>(_GetProperDivisors);
+        Memoization.Memoize<BigInteger, List<BigInteger>>(_GetProperDivisors);
 
     /// <summary>
     /// Get the list of proper divisors of an integer.
@@ -22,24 +23,17 @@ public static class Divisors
 
         List<BigInteger> divisors = new ();
 
-        // Get the square root of the argument, then cast to BigInteger to truncate the result.
-        BigDecimal.MaxSigFigs = Min(n.NumDigits() + 1, 30);
-        var sqrt = (BigInteger)BigDecimal.Sqrt(n);
+        // Get the truncated square root of the argument.
+        var sqrt = XBigInteger.Sqrt(n);
 
         // Look for divisors up to the square root.
         for (BigInteger i = 1; i <= sqrt; i++)
         {
-            if (n % i != 0)
-            {
-                continue;
-            }
+            if (n % i != 0) continue;
 
             divisors.Add(i);
             var j = n / i;
-            if (j != i && j < n)
-            {
-                divisors.Add(j);
-            }
+            if (j != i && j < n) divisors.Add(j);
         }
 
         divisors.Sort();
@@ -57,7 +51,7 @@ public static class Divisors
 
     /// <summary>
     /// Check if a number is perfect, deficient, or abundant.
-    /// <see href="https://en.wikipedia.org/wiki/Perfect_number" />
+    /// <see href="https://en.wikipedia.org/wiki/Perfect_number"/>
     /// </summary>
     public static sbyte PerfectNumber(long n)
     {

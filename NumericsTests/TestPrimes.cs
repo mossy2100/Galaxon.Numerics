@@ -163,7 +163,7 @@ public class TestPrimes
     }
 
     /// <summary>
-    ///     <see href="https://projecteuler.net/problem=10" />
+    ///     <see href="https://projecteuler.net/problem=10"/>
     /// </summary>
     [TestMethod]
     public void PrimesSumTest()

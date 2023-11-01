@@ -1,4 +1,5 @@
 using System.Numerics;
+using Galaxon.Core.Functional;
 using Galaxon.Core.Numbers;
 
 namespace Galaxon.Numerics.Integers;
@@ -111,7 +112,7 @@ public static class Primes
 
     /// <summary>
     /// Use the Miller-Rabin test to see if a number is composite or probably prime.
-    /// <see href="https://en.wikipedia.org/wiki/Miller%E2%80%93Rabin_primality_test" />
+    /// <see href="https://en.wikipedia.org/wiki/Miller%E2%80%93Rabin_primality_test"/>
     /// </summary>
     /// <param name="n">The number to test.</param>
     /// <returns>True if the number is probably prime.</returns>
@@ -166,7 +167,7 @@ public static class Primes
     /// <summary>
     /// Use the Sieve of Eratosthenes to update the cache for all prime numbers less than or equal
     /// to a given maximum.
-    /// <see href="https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes" />
+    /// <see href="https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes"/>
     /// I've limited the value of max to uint.MaxValue (4,294,967,295) as I think this will be
     /// adequate for practical purposes, and it means the isComposite cache will not need to be
     /// larger than Array.MaxSize. Nor will we need to use batches or multiple arrays for
@@ -417,18 +418,18 @@ public static class Primes
     }
 
     public static readonly Func<ulong, List<ulong>> PrimeFactors =
-        Functions.Memoize<ulong, List<ulong>>(_PrimeFactors);
+        Memoization.Memoize<ulong, List<ulong>>(_PrimeFactors);
 
     private static List<ulong> _DistinctPrimeFactors(ulong n) =>
         PrimeFactors(n).Distinct().ToList();
 
     public static readonly Func<ulong, List<ulong>> DistinctPrimeFactors =
-        Functions.Memoize<ulong, List<ulong>>(_DistinctPrimeFactors);
+        Memoization.Memoize<ulong, List<ulong>>(_DistinctPrimeFactors);
 
     private static int _NumDistinctPrimeFactors(ulong n) => DistinctPrimeFactors(n).Count;
 
     public static readonly Func<ulong, int> NumDistinctPrimeFactors =
-        Functions.Memoize<ulong, int>(_NumDistinctPrimeFactors);
+        Memoization.Memoize<ulong, int>(_NumDistinctPrimeFactors);
 
     #endregion Prime factors methods
 

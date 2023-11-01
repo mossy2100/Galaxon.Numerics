@@ -1,118 +1,14 @@
 using System.Numerics;
-using static Galaxon.Numerics.Integers.Functions;
+using Galaxon.Core.Functional;
+using Galaxon.Core.Numbers;
 
 namespace Galaxon.Numerics.Integers;
 
 /// <summary>
-/// Factorials, permutations, and combinations.
+/// Permutations and combinations.
 /// </summary>
-public static class Factorials
+public static class Combinatorial
 {
-    #region Factorial
-
-    /// <summary>
-    /// Factorial of n, n >= 0.
-    /// </summary>
-    /// <exception cref="ArgumentOutOfRangeException"></exception>
-    private static BigInteger _Factorial(BigInteger n)
-    {
-        // Guard.
-        if (n < 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(n), "Cannot be negative.");
-        }
-
-        return n <= 1 ? 1 : n * Factorial(n - 1);
-    }
-
-    /// <summary>
-    /// Public memoized version of the Factorial method.
-    /// </summary>
-    public static readonly Func<BigInteger, BigInteger> Factorial =
-        Memoize<BigInteger, BigInteger>(_Factorial);
-
-    #endregion Factorial
-
-    #region Combinations
-
-    /// <summary>
-    /// Find the number of ways r items can be selected from a set of n items.
-    /// The order of the items is unimportant.
-    /// i.e. If selecting 2 integers from a set {1, 2, 3, 4, 5}, the selection {1, 2} is counted as
-    /// equal to the selection {2, 1}.
-    /// </summary>
-    /// <param name="n">Number of items to select from.</param>
-    /// <param name="r">Number of items to select.</param>
-    /// <returns></returns>
-    public static BigInteger NumCombinations(long n, long r) =>
-        Factorial(n) / (Factorial(r) * Factorial(n - r));
-
-    /// <summary>
-    /// Get all the different ways to select n items from a bag of items, ignoring order.
-    /// </summary>
-    public static List<List<T>> GetCombinations<T>(List<T> bag, int n)
-    {
-        List<List<T>> result = new ();
-
-        // Combinations of 0 items is undefined.
-        if (n == 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(n),
-                "Number of items to select must be positive.");
-        }
-
-        // There is only one way of selecting n items from a bag with n items.
-        if (n == bag.Count)
-        {
-            result.Add(bag.ToList());
-            return result;
-        }
-
-        // There are zero ways of selecting n items from a bag with fewer than n items.
-        if (n > bag.Count)
-        {
-            return result;
-        }
-
-        for (var i = 0; i < bag.Count; i++)
-        {
-            // If we only want 1 item, shortcut.
-            if (n == 1)
-            {
-                List<T> newCombo = new () { bag[i] };
-                result.Add(newCombo);
-                continue;
-            }
-
-            // How many items left?
-            var nRemainingItems = bag.Count - i;
-
-            // If there are n items remaining, shortcut.
-            if (nRemainingItems == n)
-            {
-                var newCombo = bag.GetRange(i, n);
-                result.Add(newCombo);
-                continue;
-            }
-
-            // Get the bag with all items following the ith item.
-            var remainder = bag.GetRange(i + 1, nRemainingItems - 1);
-
-            // Find all the ways of selecting n-1 items from the remainder.
-            var remCombos = GetCombinations(remainder, n - 1);
-            foreach (var remCombo in remCombos)
-            {
-                List<T> newCombo = new () { bag[i] };
-                newCombo.AddRange(remCombo);
-                result.Add(newCombo);
-            }
-        }
-
-        return result;
-    }
-
-    #endregion Combinations
-
     #region Permutations
 
     /// <summary>
@@ -124,7 +20,8 @@ public static class Factorials
     /// <param name="n">Number of items to select from.</param>
     /// <param name="r">Number of items to select.</param>
     /// <returns></returns>
-    public static BigInteger NumPermutations(long n, long r) => Factorial(n) / Factorial(n - r);
+    public static BigInteger NumPermutations(long n, long r) =>
+        XBigInteger.Factorial(n) / XBigInteger.Factorial(n - r);
 
     /// <summary>
     /// Get all the different ways to select n items from a bag of items, considering order.
@@ -212,7 +109,7 @@ public static class Factorials
     /// Public memoized version of method.
     /// </summary>
     public static readonly Func<string, List<string>> CharPermutations =
-        Memoize<string, List<string>>(_CharPermutations);
+        Memoization.Memoize<string, List<string>>(_CharPermutations);
 
     /// <summary>
     /// Sort the digits of the given number in ascending order.
@@ -231,4 +128,84 @@ public static class Factorials
     public static bool IsPermutationOf(ulong n, ulong m) => SortDigits(n) == SortDigits(m);
 
     #endregion Permutations
+
+    #region Combinations
+
+    /// <summary>
+    /// Find the number of ways r items can be selected from a set of n items.
+    /// The order of the items is unimportant.
+    /// i.e. If selecting 2 integers from a set {1, 2, 3, 4, 5}, the selection {1, 2} is counted as
+    /// equal to the selection {2, 1}.
+    /// </summary>
+    /// <param name="n">Number of items to select from.</param>
+    /// <param name="r">Number of items to select.</param>
+    /// <returns></returns>
+    public static BigInteger NumCombinations(long n, long r) =>
+        XBigInteger.Factorial(n) / (XBigInteger.Factorial(r) * XBigInteger.Factorial(n - r));
+
+    /// <summary>
+    /// Get all the different ways to select n items from a bag of items, ignoring order.
+    /// </summary>
+    public static List<List<T>> GetCombinations<T>(List<T> bag, int n)
+    {
+        List<List<T>> result = new ();
+
+        // Combinations of 0 items is undefined.
+        if (n == 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(n),
+                "Number of items to select must be positive.");
+        }
+
+        // There is only one way of selecting n items from a bag with n items.
+        if (n == bag.Count)
+        {
+            result.Add(bag.ToList());
+            return result;
+        }
+
+        // There are zero ways of selecting n items from a bag with fewer than n items.
+        if (n > bag.Count)
+        {
+            return result;
+        }
+
+        for (var i = 0; i < bag.Count; i++)
+        {
+            // If we only want 1 item, shortcut.
+            if (n == 1)
+            {
+                List<T> newCombo = new () { bag[i] };
+                result.Add(newCombo);
+                continue;
+            }
+
+            // How many items left?
+            var nRemainingItems = bag.Count - i;
+
+            // If there are n items remaining, shortcut.
+            if (nRemainingItems == n)
+            {
+                var newCombo = bag.GetRange(i, n);
+                result.Add(newCombo);
+                continue;
+            }
+
+            // Get the bag with all items following the ith item.
+            var remainder = bag.GetRange(i + 1, nRemainingItems - 1);
+
+            // Find all the ways of selecting n-1 items from the remainder.
+            var remCombos = GetCombinations(remainder, n - 1);
+            foreach (var remCombo in remCombos)
+            {
+                List<T> newCombo = new () { bag[i] };
+                newCombo.AddRange(remCombo);
+                result.Add(newCombo);
+            }
+        }
+
+        return result;
+    }
+
+    #endregion Combinations
 }

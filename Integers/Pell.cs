@@ -38,8 +38,11 @@ public class Pell
 internal class PellIntermediateSolution
 {
     public int D;
+
     public int k;
+
     public BigInteger x;
+
     public BigInteger y;
 
     public PellIntermediateSolution(int D, BigInteger x, BigInteger y, int k)
@@ -66,7 +69,7 @@ internal class PellIntermediateSolution
 
     /// <summary>
     /// Perform one iteration of the Chakravala method.
-    /// <see href="https://en.wikipedia.org/wiki/Chakravala_method" />
+    /// <see href="https://en.wikipedia.org/wiki/Chakravala_method"/>
     /// </summary>
     /// <returns>The new triple.</returns>
     public PellIntermediateSolution Chakravala()
@@ -126,7 +129,7 @@ internal class PellIntermediateSolution
     /// Use Brahmagupta's composition method to calculate final x and y for k = 1.
     /// Not supporting Brahmagupta's method for k=-4 as this doesn't produce the smallest integer
     /// pair.
-    /// <see href="https://en.wikipedia.org/wiki/Chakravala_method#Brahmagupta's_composition_method" />
+    /// <see href="https://en.wikipedia.org/wiki/Chakravala_method#Brahmagupta's_composition_method"/>
     /// </summary>
     /// <returns>New solution with k = 1.</returns>
     public PellIntermediateSolution Brahmagupta()
