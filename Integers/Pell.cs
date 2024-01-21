@@ -18,7 +18,7 @@ public class Pell
 
         // Generate an initial intermediate solution with y = 1.
         var x = (BigInteger)Round(Sqrt(D));
-        var x2 = x * x;
+        BigInteger x2 = x * x;
         BigInteger y = 1;
         var k = (int)(x2 - D);
         PellIntermediateSolution soln = new (D, x, y, k);
@@ -58,7 +58,7 @@ internal class PellIntermediateSolution
     {
         if ((a + b * mToTest) % c == 0)
         {
-            var absMSquaredMinusD = Abs(mToTest * mToTest - D);
+            int absMSquaredMinusD = Abs(mToTest * mToTest - D);
             if (absMSquaredMinusD < minAbsMSquaredMinusD)
             {
                 minAbsMSquaredMinusD = absMSquaredMinusD;
@@ -85,10 +85,10 @@ internal class PellIntermediateSolution
                 return Brahmagupta();
         }
 
-        var a = x;
-        var b = y;
+        BigInteger a = x;
+        BigInteger b = y;
         var m = 0;
-        var minAbsMSquaredMinusD = int.MaxValue;
+        int minAbsMSquaredMinusD = int.MaxValue;
 
         // Try values for m close to sqrt(D) as this will result in minimum for |m^2 - D|.
         var sqrtD = (int)Round(Sqrt(D));
@@ -118,10 +118,10 @@ internal class PellIntermediateSolution
         }
 
         // Get new values.
-        var absK = Abs(k);
-        var newX = (a * m + D * b) / absK;
-        var newY = (a + b * m) / absK;
-        var newK = (m * m - D) / k;
+        int absK = Abs(k);
+        BigInteger newX = (a * m + D * b) / absK;
+        BigInteger newY = (a + b * m) / absK;
+        int newK = (m * m - D) / k;
         return new PellIntermediateSolution(D, newX, newY, newK);
     }
 
@@ -141,7 +141,7 @@ internal class PellIntermediateSolution
 
         BigInteger newX = 0;
         BigInteger newY = 0;
-        var xSqr = x * x;
+        BigInteger xSqr = x * x;
 
         switch (k)
         {

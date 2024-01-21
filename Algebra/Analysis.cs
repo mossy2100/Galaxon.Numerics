@@ -15,13 +15,22 @@ public static class Analysis
     private static BigRational _Bernoulli(int n)
     {
         // Guard.
-        if (n < 0) throw new ArgumentOutOfRangeException(nameof(n), "Cannot be negative.");
+        if (n < 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(n), "Cannot be negative.");
+        }
 
         // Optimizations.
-        if (n == 0) return 1;
+        if (n == 0)
+        {
+            return 1;
+        }
 
         // For all odd indices greater than 1, the Bernoulli number is 0.
-        if (n > 1 && int.IsOddInteger(n)) return 0;
+        if (n > 1 && int.IsOddInteger(n))
+        {
+            return 0;
+        }
 
         // Compute result.
         BigRational b = 1;

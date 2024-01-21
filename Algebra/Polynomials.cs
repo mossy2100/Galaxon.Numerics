@@ -10,7 +10,8 @@ public class Polynomials
     /// This method avoids calling Pow() and (in theory) should be faster.
     /// </summary>
     /// <param name="coeffs">
-    /// The coefficients of the polynomial:
+    /// The coefficients of the polynomial. The index is equal to the exponent of x.
+    /// For example:
     /// - coeffs[0] is the constant term (x^0)
     /// - coeffs[1] is the coefficient for the x term (x^1)
     /// - coeffs[2] is the coefficient for the x^2 term
@@ -26,8 +27,8 @@ public class Polynomials
             return 0;
         }
 
-        var result = coeffs[^1];
-        for (var i = coeffs.Length - 2; i >= 0; i--)
+        double result = coeffs[^1];
+        for (int i = coeffs.Length - 2; i >= 0; i--)
         {
             result = coeffs[i] + result * x;
         }
@@ -59,7 +60,7 @@ public class Polynomials
         }
 
         // Calculate the discriminant.
-        var d = b * b - 4 * a * c;
+        double d = b * b - 4 * a * c;
 
         // Check for no solutions.
         if (d < 0)
@@ -68,7 +69,7 @@ public class Polynomials
         }
 
         // Prep useful value to reduce number of multiplications.
-        var twoA = 2 * a;
+        double twoA = 2 * a;
 
         // Check for one solution.
         if (d == 0)

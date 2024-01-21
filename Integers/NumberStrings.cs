@@ -110,10 +110,15 @@ public static class NumberStrings
     /// </summary>
     /// <param name="s"></param>
     /// <returns></returns>
-    public static int LetterCount(string s) => s.Count(char.IsLetter);
+    public static int LetterCount(string s)
+    {
+        return s.Count(char.IsLetter);
+    }
 
-    public static int GetAlphabeticalValue(string name) =>
-        name.Sum(c => c - (char.IsLower(c) ? 'a' : 'A') + 1);
+    public static int GetAlphabeticalValue(string name)
+    {
+        return name.Sum(c => c - (char.IsLower(c) ? 'a' : 'A') + 1);
+    }
 
     /// <summary>
     /// Calculate the inverse of an integer, showing reptend in brackets.
@@ -132,7 +137,7 @@ public static class NumberStrings
 
         StringBuilder decimals = new ();
         long n = 1;
-        var d = x;
+        long d = x;
         var current = 0;
         Dictionary<(long n, long d), int> seen = new ();
         reptend = null;
@@ -140,14 +145,14 @@ public static class NumberStrings
         while (true)
         {
             // Get the quotient.
-            var q = n / d;
+            long q = n / d;
 
             // Check for a repeat of this quotient. If we've seen it before, the pattern of digits
             // will repeat, indicating a reptend.
-            if (seen.TryGetValue((n, d), out var reptendStart))
+            if (seen.TryGetValue((n, d), out int reptendStart))
             {
                 // Found a repeat.
-                var reptendLen = current - reptendStart;
+                int reptendLen = current - reptendStart;
                 var decimalString = decimals.ToString();
                 reptend = decimalString[^reptendLen..];
                 return $"0.{decimalString[1..reptendStart]}({reptend})";
@@ -158,7 +163,7 @@ public static class NumberStrings
             seen[(n, d)] = current;
 
             // Get the remainder. If it's 0, we're done.
-            var r = n % d;
+            long r = n % d;
             if (r == 0)
             {
                 return $"0.{decimals.ToString()[1..]}";

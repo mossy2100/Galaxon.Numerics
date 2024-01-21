@@ -24,16 +24,22 @@ public static class Divisors
         List<BigInteger> divisors = new ();
 
         // Get the truncated square root of the argument.
-        var sqrt = XBigInteger.Sqrt(n);
+        var sqrt = (BigInteger)Sqrt((double)n);
 
         // Look for divisors up to the square root.
         for (BigInteger i = 1; i <= sqrt; i++)
         {
-            if (n % i != 0) continue;
+            if (n % i != 0)
+            {
+                continue;
+            }
 
             divisors.Add(i);
-            var j = n / i;
-            if (j != i && j < n) divisors.Add(j);
+            BigInteger j = n / i;
+            if (j != i && j < n)
+            {
+                divisors.Add(j);
+            }
         }
 
         divisors.Sort();
@@ -42,12 +48,15 @@ public static class Divisors
 
     public static List<BigInteger> GetDivisors(BigInteger n)
     {
-        var divisors = GetProperDivisors(n);
+        List<BigInteger> divisors = GetProperDivisors(n);
         divisors.Add(n);
         return divisors;
     }
 
-    public static BigInteger SumDivisors(BigInteger n) => GetDivisors(n).Sum();
+    public static BigInteger SumDivisors(BigInteger n)
+    {
+        return GetDivisors(n).Sum();
+    }
 
     /// <summary>
     /// Check if a number is perfect, deficient, or abundant.
@@ -55,7 +64,7 @@ public static class Divisors
     /// </summary>
     public static sbyte PerfectNumber(long n)
     {
-        var spd = GetProperDivisors(n).Sum();
+        BigInteger spd = GetProperDivisors(n).Sum();
 
         // Check if the number is perfect.
         if (spd == n)

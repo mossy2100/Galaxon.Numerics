@@ -20,9 +20,9 @@ public static class Grids
             x >= 0 && x < size && y >= 0 && y < size && spiral[x, y] == null;
 
         // Start in the centre.
-        var x = size / 2;
-        var y = x;
-        var direction =
+        int x = size / 2;
+        int y = x;
+        EDirection direction =
             clockwise ? Direction.TurnAntiClockwise(start) : Direction.TurnClockwise(start);
 
         // Loop until the spiral is built.
@@ -121,7 +121,7 @@ public static class Grids
 
     public static void PrintGrid(uint?[,] grid)
     {
-        var size = XInt.Sqrt(grid.Length);
+        int size = XInt.Sqrt(grid.Length);
         for (var y = 0; y < size; y++)
         {
             Console.Write("[ ");

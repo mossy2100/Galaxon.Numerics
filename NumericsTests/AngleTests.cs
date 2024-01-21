@@ -30,8 +30,8 @@ public class AngleTests
         };
         for (var i = 0; i < inputs.Length; i++)
         {
-            var actual = NormalizeRadians(inputs[i]);
-            var expected = outputs[i];
+            double actual = NormalizeRadians(inputs[i]);
+            double expected = outputs[i];
             XAssert.IsInRange(actual, -PI, PI);
             Assert.AreEqual(expected, actual, _Delta);
         }
@@ -59,8 +59,8 @@ public class AngleTests
         };
         for (var i = 0; i < inputs.Length; i++)
         {
-            var actual = NormalizeRadians(inputs[i], false);
-            var expected = outputs[i];
+            double actual = NormalizeRadians(inputs[i], false);
+            double expected = outputs[i];
             XAssert.IsInRange(actual, 0, Tau);
             Assert.AreEqual(expected, actual, _Delta);
         }
@@ -88,8 +88,8 @@ public class AngleTests
         };
         for (var i = 0; i < inputs.Length; i++)
         {
-            var actual = NormalizeDegrees(inputs[i]);
-            var expected = outputs[i];
+            double actual = NormalizeDegrees(inputs[i]);
+            double expected = outputs[i];
             XAssert.IsInRange(actual, -180, 180);
             Assert.AreEqual(expected, actual, _Delta);
         }
@@ -117,8 +117,8 @@ public class AngleTests
         };
         for (var i = 0; i < inputs.Length; i++)
         {
-            var actual = NormalizeDegrees(inputs[i], false);
-            var expected = outputs[i];
+            double actual = NormalizeDegrees(inputs[i], false);
+            double expected = outputs[i];
             XAssert.IsInRange(actual, 0, 360);
             Assert.AreEqual(expected, actual, _Delta);
         }

@@ -69,7 +69,7 @@ public static class Primes
     public static bool IsPrimeSlow(ulong n)
     {
         // Run through some simple checks first.
-        var isPrimeSimple = IsPrimeSimple(n);
+        bool? isPrimeSimple = IsPrimeSimple(n);
         if (isPrimeSimple.HasValue)
         {
             return isPrimeSimple.Value;
@@ -103,12 +103,18 @@ public static class Primes
     /// </summary>
     /// <param name="n"></param>
     /// <returns></returns>
-    public static bool IsPrime(ulong n) => IsPrimeSimple(n) ?? MillerRabin(n);
+    public static bool IsPrime(ulong n)
+    {
+        return IsPrimeSimple(n) ?? MillerRabin(n);
+    }
 
     /// <summary>
     /// Check if a number is composite.
     /// </summary>
-    public static bool IsComposite(ulong n) => n > 1 && !IsPrime(n);
+    public static bool IsComposite(ulong n)
+    {
+        return n > 1 && !IsPrime(n);
+    }
 
     /// <summary>
     /// Use the Miller-Rabin test to see if a number is composite or probably prime.
@@ -132,7 +138,7 @@ public static class Primes
 
         // Get s, d such that n - 1 = 2^s * d and d is odd.
         ulong s = 0;
-        var d = n - 1;
+        ulong d = n - 1;
         while (d % 2 == 0)
         {
             d /= 2;
@@ -140,7 +146,7 @@ public static class Primes
         }
 
         // Run the test with each base.
-        foreach (var a in bases)
+        foreach (ulong a in bases)
         {
             var x = (ulong)BigInteger.ModPow(a, d, n);
             ulong y = 0;
@@ -192,7 +198,7 @@ public static class Primes
         }
 
         // Get the minimum value to test.
-        var min = (uint)MaxValueChecked + 1;
+        uint min = (uint)MaxValueChecked + 1;
 
         // Ensure min and max are odd.
         if (min % 2 == 0)
@@ -225,7 +231,7 @@ public static class Primes
 
             // Start at the greater of p^2 or the next odd multiple of p equal to or greater
             // than min.
-            var start = p * p;
+            uint start = p * p;
             if (min > start)
             {
                 var m = (uint)Ceiling((double)min / p);
@@ -237,7 +243,7 @@ public static class Primes
             }
 
             // Remove all odd multiples of p up to max.
-            for (var i = (start - min) / 2; i < (uint)arraySize; i += p)
+            for (uint i = (start - min) / 2; i < (uint)arraySize; i += p)
             {
                 isComposite[i] = true;
             }
@@ -288,7 +294,7 @@ public static class Primes
 
         // Get the rest of the values using fast IsPrime(), which will add new primes to the cache
         // as it goes.
-        for (var i = (ulong)uint.MaxValue + 1; i <= max; i++)
+        for (ulong i = (ulong)uint.MaxValue + 1; i <= max; i++)
         {
             _ = IsPrime(i);
         }
@@ -310,7 +316,7 @@ public static class Primes
         }
 
         // Initialize p to closest odd number less than or equal to n.
-        var p = n;
+        ulong p = n;
         if (p % 2 == 0)
         {
             p--;
@@ -353,7 +359,7 @@ public static class Primes
         }
 
         // Initialize p to closest odd number greater than or equal to n.
-        var p = n;
+        ulong p = n;
         if (p % 2 == 0)
         {
             p++;
@@ -420,13 +426,18 @@ public static class Primes
     public static readonly Func<ulong, List<ulong>> PrimeFactors =
         Memoization.Memoize<ulong, List<ulong>>(_PrimeFactors);
 
-    private static List<ulong> _DistinctPrimeFactors(ulong n) =>
-        PrimeFactors(n).Distinct().ToList();
+    private static List<ulong> _DistinctPrimeFactors(ulong n)
+    {
+        return PrimeFactors(n).Distinct().ToList();
+    }
 
     public static readonly Func<ulong, List<ulong>> DistinctPrimeFactors =
         Memoization.Memoize<ulong, List<ulong>>(_DistinctPrimeFactors);
 
-    private static int _NumDistinctPrimeFactors(ulong n) => DistinctPrimeFactors(n).Count;
+    private static int _NumDistinctPrimeFactors(ulong n)
+    {
+        return DistinctPrimeFactors(n).Count;
+    }
 
     public static readonly Func<ulong, int> NumDistinctPrimeFactors =
         Memoization.Memoize<ulong, int>(_NumDistinctPrimeFactors);
@@ -435,16 +446,18 @@ public static class Primes
 
     #region Coprime methods
 
-    public static bool AreCoprime(ulong n1, ulong n2) =>
-        XBigInteger.GreatestCommonDivisor(n1, n2) == 1;
+    public static bool AreCoprime(ulong n1, ulong n2)
+    {
+        return XBigInteger.GreatestCommonDivisor(n1, n2) == 1;
+    }
 
     /// <summary>
     /// Count how many numbers are coprime to, and less than, a given number.
     /// </summary>
     public static ulong Totient(ulong n)
     {
-        var factors = DistinctPrimeFactors(n);
-        var product = factors
+        List<ulong> factors = DistinctPrimeFactors(n);
+        double product = factors
             .Select(factor => (double)factor)
             .Product(factor => 1.0 - 1.0 / factor);
         return (ulong)Round(product * n);

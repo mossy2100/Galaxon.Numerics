@@ -18,8 +18,14 @@ public static class Combinatorial
     public static BigInteger BinomialCoefficient(int n, int k)
     {
         // Optimizations.
-        if (k < 0 || k > n) return 0;
-        if (k == 0 || k == n) return 1;
+        if (k < 0 || k > n)
+        {
+            return 0;
+        }
+        if (k == 0 || k == n)
+        {
+            return 1;
+        }
 
         // Take advantage of symmetry.
         k = int.Min(k, n - k);
@@ -46,8 +52,10 @@ public static class Combinatorial
     /// <param name="n">Number of items to select from.</param>
     /// <param name="r">Number of items to select.</param>
     /// <returns></returns>
-    public static BigInteger NumPermutations(long n, long r) =>
-        XBigInteger.Factorial(n) / XBigInteger.Factorial(n - r);
+    public static BigInteger NumPermutations(long n, long r)
+    {
+        return XBigInteger.Factorial(n) / XBigInteger.Factorial(n - r);
+    }
 
     /// <summary>
     /// Get all the different ways to select n items from a bag of items, considering order.
@@ -81,16 +89,16 @@ public static class Combinatorial
         for (var i = 0; i < bag.Count; i++)
         {
             // Select an item from the bag.
-            var item = bag[i];
+            T item = bag[i];
 
             // Get the remainder of the bag.
-            var remainder = bag.GetRange(0, i);
-            var remainder2 = bag.GetRange(i + 1, bag.Count - i - 1);
+            List<T> remainder = bag.GetRange(0, i);
+            List<T> remainder2 = bag.GetRange(i + 1, bag.Count - i - 1);
             remainder.AddRange(remainder2);
 
             // Get all permutations of the remainder.
-            var remPerms = GetPermutations(remainder, n - 1);
-            foreach (var remPerm in remPerms)
+            List<List<T>> remPerms = GetPermutations(remainder, n - 1);
+            foreach (List<T> remPerm in remPerms)
             {
                 List<T> perm = new () { item };
                 perm.AddRange(remPerm);
@@ -120,10 +128,10 @@ public static class Combinatorial
         HashSet<string> result = new ();
         for (var i = 0; i < chars.Length; i++)
         {
-            var ch = chars[i];
-            var rem = chars[..i] + chars[(i + 1)..];
-            var permutations = CharPermutations(rem);
-            foreach (var perm in permutations)
+            char ch = chars[i];
+            string rem = chars[..i] + chars[(i + 1)..];
+            List<string> permutations = CharPermutations(rem);
+            foreach (string perm in permutations)
             {
                 result.Add($"{ch}{perm}");
             }
@@ -143,7 +151,7 @@ public static class Combinatorial
     /// </summary>
     public static string SortDigits(ulong n)
     {
-        var digits = n.ToString().ToCharArray();
+        char[] digits = n.ToString().ToCharArray();
         Array.Sort(digits);
         return new string(digits);
     }
@@ -151,7 +159,10 @@ public static class Combinatorial
     /// <summary>
     /// Checks to see if one number is a permutation of another.
     /// </summary>
-    public static bool IsPermutationOf(ulong n, ulong m) => SortDigits(n) == SortDigits(m);
+    public static bool IsPermutationOf(ulong n, ulong m)
+    {
+        return SortDigits(n) == SortDigits(m);
+    }
 
     #endregion Permutations
 
@@ -166,8 +177,10 @@ public static class Combinatorial
     /// <param name="n">Number of items to select from.</param>
     /// <param name="r">Number of items to select.</param>
     /// <returns></returns>
-    public static BigInteger NumCombinations(long n, long r) =>
-        XBigInteger.Factorial(n) / (XBigInteger.Factorial(r) * XBigInteger.Factorial(n - r));
+    public static BigInteger NumCombinations(long n, long r)
+    {
+        return XBigInteger.Factorial(n) / (XBigInteger.Factorial(r) * XBigInteger.Factorial(n - r));
+    }
 
     /// <summary>
     /// Get all the different ways to select n items from a bag of items, ignoring order.
@@ -207,22 +220,22 @@ public static class Combinatorial
             }
 
             // How many items left?
-            var nRemainingItems = bag.Count - i;
+            int nRemainingItems = bag.Count - i;
 
             // If there are n items remaining, shortcut.
             if (nRemainingItems == n)
             {
-                var newCombo = bag.GetRange(i, n);
+                List<T> newCombo = bag.GetRange(i, n);
                 result.Add(newCombo);
                 continue;
             }
 
             // Get the bag with all items following the ith item.
-            var remainder = bag.GetRange(i + 1, nRemainingItems - 1);
+            List<T> remainder = bag.GetRange(i + 1, nRemainingItems - 1);
 
             // Find all the ways of selecting n-1 items from the remainder.
-            var remCombos = GetCombinations(remainder, n - 1);
-            foreach (var remCombo in remCombos)
+            List<List<T>> remCombos = GetCombinations(remainder, n - 1);
+            foreach (List<T> remCombo in remCombos)
             {
                 List<T> newCombo = new () { bag[i] };
                 newCombo.AddRange(remCombo);

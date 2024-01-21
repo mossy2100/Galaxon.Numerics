@@ -40,7 +40,8 @@ public class PartitionTests
     /// Test the maximum value supported by the method.
     /// </summary>
     [TestMethod]
-    public void TestPMax() =>
+    public void TestPMax()
+    {
         Assert.AreEqual(BigInteger.Parse(
                 "335882043162190684244465257601986956188015498728271478568995"
                 + "924215333504731714172271223288113412362639732788262640233482"
@@ -48,4 +49,5 @@ public class PartitionTests
                 + "208556585961685681557794125511515944466197421436709877965827"
                 + "8272116033402923541053858868675003866332"),
             Partitions.P(ushort.MaxValue));
+    }
 }

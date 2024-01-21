@@ -22,15 +22,21 @@ public class PolygonalTests
     #region Triangular numbers
 
     [TestMethod]
-    public void TestGetTriangular1() => Assert.AreEqual(1u, Polygonal.GetTriangular(1));
+    public void TestGetTriangular1()
+    {
+        Assert.AreEqual(1u, Polygonal.GetTriangular(1));
+    }
 
     [TestMethod]
-    public void TestGetTriangular5() => Assert.AreEqual(15u, Polygonal.GetTriangular(5));
+    public void TestGetTriangular5()
+    {
+        Assert.AreEqual(15u, Polygonal.GetTriangular(5));
+    }
 
     [TestMethod]
     public void TestGetAllTriangularUpTo()
     {
-        var nums = Polygonal.GetAllTriangularUpTo(25);
+        ulong[] nums = Polygonal.GetAllTriangularUpTo(25);
         Assert.AreEqual(1u, nums[1]);
         Assert.AreEqual(3u, nums[2]);
         Assert.AreEqual(6u, nums[3]);
@@ -62,15 +68,21 @@ public class PolygonalTests
     #region Pentagonal numbers
 
     [TestMethod]
-    public void TestGetPentagonal1() => Assert.AreEqual(1u, Polygonal.GetPentagonal(1));
+    public void TestGetPentagonal1()
+    {
+        Assert.AreEqual(1u, Polygonal.GetPentagonal(1));
+    }
 
     [TestMethod]
-    public void TestGetPentagonal5() => Assert.AreEqual(35u, Polygonal.GetPentagonal(5));
+    public void TestGetPentagonal5()
+    {
+        Assert.AreEqual(35u, Polygonal.GetPentagonal(5));
+    }
 
     [TestMethod]
     public void TestGetAllPentagonalUpTo()
     {
-        var nums = Polygonal.GetAllPentagonalUpTo(60);
+        ulong[] nums = Polygonal.GetAllPentagonalUpTo(60);
         Assert.AreEqual(1u, nums[1]);
         Assert.AreEqual(5u, nums[2]);
         Assert.AreEqual(12u, nums[3]);
@@ -102,15 +114,21 @@ public class PolygonalTests
     #region Hexagonal numbers
 
     [TestMethod]
-    public void TestGetHexagonal1() => Assert.AreEqual(1u, Polygonal.GetHexagonal(1));
+    public void TestGetHexagonal1()
+    {
+        Assert.AreEqual(1u, Polygonal.GetHexagonal(1));
+    }
 
     [TestMethod]
-    public void TestGetHexagonal5() => Assert.AreEqual(45u, Polygonal.GetHexagonal(5));
+    public void TestGetHexagonal5()
+    {
+        Assert.AreEqual(45u, Polygonal.GetHexagonal(5));
+    }
 
     [TestMethod]
     public void TestGetAllHexagonalUpTo()
     {
-        var nums = Polygonal.GetAllHexagonalUpTo(100);
+        ulong[] nums = Polygonal.GetAllHexagonalUpTo(100);
         Assert.AreEqual(1u, nums[1]);
         Assert.AreEqual(6u, nums[2]);
         Assert.AreEqual(15u, nums[3]);

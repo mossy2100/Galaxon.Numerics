@@ -11,14 +11,14 @@ public class PrimeTests
     [TestMethod]
     public void TestIsPrimeSlow()
     {
-        var t1 = DateTime.Now.Ticks;
+        long t1 = DateTime.Now.Ticks;
 
         // Test IsPrimeSlow() is correctly reporting whether or not a value is prime for all values
         // up to Primes.MaxValueChecked.
         for (uint i = 0; i <= Primes.MaxValueChecked; i++)
         {
-            var expected = Primes.Cache.Contains(i);
-            var actual = Primes.IsPrimeSlow(i);
+            bool expected = Primes.Cache.Contains(i);
+            bool actual = Primes.IsPrimeSlow(i);
             if (expected != actual)
             {
                 Trace.WriteLine($"Error. i is prime? {expected} but the function says {actual}.");
@@ -26,22 +26,22 @@ public class PrimeTests
             Assert.AreEqual(expected, actual);
         }
 
-        var t2 = DateTime.Now.Ticks;
-        var t = t2 - t1;
+        long t2 = DateTime.Now.Ticks;
+        long t = t2 - t1;
         Trace.WriteLine($"Time taken: {t} ticks.");
     }
 
     [TestMethod]
     public void TestIsPrimeFast()
     {
-        var t1 = DateTime.Now.Ticks;
+        long t1 = DateTime.Now.Ticks;
 
         // Test IsPrimeFast() is correctly reporting whether or not a value is prime for all values
         // up to Primes.MaxValueChecked.
         for (uint i = 0; i <= Primes.MaxValueChecked; i++)
         {
-            var expected = Primes.Cache.Contains(i);
-            var actual = Primes.IsPrime(i);
+            bool expected = Primes.Cache.Contains(i);
+            bool actual = Primes.IsPrime(i);
             if (expected != actual)
             {
                 Trace.WriteLine($"Error. i is prime? {expected} but the function says {actual}.");
@@ -49,8 +49,8 @@ public class PrimeTests
             Assert.AreEqual(expected, actual);
         }
 
-        var t2 = DateTime.Now.Ticks;
-        var t = t2 - t1;
+        long t2 = DateTime.Now.Ticks;
+        long t = t2 - t1;
         Trace.WriteLine($"Time taken: {t} ticks.");
     }
 
@@ -61,7 +61,7 @@ public class PrimeTests
         // Trace.WriteLine($"Testing IsPrimeSlow({n})...");
         Primes.ClearCache();
         // long t3 = DateTime.Now.Ticks / TimeSpan.TicksPerMicrosecond;
-        var isPrimeSlow = Primes.IsPrimeSlow(n);
+        bool isPrimeSlow = Primes.IsPrimeSlow(n);
         // long t4 = DateTime.Now.Ticks / TimeSpan.TicksPerMicrosecond;
         // long tSlow = t4 - t3;
         // Trace.WriteLine($"IsPrimeSlow(): {n} is " + (isPrimeSlow ? "" : "not ") + "prime.");
@@ -70,7 +70,7 @@ public class PrimeTests
         // Trace.WriteLine($"Testing IsPrime({n})...");
         Primes.ClearCache();
         // long t1 = DateTime.Now.Ticks / TimeSpan.TicksPerMicrosecond;
-        var isPrimeFast = Primes.IsPrime(n);
+        bool isPrimeFast = Primes.IsPrime(n);
         // long t2 = DateTime.Now.Ticks / TimeSpan.TicksPerMicrosecond;
         // long tFast = t2 - t1;
         // Trace.WriteLine($"IsPrime(): {n} is " + (isPrimeFast ? "" : "not ") + "prime.");
@@ -152,7 +152,7 @@ public class PrimeTests
     [TestMethod]
     public void CompareIsPrimeMethodsMaxULong()
     {
-        var n = ulong.MaxValue;
+        ulong n = ulong.MaxValue;
         if (!Primes.IsPrime(n))
         {
             n = Primes.GetPrevious(n);
@@ -169,7 +169,7 @@ public class PrimeTests
     public void PrimesSumTest()
     {
         IEnumerable<ulong> primes = Primes.GetPrimesUpTo(2_000_000);
-        var total = primes.Sum();
+        ulong total = primes.Sum();
         Assert.AreEqual(142913828922ul, total);
     }
 

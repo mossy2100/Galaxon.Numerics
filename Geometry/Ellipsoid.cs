@@ -65,39 +65,48 @@ public class Ellipsoid : IShape3D
         }
     }
 
-    public (double, double, double) SortedRadii()
+    /// <summary>
+    /// Return the ellipse radii sorted by length.
+    /// </summary>
+    /// <returns>The array of sorted radii.</returns>
+    public double[] SortedRadii()
     {
-        double[] radii = { RadiusA, RadiusB, RadiusC };
-        // Sort radii in ascending order (much simpler than descending).
-        Array.Sort(radii);
-        // Return them in descending order, matching convention in formulae.
-        return (radii[2], radii[1], radii[0]);
+        double[] r = [RadiusA, RadiusB, RadiusC];
+        Array.Sort(r);
+        return r;
     }
 
     #endregion Radii
 
     #region Ellipsoid Types
 
-    public bool IsSphere() => RadiusA.FuzzyEquals(RadiusB) && RadiusB.FuzzyEquals(RadiusC);
-
-    public bool IsOblate()
+    public bool IsSphere()
     {
-        var (a, b, c) = SortedRadii();
-        return a.FuzzyEquals(b) && b > c;
+        return RadiusA.FuzzyEquals(RadiusB) && RadiusB.FuzzyEquals(RadiusC);
     }
 
-    public bool IsProlate()
+    public bool IsOblateSpheroid()
     {
-        var (a, b, c) = SortedRadii();
-        return a > b && b.FuzzyEquals(c);
+        double[] r = SortedRadii();
+        return r[0] < r[1] && r[1].FuzzyEquals(r[2]);
     }
 
-    public bool IsSpheroid() => IsOblate() || IsProlate();
+    public bool IsProlateSpheroid()
+    {
+        double[] r = SortedRadii();
+        return r[0].FuzzyEquals(r[1]) && r[1] < r[2];
+    }
+
+    public bool IsSpheroid()
+    {
+        double[] r = SortedRadii();
+        return r[0].FuzzyEquals(r[1]) || r[1].FuzzyEquals(r[2]);
+    }
 
     public bool IsScalene()
     {
-        var (a, b, c) = SortedRadii();
-        return a > b && b > c;
+        double[] r = SortedRadii();
+        return r[0] < r[1] && r[1] < r[2];
     }
 
     #endregion Ellipsoid Types
@@ -116,8 +125,12 @@ public class Ellipsoid : IShape3D
         {
             // Check for simple cases to get a quicker answer.
             // Calculate intermediate variables as needed.
-            var (a, b, c) = SortedRadii();
-            var a2 = a * a;
+            double[] r = SortedRadii();
+            double a = r[0];
+            double b = r[1];
+            double c = r[2];
+
+            double a2 = a * a;
 
             if (IsSphere())
             {
@@ -125,19 +138,19 @@ public class Ellipsoid : IShape3D
                 return 4 * PI * a2;
             }
 
-            var c2 = c * c;
-            var e2 = 1 - c2 / a2;
-            var e = Sqrt(e2);
+            double c2 = c * c;
+            double e2 = 1 - c2 / a2;
+            double e = Sqrt(e2);
 
-            if (IsOblate())
+            if (IsOblateSpheroid())
             {
                 // Formula: https://en.wikipedia.org/wiki/Ellipsoid#Surface_area
                 return Tau * a2 * (1 + (1 - e2) / e * Atanh(e));
             }
 
-            var phi = Asin(e);
+            double phi = Asin(e);
 
-            if (IsProlate())
+            if (IsProlateSpheroid())
             {
                 // Formula: https://en.wikipedia.org/wiki/Ellipsoid#Surface_area
                 return Tau * c2 * (1 + a / (c * e) * phi);
@@ -146,8 +159,8 @@ public class Ellipsoid : IShape3D
             // The ellipsoid is scalene.
             // Formula: https://keisan.casio.com/exec/system/1223392149
             // (This is more efficient than the formula in Wikipedia).
-            var k = Sqrt(1 - c2 / (b * b)) / e;
-            var (F, E) = EllipticIntegrals.FE(phi, k);
+            double k = Sqrt(1 - c2 / (b * b)) / e;
+            (double F, double E) = EllipticIntegrals.FE(phi, k);
             return Tau * (c2 + a * b * e * E + b * c2 / (a * e) * F);
         }
     }

@@ -27,7 +27,7 @@ public static class Sequences
         if (n > 1)
         {
             // Get the next number.
-            var m = n % 2 == 0 ? n / 2 : 3 * n + 1;
+            long m = n % 2 == 0 ? n / 2 : 3 * n + 1;
 
             // Append additional items in the chain.
             result.AddRange(Collatz(m));

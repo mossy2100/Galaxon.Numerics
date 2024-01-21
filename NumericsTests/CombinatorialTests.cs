@@ -71,10 +71,10 @@ public class CombinatorialTests
     public void TestGetPermutationsSimple()
     {
         List<int> bag = new () { 2, 3, 5, 7 };
-        var perms = Combinatorial.GetPermutations(bag, 2);
+        List<List<int>> perms = Combinatorial.GetPermutations(bag, 2);
         Assert.AreEqual(12, perms.Count);
 
-        var permsAsStrings = perms.Select(list => list[0] * 10 + list[1]).ToArray();
+        int[] permsAsStrings = perms.Select(list => list[0] * 10 + list[1]).ToArray();
         Assert.AreEqual(23, permsAsStrings[0]);
         Assert.AreEqual(25, permsAsStrings[1]);
         Assert.AreEqual(27, permsAsStrings[2]);

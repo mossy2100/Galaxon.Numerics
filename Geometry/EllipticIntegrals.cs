@@ -28,17 +28,17 @@ public static class EllipticIntegrals
         bool getSecondKind = true)
     {
         // Calculate m = k^2, a.k.a. "the parameter".
-        var m = k * k;
-        var x = Sin(phi);
-        var y = Cos(phi);
-        var g = y * y;
-        var h = 1 - m * x * x;
-        var F = x * RF(g, h, 1);
+        double m = k * k;
+        double x = Sin(phi);
+        double y = Cos(phi);
+        double g = y * y;
+        double h = 1 - m * x * x;
+        double F = x * RF(g, h, 1);
         if (!getSecondKind)
         {
             return (F, null);
         }
-        var E = F - m / 3 * Pow(x, 3) * RD(g, h, 1);
+        double E = F - m / 3 * Pow(x, 3) * RD(g, h, 1);
         return (F, E);
     }
 
@@ -52,7 +52,7 @@ public static class EllipticIntegrals
     /// <returns>A tuple containing the two results.</returns>
     public static (double F, double E) FE(double phi, double k)
     {
-        var (F, E) = HelperIncomplete(phi, k);
+        (double F, double? E) = HelperIncomplete(phi, k);
         return (F, E!.Value);
     }
 
@@ -65,7 +65,7 @@ public static class EllipticIntegrals
     /// <returns>The result.</returns>
     public static double F(double phi, double k)
     {
-        var (F, E) = HelperIncomplete(phi, k, false);
+        (double F, double? E) = HelperIncomplete(phi, k, false);
         return F;
     }
 
@@ -78,7 +78,7 @@ public static class EllipticIntegrals
     /// <returns>The result.</returns>
     public static double E(double phi, double k)
     {
-        var (F, E) = HelperIncomplete(phi, k);
+        (double F, double? E) = HelperIncomplete(phi, k);
         return E!.Value;
     }
 
@@ -100,7 +100,7 @@ public static class EllipticIntegrals
 
         do
         {
-            var lambda = Sqrt(x * y) + Sqrt(y * z) + Sqrt(z * x);
+            double lambda = Sqrt(x * y) + Sqrt(y * z) + Sqrt(z * x);
 
             x = (x + lambda) / 4;
             y = (y + lambda) / 4;
@@ -113,9 +113,9 @@ public static class EllipticIntegrals
             dz = 1 - z / A;
         } while (Compare.Max(Abs(dx), Abs(dy), Abs(dz)) >= _Delta);
 
-        var E2 = dx * dy + dy * dz + dz * dx;
-        var E3 = dx * dy * dz;
-        var E22 = E2 * E2;
+        double E2 = dx * dy + dy * dz + dz * dx;
+        double E3 = dx * dy * dz;
+        double E22 = E2 * E2;
 
         // Integer values rearranged to avoid integer division operations.
         return (1 - E2 / 10 + E3 / 14 + E22 / 24 - 3 * E2 * E3 / 44
@@ -143,7 +143,7 @@ public static class EllipticIntegrals
 
         do
         {
-            var lambda = Sqrt(x * y) + Sqrt(y * z) + Sqrt(z * x);
+            double lambda = Sqrt(x * y) + Sqrt(y * z) + Sqrt(z * x);
             sum += fac / (Sqrt(z) * (z + lambda));
 
             fac /= 4;
@@ -159,14 +159,14 @@ public static class EllipticIntegrals
             dz = 1 - z / A;
         } while (Compare.Max(Abs(dx), Abs(dy), Abs(dz)) >= _Delta);
 
-        var dz2 = dz * dz;
-        var dz3 = dz2 * dz;
+        double dz2 = dz * dz;
+        double dz3 = dz2 * dz;
 
-        var E2 = dx * dy + 3 * dz2 + 3 * dz * dx + 3 * dy * dz;
-        var E3 = dz3 + 3 * dx * dy * dz + 3 * dy * dz2 + 3 * dx * dz2;
-        var E4 = dy * dz3 + dx * dz3 + 3 * dx * dy * dz2;
-        var E5 = dx * dy * dz3;
-        var E22 = E2 * E2;
+        double E2 = dx * dy + 3 * dz2 + 3 * dz * dx + 3 * dy * dz;
+        double E3 = dz3 + 3 * dx * dy * dz + 3 * dy * dz2 + 3 * dx * dz2;
+        double E4 = dy * dz3 + dx * dz3 + 3 * dx * dy * dz2;
+        double E5 = dx * dy * dz3;
+        double E22 = E2 * E2;
 
         return 3 * sum + fac * (1 - 3 * E2 / 14 + E3 / 6 + 9 * E22 / 88
                 - 3 * E4 / 22 - 9 * E2 * E3 / 52 + 3 * E5 / 26

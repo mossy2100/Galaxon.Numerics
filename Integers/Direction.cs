@@ -13,9 +13,13 @@ public enum EDirection
 
 public static class Direction
 {
-    public static EDirection TurnClockwise(EDirection currentDirection) =>
-        currentDirection == EDirection.Left ? EDirection.Up : currentDirection + 1;
+    public static EDirection TurnClockwise(EDirection currentDirection)
+    {
+        return currentDirection == EDirection.Left ? EDirection.Up : currentDirection + 1;
+    }
 
-    public static EDirection TurnAntiClockwise(EDirection currentDirection) =>
-        currentDirection == EDirection.Up ? EDirection.Left : currentDirection - 1;
+    public static EDirection TurnAntiClockwise(EDirection currentDirection)
+    {
+        return currentDirection == EDirection.Up ? EDirection.Left : currentDirection - 1;
+    }
 }

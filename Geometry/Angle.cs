@@ -19,7 +19,7 @@ public static class Angle
     /// <returns>A string with the formatted angle.</returns>
     public static string FormatDms(double degrees, byte scale = 0)
     {
-        var (wholeDegrees, arcminutes, arcseconds) = DegToDms(degrees);
+        (double wholeDegrees, double arcminutes, double arcseconds) = DegToDms(degrees);
         var arcsecondsString = Abs(arcseconds).ToString($"F{scale}");
         return $"{wholeDegrees}° {Abs(arcminutes)}′ {arcsecondsString}″";
     }
@@ -71,14 +71,20 @@ public static class Angle
     /// </summary>
     /// <param name="degrees">An angle size in degrees.</param>
     /// <returns>The angle size in radians.</returns>
-    public static double DegToRad(double degrees) => degrees * RadiansPerDegree;
+    public static double DegToRad(double degrees)
+    {
+        return degrees * RadiansPerDegree;
+    }
 
     /// <summary>
     /// Convert radians to degrees.
     /// </summary>
     /// <param name="radians">An angle size in radians.</param>
     /// <returns>The angle size in degrees.</returns>
-    public static double RadToDeg(double radians) => radians * DegreesPerRadian;
+    public static double RadToDeg(double radians)
+    {
+        return radians * DegreesPerRadian;
+    }
 
     /// <summary>
     /// Creates a new angle from degrees, arcminutes, and (optionally) arcseconds.
@@ -93,8 +99,10 @@ public static class Angle
     /// <param name="arcminutes">The number of arcminutes.</param>
     /// <param name="arcseconds">The number of arcseconds.</param>
     /// <returns>The angle in degrees.</returns>
-    public static double DmsToDeg(double degrees, double arcminutes, double arcseconds = 0) =>
-        degrees + arcminutes / ArcminutesPerDegree + arcseconds / ArcsecondsPerDegree;
+    public static double DmsToDeg(double degrees, double arcminutes, double arcseconds = 0)
+    {
+        return degrees + arcminutes / ArcminutesPerDegree + arcseconds / ArcsecondsPerDegree;
+    }
 
     /// <summary>
     /// Convert degrees, arcminutes, and arcseconds to radians.
@@ -103,8 +111,10 @@ public static class Angle
     /// <param name="arcminutes">The number of arcminutes.</param>
     /// <param name="arcseconds">The number of arcseconds.</param>
     /// <returns>The angle in radians.</returns>
-    public static double DmsToRad(double degrees, double arcminutes, double arcseconds = 0) =>
-        DegToRad(DmsToDeg(degrees, arcminutes, arcseconds));
+    public static double DmsToRad(double degrees, double arcminutes, double arcseconds = 0)
+    {
+        return DegToRad(DmsToDeg(degrees, arcminutes, arcseconds));
+    }
 
     /// <summary>
     /// Convert an angle from degrees to degrees, arcminutes, and arcseconds.
@@ -119,12 +129,12 @@ public static class Angle
     /// </returns>
     public static (double degrees, double arcminutes, double arcseconds) DegToDms(double degrees)
     {
-        var wholeDegrees = Truncate(degrees);
-        var fracDegrees = degrees - wholeDegrees;
-        var arcminutes = fracDegrees * ArcminutesPerDegree;
-        var wholeArcminutes = Truncate(arcminutes);
-        var fracArcminutes = arcminutes - wholeArcminutes;
-        var arcseconds = fracArcminutes * ArcsecondsPerArcminute;
+        double wholeDegrees = Truncate(degrees);
+        double fracDegrees = degrees - wholeDegrees;
+        double arcminutes = fracDegrees * ArcminutesPerDegree;
+        double wholeArcminutes = Truncate(arcminutes);
+        double fracArcminutes = arcminutes - wholeArcminutes;
+        double arcseconds = fracArcminutes * ArcsecondsPerArcminute;
         return (degrees: wholeDegrees, arcminutes: wholeArcminutes, arcseconds);
     }
 
@@ -139,8 +149,10 @@ public static class Angle
     /// <returns>
     /// A tuple containing 3 double values representing degrees, arcminutes, and arcseconds.
     /// </returns>
-    public static (double degrees, double arcminutes, double arcseconds) RadToDms(double radians) =>
-        DegToDms(RadToDeg(radians));
+    public static (double degrees, double arcminutes, double arcseconds) RadToDms(double radians)
+    {
+        return DegToDms(RadToDeg(radians));
+    }
 
     #endregion Conversion methods
 
@@ -151,36 +163,54 @@ public static class Angle
     /// </summary>
     /// <param name="radians">The size of an angle in radians.</param>
     /// <returns></returns>
-    public static double Sin2(double radians) => Pow(Sin(radians), 2);
+    public static double Sin2(double radians)
+    {
+        return Pow(Sin(radians), 2);
+    }
 
     /// <summary>
     /// The square of the sine of an angle in radians.
     /// </summary>
     /// <param name="radians">The size of an angle in radians.</param>
     /// <returns></returns>
-    public static double Cos2(double radians) => Pow(Cos(radians), 2);
+    public static double Cos2(double radians)
+    {
+        return Pow(Cos(radians), 2);
+    }
 
     /// <summary>
     /// The square of the tangent of an angle in radians.
     /// </summary>
     /// <param name="radians">The size of an angle in radians.</param>
     /// <returns></returns>
-    public static double Tan2(double radians) => Pow(Tan(radians), 2);
+    public static double Tan2(double radians)
+    {
+        return Pow(Tan(radians), 2);
+    }
 
     /// <summary>
     /// The sine of an angle in degrees.
     /// </summary>
-    public static double SinDeg(double degrees) => Sin(DegToRad(degrees));
+    public static double SinDeg(double degrees)
+    {
+        return Sin(DegToRad(degrees));
+    }
 
     /// <summary>
     /// The cosine of an angle in degrees.
     /// </summary>
-    public static double CosDeg(double degrees) => Cos(DegToRad(degrees));
+    public static double CosDeg(double degrees)
+    {
+        return Cos(DegToRad(degrees));
+    }
 
     /// <summary>
     /// The tangent of an angle in degrees.
     /// </summary>
-    public static double TanDeg(double degrees) => Tan(DegToRad(degrees));
+    public static double TanDeg(double degrees)
+    {
+        return Tan(DegToRad(degrees));
+    }
 
     #endregion Trigonometric methods
 
@@ -208,9 +238,9 @@ public static class Angle
 
     public const double RadiansPerQuadrant = PI / 2;
 
-    public const double RadiansPerDegree = 1.745329251994329576923691e-2;
+    public const double RadiansPerDegree = 1.745329251994329576923691e-2; // PI / 180
 
-    public const double DegreesPerRadian = 57.29577951308232087679815;
+    public const double DegreesPerRadian = 57.29577951308232087679815; // 180 / PI
 
     public const double RadiansPerArcsecond = 4.848136811095359935899141e-6;
 

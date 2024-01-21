@@ -36,7 +36,7 @@ public static class Partitions
         while (true)
         {
             // Positive k term.
-            var arg = n - k * (3 * k - 1) / 2;
+            int arg = n - k * (3 * k - 1) / 2;
             if (arg < 0)
             {
                 break;
@@ -58,7 +58,7 @@ public static class Partitions
 
         // Sum the terms from smallest to largest.
         BigInteger sum = 0;
-        for (var i = terms.Count - 1; i >= 0; i--)
+        for (int i = terms.Count - 1; i >= 0; i--)
         {
             sum += terms[i].sign * P(terms[i].arg);
         }
