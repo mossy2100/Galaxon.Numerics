@@ -126,9 +126,9 @@ public class Ellipsoid : IShape3D
             // Check for simple cases to get a quicker answer.
             // Calculate intermediate variables as needed.
             double[] r = SortedRadii();
-            double a = r[0];
+            double a = r[2];
             double b = r[1];
-            double c = r[2];
+            double c = r[0];
 
             double a2 = a * a;
 
@@ -157,7 +157,6 @@ public class Ellipsoid : IShape3D
             }
 
             // The ellipsoid is scalene.
-            // Formula: https://keisan.casio.com/exec/system/1223392149
             // (This is more efficient than the formula in Wikipedia).
             double k = Sqrt(1 - c2 / (b * b)) / e;
             (double F, double E) = EllipticIntegrals.FE(phi, k);
