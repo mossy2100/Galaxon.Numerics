@@ -6,8 +6,11 @@ namespace Galaxon.Numerics.Algebra;
 public class Polynomials
 {
     /// <summary>
-    /// Calculate the result of a polynomial expression using Horner's algorithm.
-    /// This method avoids calling Pow() and (in theory) should be faster.
+    /// Get a polynomial function, given the coefficients.
+    /// NB: In the coeffs array, the item with index 0 will correspond to the coefficient of the x^0
+    /// term, the item with index 1 will correspond to the coefficient of the x^1 term, and so on.
+    /// This is the reverse order of how coefficients are usually written when writing out a
+    /// polynomial.
     /// </summary>
     /// <param name="coeffs">
     /// The coefficients of the polynomial. The index is equal to the exponent of x.
@@ -18,21 +21,47 @@ public class Polynomials
     /// - coeffs[3] is the coefficient for the x^3 term
     /// - etc.
     /// </param>
+    /// <returns>The polynomial function.</returns>
+    /// <exception cref="ArgumentException">If </exception>
+    public static Func<double, double> ConstructPolynomial(double[] coeffs)
+    {
+        // Ensure there are coefficients provided.
+        if (coeffs.Length == 0)
+        {
+            throw new ArgumentException("At least one coefficient must be provided.");
+        }
+
+        // Create a delegate for the polynomial function.
+        Func<double, double> f = x =>
+        {
+            // Initialize the result with the highest order term.
+            double result = coeffs[^1];
+
+            // Evaluate the polynomial using Horner's algorithm.
+            if (coeffs.Length > 1)
+            {
+                for (int i = coeffs.Length - 2; i >= 0; i--)
+                {
+                    result = result * x + coeffs[i];
+                }
+            }
+
+            return result;
+        };
+
+        return f;
+    }
+
+    /// <summary>
+    /// Calculate the result of a polynomial expression using Horner's algorithm.
+    /// This method avoids calling Pow() and (in theory) should be faster.
+    /// </summary>
+    /// <param name="coeffs">The coefficients of the polynomial.</param>
     /// <param name="x">The input value.</param>
     /// <returns>The result of the calculation.</returns>
     public static double EvaluatePolynomial(double[] coeffs, double x)
     {
-        if (coeffs.Length == 0)
-        {
-            return 0;
-        }
-
-        double result = coeffs[^1];
-        for (int i = coeffs.Length - 2; i >= 0; i--)
-        {
-            result = coeffs[i] + result * x;
-        }
-        return result;
+        return ConstructPolynomial(coeffs)(x);
     }
 
     /// <summary>
