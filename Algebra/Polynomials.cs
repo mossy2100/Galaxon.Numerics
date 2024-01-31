@@ -32,7 +32,7 @@ public class Polynomials
         }
 
         // Create a delegate for the polynomial function.
-        Func<double, double> f = x =>
+        Func<double, double> fnPolynomial = x =>
         {
             // Initialize the result with the highest order term.
             double result = coeffs[^1];
@@ -49,7 +49,7 @@ public class Polynomials
             return result;
         };
 
-        return f;
+        return fnPolynomial;
     }
 
     /// <summary>
